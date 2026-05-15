@@ -86,7 +86,38 @@ Scientist). Detail in `research/eddy-investigation.md`.
 
 ## 2. Proposed targets (uncovered)
 
-*To be filled.*
+Targets are tiered by what we propose to ship in this engagement vs. the
+next one. Star counts and last-active dates are point-in-time
+(2026-05-15). "Entry point" is the exact file where a `search_you` /
+`YouSearch` / equivalent should land — the forks in section 3 prove this
+analysis with working code.
+
+### Tier 1 — this engagement (two reference forks, already built)
+
+| Repo | Stars | Lang | Region/community signal | Integration entry point | Why this fits |
+|---|---|---|---|---|---|
+| [`camel-ai/camel`](https://github.com/camel-ai/camel) | ~13k | Python | KAUST origin (Saudi Arabia); Arabic-community story | [`camel/toolkits/search_toolkit.py`](https://github.com/camel-ai/camel/blob/master/camel/toolkits/search_toolkit.py) — add `search_you()` method + register in `get_tools()` | Multi-engine `SearchToolkit` already supports 15 search backends including Brave / Serper / Tavily; You.com is a clean drop-in. Brave's `search_lang` accepts `'jp'` (not `'ja'`) and offers no Arabic country mapping — You.com is the cleanest win for `ar-SA` / `ar-AE` / `ja-JP` use cases. Detail in `research/camel-recon.md`. |
+| [`assafelovic/gpt-researcher`](https://github.com/assafelovic/gpt-researcher) | ~16k | Python | Deep-research narrative; closest framework analog to You.com Research API | [`gpt_researcher/retrievers/`](https://github.com/assafelovic/gpt-researcher/tree/master/gpt_researcher/retrievers) — new `you/` package + `you_search.py` | Tavily-shape contract (`{href, body}` per result) is the de-facto standard; Serper-style locale precedent (`country`, `language`) is already in the codebase. You.com Research API is the natural counterpart to gpt-researcher's "deep" mode. Detail in `research/gpt-researcher-recon.md`. |
+
+### Tier 2 — recommended next (priority order)
+
+| Repo | Stars | Lang | Region/community signal | Integration entry point | Why this fits |
+|---|---|---|---|---|---|
+| [`SakanaAI/AI-Scientist-v2`](https://github.com/SakanaAI/AI-Scientist-v2) (+ [v1](https://github.com/SakanaAI/AI-Scientist) paired) | ~6.3k + ~14k | Python | Japan (Sakana AI, Tokyo); flagship JP agent project | [`ai_scientist/tools/base_tool.py`](https://github.com/SakanaAI/AI-Scientist-v2/blob/main/ai_scientist/tools/base_tool.py) — subclass `BaseTool`, register in `perform_ideation_temp_free.py` alongside `SemanticScholarSearchTool` | Clean abstract `BaseTool` (`name`, `description`, `parameters`, `use_tool(**kwargs)`); only existing search backend is Semantic Scholar — You.com adds web grounding. JP-flagship endorsement is the engagement leverage. Detail in `research/japanese-community.md`. |
+| [`huggingface/smolagents`](https://github.com/huggingface/smolagents) | ~17k | Python | HF distribution = multilingual reach by default | `src/smolagents/default_tools.py` (web-search tool slot) | HF's distribution and the multilingual model audience make this a cheap force-multiplier. |
+| [`agno-agi/agno`](https://github.com/agno-agi/agno) | ~30k | Python | Active maintainers, clean tools layer | `libs/agno/agno/tools/` (per-provider file pattern, e.g. `tavily.py`, `exa.py`) | Drop-in pattern matches camel-ai; high-traffic project. |
+| [`pydantic/pydantic-ai`](https://github.com/pydantic/pydantic-ai) | ~10k | Python | Pydantic ecosystem; common-tools convention | `pydantic_ai/common_tools/` (one file per provider, e.g. `tavily.py`) | Clean common-tools pattern; a `you.py` follows the existing template directly. |
+| [`QwenLM/Qwen-Agent`](https://github.com/QwenLM/Qwen-Agent) | ~9k | Python | China / Asia, Alibaba-backed | `qwen_agent/tools/web_search.py` | Asia regional coverage; complements the JP fork target. |
+| [`LearningCircuit/local-deep-research`](https://github.com/LearningCircuit/local-deep-research) | ~3k | Python | Direct fit for the Research API surface | `src/local_deep_research/web_search_engines/engines/` | Direct Research-API match; smaller audience but high relevance. |
+
+### Tier 3 — future / dependent on roadmap
+
+| Repo | Stars | Lang | Region/community signal | Integration entry point |
+|---|---|---|---|---|
+| [`deepset-ai/haystack`](https://github.com/deepset-ai/haystack) | ~17k | Python | German enterprise audience (deepset, Berlin) | `haystack/components/websearch/` |
+| [`microsoft/semantic-kernel`](https://github.com/microsoft/semantic-kernel) | ~22k | C#/Python | Microsoft enterprise; connector pattern | `python/semantic_kernel/connectors/search/` |
+| [`letta-ai/letta`](https://github.com/letta-ai/letta) | ~15k | Python | Stateful agents (formerly MemGPT) | Tool plug-in surface |
+| [`pfnet-research/plamo-examples`](https://github.com/pfnet-research/plamo-examples) | ~25 | Jupyter | Japan (PFN brand) — examples repo, not framework code | `examples/` notebook addition |
 
 ## 3. Two reference forks (already built)
 
