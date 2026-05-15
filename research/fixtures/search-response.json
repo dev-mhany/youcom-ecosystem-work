@@ -1,0 +1,38 @@
+{
+  "results": {
+    "web": [
+      {
+        "url": "https://docs.langchain.com/oss/python/integrations/providers/overview",
+        "title": "LangChain Python integrations - Docs by LangChain",
+        "description": "Integrate with providers using LangChain Python.",
+        "thumbnail_url": "https://langchain-5e9cc07a.mintlify.app/mintlify-assets/_next/image?url=%2F_mintlify%2Fapi%2Fog%3Fdivision%3DDocumentation%26appearance%3Dsystem%26title%3DLangChain%2BPython%2Bintegrations%26description%3DIntegrate%2Bwith%2Bproviders%2Busing%2BLangChain%2BPython.%26logoLight%3Dhttps%253A%252F%252Fmintcdn.com%252Flangchain-5e9cc07a%252FnQm-sjd_MByLhgeW%252Fimages%252Fbrand%252Flangchain-docs-dark-blue.png%253Ffit%253Dmax%2526auto%253Dformat%2526n%253DnQm-sjd_MByLhgeW%2526q%253D85%2526s%253D5babf1a1962208fd7eed942fa2432ecb%26logoDark%3Dhttps%253A%252F%252Fmintcdn.com%252Flangchain-5e9cc07a%252FnQm-sjd_MByLhgeW%252Fimages%252Fbrand%252Flangchain-docs-light-blue.png%253Ffit%253Dmax%2526auto%253Dformat%2526n%253DnQm-sjd_MByLhgeW%2526q%253D85%2526s%253D0bcd2a1f2599ed228bcedf0f535b45b1%26primaryColor%3D%2523161F34%26lightColor%3D%25237FC8FF%26darkColor%3D%2523006DDD%26backgroundLight%3D%2523FFFFFF%26backgroundDark%3D%2523030710&amp;w=1200&amp;q=100",
+        "original_thumbnail_url": "https://langchain-5e9cc07a.mintlify.app/mintlify-assets/_next/image?url=%2F_mintlify%2Fapi%2Fog%3Fdivision%3DDocumentation%26appearance%3Dsystem%26title%3DLangChain%2BPython%2Bintegrations%26description%3DIntegrate%2Bwith%2Bproviders%2Busing%2BLangChain%2BPython.%26logoLight%3Dhttps%253A%252F%252Fmintcdn.com%252Flangchain-5e9cc07a%252FnQm-sjd_MByLhgeW%252Fimages%252Fbrand%252Flangchain-docs-dark-blue.png%253Ffit%253Dmax%2526auto%253Dformat%2526n%253DnQm-sjd_MByLhgeW%2526q%253D85%2526s%253D5babf1a1962208fd7eed942fa2432ecb%26logoDark%3Dhttps%253A%252F%252Fmintcdn.com%252Flangchain-5e9cc07a%252FnQm-sjd_MByLhgeW%252Fimages%252Fbrand%252Flangchain-docs-light-blue.png%253Ffit%253Dmax%2526auto%253Dformat%2526n%253DnQm-sjd_MByLhgeW%2526q%253D85%2526s%253D0bcd2a1f2599ed228bcedf0f535b45b1%26primaryColor%3D%2523161F34%26lightColor%3D%25237FC8FF%26darkColor%3D%2523006DDD%26backgroundLight%3D%2523FFFFFF%26backgroundDark%3D%2523030710&amp;w=1200&amp;q=100",
+        "favicon_url": "https://you.com/favicon?domain=docs.langchain.com&size=128",
+        "snippets": [
+          "Use this file to discover all available pages before exploring further.LangChain offers an extensive ecosystem with 1000+ integrations across chat & embedding models, tools & toolkits, document loaders, vector stores, and more. A provider is a company or platform that hosts AI models and exposes them through an API (e.g., OpenAI, Anthropic, Google). Many providers have a dedicated langchain-<provider> package that implements one or more of LangChain’s standard interfaces—chat models, embedding models, vector stores, and more—giving you a consistent API regardless of the underlying provider.",
+          "To see a full list of integrations by component type, refer to the categories in the sidebar. For a conceptual overview of how providers and models work in LangChain, including how to find model names, use new models immediately, and work with routers—see Providers and models.",
+          "See all providers or search for a provider using the search field. Community integrations can be found in langchain-community."
+        ]
+      },
+      {
+        "url": "https://docs.langchain.com/oss/python/integrations/providers/all_providers",
+        "title": "All LangChain Python integration providers - Docs by LangChain",
+        "description": "Join us May 13th & May 14th at Interrupt, the Agent Conference by LangChain. Buy tickets > ... Use this file to discover all available pages before exploring further.Browse the complete collection of integrations available for Python.",
+        "thumbnail_url": "https://langchain-5e9cc07a.mintlify.app/mintlify-assets/_next/image?url=%2F_mintlify%2Fapi%2Fog%3Fdivision%3DDocumentation%26appearance%3Dsystem%26title%3DAll%2BLangChain%2BPython%2Bintegration%2Bproviders%26logoLight%3Dhttps%253A%252F%252Fmintcdn.com%252Flangchain-5e9cc07a%252FnQm-sjd_MByLhgeW%252Fimages%252Fbrand%252Flangchain-docs-dark-blue.png%253Ffit%253Dmax%2526auto%253Dformat%2526n%253DnQm-sjd_MByLhgeW%2526q%253D85%2526s%253D5babf1a1962208fd7eed942fa2432ecb%26logoDark%3Dhttps%253A%252F%252Fmintcdn.com%252Flangchain-5e9cc07a%252FnQm-sjd_MByLhgeW%252Fimages%252Fbrand%252Flangchain-docs-light-blue.png%253Ffit%253Dmax%2526auto%253Dformat%2526n%253DnQm-sjd_MByLhgeW%2526q%253D85%2526s%253D0bcd2a1f2599ed228bcedf0f535b45b1%26primaryColor%3D%2523161F34%26lightColor%3D%25237FC8FF%26darkColor%3D%2523006DDD%26backgroundLight%3D%2523FFFFFF%26backgroundDark%3D%2523030710&amp;w=1200&amp;q=100",
+        "original_thumbnail_url": "https://langchain-5e9cc07a.mintlify.app/mintlify-assets/_next/image?url=%2F_mintlify%2Fapi%2Fog%3Fdivision%3DDocumentation%26appearance%3Dsystem%26title%3DAll%2BLangChain%2BPython%2Bintegration%2Bproviders%26logoLight%3Dhttps%253A%252F%252Fmintcdn.com%252Flangchain-5e9cc07a%252FnQm-sjd_MByLhgeW%252Fimages%252Fbrand%252Flangchain-docs-dark-blue.png%253Ffit%253Dmax%2526auto%253Dformat%2526n%253DnQm-sjd_MByLhgeW%2526q%253D85%2526s%253D5babf1a1962208fd7eed942fa2432ecb%26logoDark%3Dhttps%253A%252F%252Fmintcdn.com%252Flangchain-5e9cc07a%252FnQm-sjd_MByLhgeW%252Fimages%252Fbrand%252Flangchain-docs-light-blue.png%253Ffit%253Dmax%2526auto%253Dformat%2526n%253DnQm-sjd_MByLhgeW%2526q%253D85%2526s%253D0bcd2a1f2599ed228bcedf0f535b45b1%26primaryColor%3D%2523161F34%26lightColor%3D%25237FC8FF%26darkColor%3D%2523006DDD%26backgroundLight%3D%2523FFFFFF%26backgroundDark%3D%2523030710&amp;w=1200&amp;q=100",
+        "favicon_url": "https://you.com/favicon?domain=docs.langchain.com&size=128",
+        "snippets": [
+          "LangChain Python offers the most extensive ecosystem with 1000+ integrations across LLMs, chat models, retrievers, vector stores, document loaders, and more.",
+          "Geographic data analysis with Python. Version control system integration.",
+          "Social media platform integration and APIs. In-memory data structure store and cache. AI memory and context management. Cloud platform for running ML models. Research and note-taking platform. Python automation and RPA platform.",
+          "Machine learning library for Python. Business communication and collaboration. Cloud data platform and analytics. High-accuracy multilingual speech-to-text API. Industrial-strength NLP library. Unified analytics engine for big data. ... Authorization system for fine-grained permissions filtering in RAG applications. Payment orchestration platform. Embedded relational database engine. Q&A platform network integration."
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "query": "python langchain integration",
+    "search_uuid": "46e1a6fa-ad87-485e-9b99-e18db4c40c5b",
+    "latency": 0.5296363830566406
+  }
+}
