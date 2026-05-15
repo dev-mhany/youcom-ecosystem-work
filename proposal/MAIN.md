@@ -1,7 +1,7 @@
 # You.com Ecosystem Engagement — Proposal
 
 **Date:** 2026-05-15
-**Version:** v0.1
+**Version:** v1.0
 **Prepared for:** You.com ecosystem / partnerships team
 **Presenter:** Gitonga Miriam (Cooperation.org), Monday 2026-05-18, 10:00 AM PT
 
@@ -9,9 +9,9 @@
 
 We propose a multi-region, multi-language open-source engagement that adds the You.com Search and Research APIs to agent and research frameworks where they are not yet present. The engagement is anchored by two reference forks already built against verified You.com endpoints: `camel-ai/camel` (KAUST origin, Arabic-community fit) and `assafelovic/gpt-researcher` (deep-research narrative fit). Each fork mirrors the upstream LangChain integration's parity contract and adds locale parameters (`country`, `search_lang`) that the existing LangChain wrapper does not expose for the Search endpoint.
 
-The team is global and multi-language. Muhammad Hany leads Arabic outreach (KAUST, AUC). The Japanese leg is structured as a translation-plus-influencer play around Sakana AI's `AI-Scientist-v2`, with npaka (note.com) as the natural amplifier. The pitch credibility is the two completed forks; the engagement we want is a recurring cadence that keeps adding repos like these on a documented schedule.
+The team is global and multi-language. Muhammad Hany leads Arabic outreach (KAUST, AUC). The Japanese leg is structured as a translation-plus-influencer play around Sakana AI's `AI-Scientist-v2`, with npaka (note.com) as the outreach contact. The two completed forks are the demonstration; the engagement we want is a recurring cadence that keeps adding repos like these on a documented schedule.
 
-This document supersedes the earlier pre-Monday brief drafted by Peter B.A. It is built on verified primary sources: every claim about an existing You.com integration links to the file or release that proves it, and every recommended target lists the exact integration entry-point file.
+This document refines the earlier pre-Monday brief drafted by Peter B.A. and is built on verified primary sources: every claim about an existing You.com integration links to the file or release that proves it, and every recommended target lists the exact integration entry-point file.
 
 ## Sections
 
@@ -103,8 +103,8 @@ analysis with working code.
 
 | Repo | Stars | Lang | Region/community signal | Integration entry point | Why this fits |
 |---|---|---|---|---|---|
-| [`SakanaAI/AI-Scientist-v2`](https://github.com/SakanaAI/AI-Scientist-v2) (+ [v1](https://github.com/SakanaAI/AI-Scientist) paired) | ~6.3k + ~14k | Python | Japan (Sakana AI, Tokyo); flagship JP agent project | [`ai_scientist/tools/base_tool.py`](https://github.com/SakanaAI/AI-Scientist-v2/blob/main/ai_scientist/tools/base_tool.py) — subclass `BaseTool`, register in `perform_ideation_temp_free.py` alongside `SemanticScholarSearchTool` | Clean abstract `BaseTool` (`name`, `description`, `parameters`, `use_tool(**kwargs)`); only existing search backend is Semantic Scholar — You.com adds web grounding. JP-flagship endorsement is the engagement leverage. Detail in `research/japanese-community.md`. |
-| [`huggingface/smolagents`](https://github.com/huggingface/smolagents) | ~17k | Python | HF distribution = multilingual reach by default | `src/smolagents/default_tools.py` (web-search tool slot) | HF's distribution and the multilingual model audience make this a cheap force-multiplier. |
+| [`SakanaAI/AI-Scientist-v2`](https://github.com/SakanaAI/AI-Scientist-v2) (+ [v1](https://github.com/SakanaAI/AI-Scientist) paired) | ~6.3k + ~14k | Python | Japan (Sakana AI, Tokyo); flagship JP agent project | [`ai_scientist/tools/base_tool.py`](https://github.com/SakanaAI/AI-Scientist-v2/blob/main/ai_scientist/tools/base_tool.py) — subclass `BaseTool`, register in `perform_ideation_temp_free.py` alongside `SemanticScholarSearchTool` | Clean abstract `BaseTool` (`name`, `description`, `parameters`, `use_tool(**kwargs)`); only existing search backend is Semantic Scholar — You.com adds web grounding. JP-flagship endorsement is the engagement value. Detail in `research/japanese-community.md`. |
+| [`huggingface/smolagents`](https://github.com/huggingface/smolagents) | ~17k | Python | HF distribution = multilingual reach by default | `src/smolagents/default_tools.py` (web-search tool slot) | HF's distribution and the multilingual model audience put a single PR in front of a wide developer base. |
 | [`agno-agi/agno`](https://github.com/agno-agi/agno) | ~30k | Python | Active maintainers, clean tools layer | `libs/agno/agno/tools/` (per-provider file pattern, e.g. `tavily.py`, `exa.py`) | Drop-in pattern matches camel-ai; high-traffic project. |
 | [`pydantic/pydantic-ai`](https://github.com/pydantic/pydantic-ai) | ~10k | Python | Pydantic ecosystem; common-tools convention | `pydantic_ai/common_tools/` (one file per provider, e.g. `tavily.py`) | Clean common-tools pattern; a `you.py` follows the existing template directly. |
 | [`QwenLM/Qwen-Agent`](https://github.com/QwenLM/Qwen-Agent) | ~9k | Python | China / Asia, Alibaba-backed | `qwen_agent/tools/web_search.py` | Asia regional coverage; complements the JP fork target. |
@@ -133,7 +133,8 @@ those to the News endpoint).
 ### 3.1 `camel-fork` — `camel-ai/camel`
 
 Working tree: `E:\youdotcom\workspace\camel-fork\`. Branch off
-upstream `master` at `0d917c0f`.
+upstream `master` at `0d917c0f`. Build report:
+`research/camel-build-report.md`.
 
 Commits (in order; `git log 0d917c0f..HEAD --reverse`):
 
@@ -171,7 +172,8 @@ locale.
 ### 3.2 `gpt-researcher-fork` — `assafelovic/gpt-researcher`
 
 Working tree: `E:\youdotcom\workspace\gpt-researcher-fork\`. Branch off
-upstream `master` at `92bfc038`.
+upstream `master` at `92bfc038`. Build report:
+`research/gpt-researcher-build-report.md`.
 
 Commits (in order; `git log 92bfc038..HEAD --reverse`):
 
@@ -236,7 +238,7 @@ target, name the first repo. We start with what we can demonstrate
   [@npaka123](https://twitter.com/npaka123)) on note.com / X. He has
   already written explainers on Tavily Search API + LangChain; a
   "You.com Search API を試す" post from him is the single
-  highest-leverage piece of JP coverage available.
+  highest-yield piece of JP coverage available.
 - **First repo:** [`SakanaAI/AI-Scientist-v2`](https://github.com/SakanaAI/AI-Scientist-v2)
   (paired with [v1](https://github.com/SakanaAI/AI-Scientist) for ~20k
   combined stars). Sakana's codebase is English-language despite the
@@ -270,7 +272,63 @@ list.
 
 ## 5. How we'll execute
 
-*To be filled.*
+This section is the operating contract we propose for the engagement. It
+is deliberately concrete: cadence, asks, and reporting format.
+
+### 5.1 Engagement structure
+
+- **Weekly sync** with the You.com partnerships / DevRel point-of-contact.
+  30 minutes, agenda-driven, async-first (notes shared 24h ahead).
+- **Per-fork PR cadence:** scaffold → implementation → tests → docs in
+  separate commits, mirroring the cadence visible in the camel-fork and
+  gpt-researcher-fork commit logs (sections 3.1 / 3.2). Upstream PRs
+  opened in English; locale-test fixtures included.
+- **Eval against the You.com team's existing harness** (Eddy Nassif's
+  work). Every fork ships with at minimum one locale-positive case
+  (e.g. `country='JP', search_lang='ja'`) and one locale-negative case;
+  if the eval harness is open to outside contributors, we add the new
+  framework backends to it. If methodology comes up on Monday we're
+  prepared to discuss; otherwise we credit "the You.com team" generically.
+
+### 5.2 What we need from You.com
+
+- **API keys** for the team — minimum: lead developer per region
+  (Muhammad for Arabic; one per future region as leads are confirmed)
+  plus one shared key for CI / integration smoke tests. The forks'
+  unit tests don't need keys; the live integration smoke tests do.
+- **A direct channel** with You.com DevRel for fast questions
+  (Slack channel, Discord, or shared email thread — whichever
+  matches their existing partnerships flow). Specifically: schema
+  questions on `you-contents` (the CrewAI doc workaround in section 1
+  shows this is non-trivial) and confirmation of `country=SA` / `AE` /
+  `EG` plus `language=AR` behavior with Arabic queries.
+- **Optional pre-PR review** of the next batch of target repos before
+  we open upstream PRs. We'd rather route through You.com once and ship
+  cleanly than have to renegotiate after a maintainer asks "did You.com
+  ask for this?"
+
+### 5.3 Cadence
+
+- **Minimum:** 2 forks per month upstream-PR-ready. Camel-ai +
+  gpt-researcher are the proof of cadence — both built in this engagement
+  prep window.
+- **Scaling:** more, contingent on team availability and on locked
+  region leads (section 4). The Tier 2 list in section 2 is six repos
+  deep, which gives us 3 months of runway at the minimum cadence
+  before we'd need to pull from Tier 3.
+
+### 5.4 Reporting
+
+Monthly markdown report mirroring this document's style and structure.
+Required sections per report:
+
+- PRs opened (link, status, maintainer signal).
+- Outreach evidence (template links, replies, scheduled meetings).
+- Eval delta vs. previous month if a harness comparison is run.
+- Next month's commitment list (repo, lead, target PR-open date).
+
+Reports live in the same `Cooperation-org/projects` repo that hosts
+this proposal so You.com partnerships can read them in one place.
 
 ---
 
@@ -282,6 +340,7 @@ Every claim in this document is grounded in primary research saved to
 - `benchmark-langchain.md` — LangChain wrapper fetched 2026-05-15; parity contract
 - `api-reference.md` — endpoints, auth, response shape verified against a live 200
 - `camel-recon.md`, `gpt-researcher-recon.md` — fork target reconnaissance
+- `camel-build-report.md`, `gpt-researcher-build-report.md` — what each fork actually shipped
 - `eddy-investigation.md` — identification of Eddy Nassif as the eval-harness lead
 - `crewai-verification.md` — CrewAI integration is Type B (generic MCP), not first-class
 - `japanese-community.md` — JP fork target ranking and outreach plan
