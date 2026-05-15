@@ -1,11 +1,12 @@
 # gpt-researcher: You.com Retriever Build Report
 
 Build date: 2026-05-15
-Repo: `E:\youdotcom\workspace\gpt-researcher-fork\` (branch `main`, 8 commits ahead of `origin/main`, working tree clean, **not pushed**)
+Repo: `E:\youdotcom\workspace\gpt-researcher-fork\` (branch `main`, 9 commits ahead of `origin/main`, working tree clean, **not pushed**)
 
 ## Commits
 
 ```
+0158732e Rename YOU_SAFE_SEARCH env var to YOU_LANGUAGE
 a319d30a Document You.com retriever in search-engines guide
 077b8c63 Add unit tests for YouSearch
 9bec63bc Add HTTP error handling
@@ -15,6 +16,10 @@ b531be50 Add soft-fail on missing API key (Tavily pattern)
 d0044789 Implement YouSearch core retrieval
 296826ff Scaffold You.com retriever package
 ```
+
+The 9th commit (`0158732e`) was a follow-up fix landed after this
+report's first draft, addressing the open question in section "Open
+questions for human review" #1.
 
 Author: Muhammad Hany <dev.mhany@gmail.com> (per existing repo git config — not modified).
 
@@ -74,9 +79,9 @@ The repo's existing tests (e.g. `test_quick_search.py`) cannot run in the local 
 
 ## Verification checklist
 
-- [x] 8 commits, exact subjects from the plan
+- [x] 9 commits (8 from the plan + 1 follow-up fix), exact subjects from the plan
 - [x] `git status` clean in `gpt-researcher-fork`
-- [x] No push to remote (`Your branch is ahead of 'origin/main' by 8 commits`)
+- [x] No push to remote (`Your branch is ahead of 'origin/main' by 9 commits`)
 - [x] All 6 unit tests pass
 - [x] No files modified outside `gpt_researcher/retrievers/you/**`, `gpt_researcher/retrievers/__init__.py`, `gpt_researcher/retrievers/utils.py`, `gpt_researcher/actions/retriever.py`, `tests/test_you_retriever.py`, `docs/docs/gpt-researcher/search-engines/search-engines.md`
 - [x] No files modified in `youcom-ecosystem-work` except this report
