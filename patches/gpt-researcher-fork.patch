@@ -1,0 +1,765 @@
+From 296826ff54264eb99940a6189f6d1ccf1f0332b5 Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:18:37 +0300
+Subject: [PATCH 1/9] Scaffold You.com retriever package
+
+Adds the directory and class skeleton mirroring the Tavily retriever
+package layout. Implementation is intentionally deferred to subsequent
+commits so the soft-fail, locale, and error-handling concerns are each
+visible in isolation.
+---
+ gpt_researcher/retrievers/you/__init__.py   |  0
+ gpt_researcher/retrievers/you/you_search.py | 48 +++++++++++++++++++++
+ 2 files changed, 48 insertions(+)
+ create mode 100644 gpt_researcher/retrievers/you/__init__.py
+ create mode 100644 gpt_researcher/retrievers/you/you_search.py
+
+diff --git a/gpt_researcher/retrievers/you/__init__.py b/gpt_researcher/retrievers/you/__init__.py
+new file mode 100644
+index 00000000..e69de29b
+diff --git a/gpt_researcher/retrievers/you/you_search.py b/gpt_researcher/retrievers/you/you_search.py
+new file mode 100644
+index 00000000..2905e9fe
+--- /dev/null
++++ b/gpt_researcher/retrievers/you/you_search.py
+@@ -0,0 +1,48 @@
++"""You.com Search API retriever for GPT Researcher.
++
++This module provides the YouSearch class for performing web searches
++using the You.com Search API (https://documentation.you.com/quickstart).
++"""
++
++import os
++
++import requests
++
++
++BASE_URL = "https://ydc-index.io/v1/search"
++DEFAULT_TIMEOUT = 10
++
++
++class YouSearch:
++    """
++    You.com Search API Retriever.
++    """
++
++    def __init__(self, query, headers=None, topic="general", query_domains=None):
++        """
++        Initializes the YouSearch object.
++
++        Args:
++            query (str): The search query string.
++            headers (dict, optional): Additional headers to include in the request.
++                May contain ``you_api_key`` for per-request key override. Defaults to None.
++            topic (str, optional): The topic for the search. Defaults to "general".
++            query_domains (list, optional): List of domains to include in the search.
++                Defaults to None.
++        """
++        self.query = query
++        self.headers = headers or {}
++        self.topic = topic
++        self.query_domains = query_domains or None
++
++    def search(self, max_results=7):
++        """
++        Searches the query against the You.com Search API.
++
++        Args:
++            max_results (int): Maximum number of results to return. Defaults to 7.
++
++        Returns:
++            list[dict]: A list of result dicts with keys ``href``, ``body``, ``title``.
++        """
++        raise NotImplementedError
+-- 
+2.49.0.windows.1
+
+
+From d0044789649e2a9aba113cb064bba36e0caeefa9 Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:18:54 +0300
+Subject: [PATCH 2/9] Implement YouSearch core retrieval
+
+Issues a GET against the documented Search API endpoint, parses
+results.web from the response, and maps each hit to the gpt-researcher
+retriever shape (href/body/title) so downstream scrapers and
+ResearchConductor can consume it without special casing.
+---
+ gpt_researcher/retrievers/you/you_search.py | 42 ++++++++++++++++++++-
+ 1 file changed, 41 insertions(+), 1 deletion(-)
+
+diff --git a/gpt_researcher/retrievers/you/you_search.py b/gpt_researcher/retrievers/you/you_search.py
+index 2905e9fe..275dc952 100644
+--- a/gpt_researcher/retrievers/you/you_search.py
++++ b/gpt_researcher/retrievers/you/you_search.py
+@@ -35,6 +35,17 @@ class YouSearch:
+         self.topic = topic
+         self.query_domains = query_domains or None
+ 
++    def _get_api_key(self):
++        """
++        Resolves the You.com API key. The ``you_api_key`` header takes
++        precedence over the ``YOU_API_KEY`` environment variable so that
++        callers (e.g. the backend server) may inject per-request keys.
++        """
++        api_key = self.headers.get("you_api_key")
++        if not api_key:
++            api_key = os.environ.get("YOU_API_KEY", "")
++        return api_key
++
+     def search(self, max_results=7):
+         """
+         Searches the query against the You.com Search API.
+@@ -45,4 +56,33 @@ class YouSearch:
+         Returns:
+             list[dict]: A list of result dicts with keys ``href``, ``body``, ``title``.
+         """
+-        raise NotImplementedError
++        api_key = self._get_api_key()
++
++        params = {
++            "query": self.query,
++            "count": max_results,
++        }
++
++        response = requests.get(
++            BASE_URL,
++            headers={"X-API-Key": api_key},
++            params=params,
++            timeout=DEFAULT_TIMEOUT,
++        )
++
++        payload = response.json()
++        web_results = payload.get("results", {}).get("web", [])
++
++        search_response = []
++        for item in web_results:
++            snippets = item.get("snippets") or []
++            body = " ".join(snippets) if snippets else item.get("description", "")
++            search_response.append(
++                {
++                    "href": item.get("url", ""),
++                    "body": body,
++                    "title": item.get("title", ""),
++                }
++            )
++
++        return search_response
+-- 
+2.49.0.windows.1
+
+
+From b531be506e6561fa1fe5c0c58fa69fa0be31c7d7 Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:19:19 +0300
+Subject: [PATCH 3/9] Add soft-fail on missing API key (Tavily pattern)
+
+When neither the per-request header nor YOU_API_KEY is present, log a
+warning and return an empty list instead of raising. This matches
+Tavily's behavior so a misconfigured retriever does not abort an
+entire multi-retriever research run.
+---
+ gpt_researcher/retrievers/you/you_search.py | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/gpt_researcher/retrievers/you/you_search.py b/gpt_researcher/retrievers/you/you_search.py
+index 275dc952..490aa109 100644
+--- a/gpt_researcher/retrievers/you/you_search.py
++++ b/gpt_researcher/retrievers/you/you_search.py
+@@ -4,6 +4,7 @@ This module provides the YouSearch class for performing web searches
+ using the You.com Search API (https://documentation.you.com/quickstart).
+ """
+ 
++import logging
+ import os
+ 
+ import requests
+@@ -12,6 +13,8 @@ import requests
+ BASE_URL = "https://ydc-index.io/v1/search"
+ DEFAULT_TIMEOUT = 10
+ 
++logger = logging.getLogger(__name__)
++
+ 
+ class YouSearch:
+     """
+@@ -57,6 +60,12 @@ class YouSearch:
+             list[dict]: A list of result dicts with keys ``href``, ``body``, ``title``.
+         """
+         api_key = self._get_api_key()
++        if not api_key:
++            logger.warning(
++                "You.com API key not found, set to blank. If you need a retriver, "
++                "please set the YOU_API_KEY environment variable."
++            )
++            return []
+ 
+         params = {
+             "query": self.query,
+-- 
+2.49.0.windows.1
+
+
+From 8b9e208a117355ea3e40c6f65094beee730cbd11 Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:19:52 +0300
+Subject: [PATCH 4/9] Wire YouSearch into retrievers registry
+
+Re-exports YouSearch from the retrievers package, adds the matching
+case in the factory dispatch, and lists "you" in the VALID_RETRIEVERS
+fallback so RETRIEVER=you resolves through every selection path.
+---
+ gpt_researcher/actions/retriever.py   | 5 +++++
+ gpt_researcher/retrievers/__init__.py | 4 +++-
+ gpt_researcher/retrievers/utils.py    | 1 +
+ 3 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/gpt_researcher/actions/retriever.py b/gpt_researcher/actions/retriever.py
+index 8e4c0d5c..0feaf2aa 100644
+--- a/gpt_researcher/actions/retriever.py
++++ b/gpt_researcher/actions/retriever.py
+@@ -30,6 +30,7 @@ def get_retriever(retriever: str):
+         - custom: Custom user-defined retriever
+         - mcp: Model Context Protocol retriever
+         - xquik: Xquik X/Twitter search
++        - you: You.com Search API
+     """
+     match retriever:
+         case "google":
+@@ -96,6 +97,10 @@ def get_retriever(retriever: str):
+             from gpt_researcher.retrievers import XquikSearch
+ 
+             return XquikSearch
++        case "you":
++            from gpt_researcher.retrievers import YouSearch
++
++            return YouSearch
+ 
+         case _:
+             return None
+diff --git a/gpt_researcher/retrievers/__init__.py b/gpt_researcher/retrievers/__init__.py
+index 74e873a9..e94a2f29 100644
+--- a/gpt_researcher/retrievers/__init__.py
++++ b/gpt_researcher/retrievers/__init__.py
+@@ -14,6 +14,7 @@ from .exa.exa import ExaSearch
+ from .mcp import MCPRetriever
+ from .bocha.bocha import BoChaSearch
+ from .xquik.xquik import XquikSearch
++from .you.you_search import YouSearch
+ 
+ __all__ = [
+     "TavilySearch",
+@@ -31,5 +32,6 @@ __all__ = [
+     "ExaSearch",
+     "MCPRetriever",
+     "BoChaSearch",
+-    "XquikSearch"
++    "XquikSearch",
++    "YouSearch",
+ ]
+diff --git a/gpt_researcher/retrievers/utils.py b/gpt_researcher/retrievers/utils.py
+index 9529f050..0cc2e0aa 100644
+--- a/gpt_researcher/retrievers/utils.py
++++ b/gpt_researcher/retrievers/utils.py
+@@ -75,6 +75,7 @@ VALID_RETRIEVERS = [
+     "exa",
+     "mcp",
+     "xquik",
++    "you",
+     "mock"
+ ]
+ 
+-- 
+2.49.0.windows.1
+
+
+From ca93f2aa07c50e3c3fc0c71e28d123173d169649 Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:20:31 +0300
+Subject: [PATCH 5/9] Add country and language locale support
+
+Mirrors the Serper retriever pattern: ctor kwargs override env-var
+defaults (YOU_COUNTRY, YOU_SAFE_SEARCH). The user-facing kwarg is
+language for readability while the wire param remains search_lang as
+the You.com API expects. This unlocks Arabic and Japanese research
+flows without a separate retriever.
+---
+ gpt_researcher/retrievers/you/you_search.py | 36 +++++++++++++++++++--
+ 1 file changed, 34 insertions(+), 2 deletions(-)
+
+diff --git a/gpt_researcher/retrievers/you/you_search.py b/gpt_researcher/retrievers/you/you_search.py
+index 490aa109..b3bc279c 100644
+--- a/gpt_researcher/retrievers/you/you_search.py
++++ b/gpt_researcher/retrievers/you/you_search.py
+@@ -6,6 +6,7 @@ using the You.com Search API (https://documentation.you.com/quickstart).
+ 
+ import logging
+ import os
++from typing import Optional
+ 
+ import requests
+ 
+@@ -18,10 +19,30 @@ logger = logging.getLogger(__name__)
+ 
+ class YouSearch:
+     """
+-    You.com Search API Retriever.
++    You.com Search API Retriever with optional locale support.
++
++    Locale parameters follow the You.com Search API spec:
++
++    * ``country`` is an ISO-3166 alpha-2 code, e.g. ``US``, ``GB``, ``SA``
++      (Saudi Arabia), ``JP`` (Japan).
++    * ``language`` is a BCP-47 language tag, e.g. ``en``, ``ar`` (Arabic),
++      ``ja`` (Japanese). The user-facing kwarg is ``language`` for
++      readability but the wire parameter is ``search_lang``.
++
++    Both kwargs fall back to the ``YOU_COUNTRY`` and ``YOU_SAFE_SEARCH``
++    environment variables, mirroring Serper's ``SERPER_REGION`` /
++    ``SERPER_LANGUAGE`` precedent.
+     """
+ 
+-    def __init__(self, query, headers=None, topic="general", query_domains=None):
++    def __init__(
++        self,
++        query,
++        headers=None,
++        topic="general",
++        query_domains=None,
++        country: Optional[str] = None,
++        language: Optional[str] = None,
++    ):
+         """
+         Initializes the YouSearch object.
+ 
+@@ -32,11 +53,18 @@ class YouSearch:
+             topic (str, optional): The topic for the search. Defaults to "general".
+             query_domains (list, optional): List of domains to include in the search.
+                 Defaults to None.
++            country (str, optional): ISO-3166 alpha-2 country code (e.g. ``SA``,
++                ``JP``). Falls back to the ``YOU_COUNTRY`` env var.
++            language (str, optional): BCP-47 language tag (e.g. ``ar``, ``ja``).
++                Sent on the wire as ``search_lang``. Falls back to the
++                ``YOU_SAFE_SEARCH`` env var.
+         """
+         self.query = query
+         self.headers = headers or {}
+         self.topic = topic
+         self.query_domains = query_domains or None
++        self.country = country or os.getenv("YOU_COUNTRY")
++        self.language = language or os.getenv("YOU_SAFE_SEARCH")
+ 
+     def _get_api_key(self):
+         """
+@@ -71,6 +99,10 @@ class YouSearch:
+             "query": self.query,
+             "count": max_results,
+         }
++        if self.country:
++            params["country"] = self.country
++        if self.language:
++            params["search_lang"] = self.language
+ 
+         response = requests.get(
+             BASE_URL,
+-- 
+2.49.0.windows.1
+
+
+From 9bec63bc7ce502cf8659ecac362b91e0d29ff8ae Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:20:48 +0300
+Subject: [PATCH 6/9] Add HTTP error handling
+
+Catch timeouts and generic request failures, and treat any non-2xx
+status (401 auth, 429 rate-limit, 5xx) as a soft failure that returns
+an empty list. Keeps the retriever from poisoning a multi-retriever
+research pipeline when You.com is unreachable.
+---
+ gpt_researcher/retrievers/you/you_search.py | 31 +++++++++++++++++----
+ 1 file changed, 25 insertions(+), 6 deletions(-)
+
+diff --git a/gpt_researcher/retrievers/you/you_search.py b/gpt_researcher/retrievers/you/you_search.py
+index b3bc279c..a0cb1144 100644
+--- a/gpt_researcher/retrievers/you/you_search.py
++++ b/gpt_researcher/retrievers/you/you_search.py
+@@ -104,12 +104,31 @@ class YouSearch:
+         if self.language:
+             params["search_lang"] = self.language
+ 
+-        response = requests.get(
+-            BASE_URL,
+-            headers={"X-API-Key": api_key},
+-            params=params,
+-            timeout=DEFAULT_TIMEOUT,
+-        )
++        try:
++            response = requests.get(
++                BASE_URL,
++                headers={"X-API-Key": api_key},
++                params=params,
++                timeout=DEFAULT_TIMEOUT,
++            )
++        except requests.exceptions.Timeout:
++            logger.warning(
++                "You.com Search request timed out after %ss. Returning empty results.",
++                DEFAULT_TIMEOUT,
++            )
++            return []
++        except requests.exceptions.RequestException as exc:
++            logger.warning(
++                "You.com Search request failed: %s. Returning empty results.", exc
++            )
++            return []
++
++        if response.status_code != 200:
++            logger.warning(
++                "You.com Search returned HTTP %s. Returning empty results.",
++                response.status_code,
++            )
++            return []
+ 
+         payload = response.json()
+         web_results = payload.get("results", {}).get("web", [])
+-- 
+2.49.0.windows.1
+
+
+From 077b8c632ed1cbcdab0a41bc210bf07c7b0ff2b7 Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:22:50 +0300
+Subject: [PATCH 7/9] Add unit tests for YouSearch
+
+Six unittest cases cover the happy path, soft-fail on missing key,
+header-vs-env precedence, locale propagation, request timeout, and
+non-2xx HTTP responses. The test loads the module directly via
+importlib so it does not require the rest of the gpt_researcher
+optional-dependency stack at unit-test time.
+---
+ tests/test_you_retriever.py | 181 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 181 insertions(+)
+ create mode 100644 tests/test_you_retriever.py
+
+diff --git a/tests/test_you_retriever.py b/tests/test_you_retriever.py
+new file mode 100644
+index 00000000..50c3cd92
+--- /dev/null
++++ b/tests/test_you_retriever.py
+@@ -0,0 +1,181 @@
++"""Unit tests for the You.com Search retriever.
++
++These tests stub out ``requests.get`` so no network or live API key is
++required. The fixture payload mirrors the shape captured at
++``research/fixtures/search-response.json`` in the youcom-ecosystem-work
++companion repo.
++"""
++
++import importlib.util
++import os
++import pathlib
++import sys
++import unittest
++from unittest.mock import MagicMock, patch
++
++import requests
++
++
++# Load the retriever module directly from disk to avoid pulling in the
++# whole ``gpt_researcher`` package (and its many optional dependencies)
++# at unit-test time.
++_MODULE_PATH = (
++    pathlib.Path(__file__).resolve().parent.parent
++    / "gpt_researcher"
++    / "retrievers"
++    / "you"
++    / "you_search.py"
++)
++_spec = importlib.util.spec_from_file_location(
++    "you_search_under_test", _MODULE_PATH
++)
++you_search = importlib.util.module_from_spec(_spec)
++sys.modules["you_search_under_test"] = you_search
++_spec.loader.exec_module(you_search)
++
++BASE_URL = you_search.BASE_URL
++YouSearch = you_search.YouSearch
++
++
++# Reduced fixture mirroring fixtures/search-response.json
++SEARCH_FIXTURE = {
++    "results": {
++        "web": [
++            {
++                "url": "https://docs.langchain.com/oss/python/integrations/providers/overview",
++                "title": "LangChain Python integrations - Docs by LangChain",
++                "description": "Integrate with providers using LangChain Python.",
++                "snippets": [
++                    "LangChain offers an extensive ecosystem with 1000+ integrations.",
++                    "Community integrations can be found in langchain-community.",
++                ],
++            },
++            {
++                "url": "https://docs.langchain.com/oss/python/integrations/providers/all_providers",
++                "title": "All LangChain Python integration providers - Docs by LangChain",
++                "description": "Browse the complete collection of integrations available for Python.",
++                "snippets": [
++                    "LangChain Python offers the most extensive ecosystem.",
++                ],
++            },
++        ]
++    },
++    "metadata": {
++        "query": "python langchain integration",
++        "search_uuid": "46e1a6fa-ad87-485e-9b99-e18db4c40c5b",
++        "latency": 0.53,
++    },
++}
++
++
++def _mock_response(payload, status_code=200):
++    """Build a MagicMock that quacks like a ``requests.Response``."""
++    mock = MagicMock()
++    mock.status_code = status_code
++    mock.json.return_value = payload
++    return mock
++
++
++class YouSearchTests(unittest.TestCase):
++    def setUp(self):
++        # Ensure no environment leakage between tests.
++        self._env_backup = {
++            key: os.environ.pop(key, None)
++            for key in ("YOU_API_KEY", "YOU_COUNTRY", "YOU_SAFE_SEARCH")
++        }
++
++    def tearDown(self):
++        for key, value in self._env_backup.items():
++            if value is not None:
++                os.environ[key] = value
++            else:
++                os.environ.pop(key, None)
++
++    @patch("you_search_under_test.requests.get")
++    def test_search_returns_results_in_tavily_shape(self, mock_get):
++        os.environ["YOU_API_KEY"] = "test-key"
++        mock_get.return_value = _mock_response(SEARCH_FIXTURE)
++
++        results = YouSearch("python langchain integration").search(max_results=2)
++
++        self.assertEqual(len(results), 2)
++        for item in results:
++            self.assertEqual(set(item.keys()), {"href", "body", "title"})
++        self.assertEqual(
++            results[0]["href"],
++            "https://docs.langchain.com/oss/python/integrations/providers/overview",
++        )
++        self.assertIn("LangChain offers", results[0]["body"])
++        self.assertEqual(
++            results[0]["title"],
++            "LangChain Python integrations - Docs by LangChain",
++        )
++
++        # Verify the request URL and headers
++        call = mock_get.call_args
++        self.assertEqual(call.args[0], BASE_URL)
++        self.assertEqual(call.kwargs["headers"], {"X-API-Key": "test-key"})
++        self.assertEqual(call.kwargs["params"]["query"], "python langchain integration")
++        self.assertEqual(call.kwargs["params"]["count"], 2)
++
++    @patch("you_search_under_test.requests.get")
++    def test_search_soft_fails_on_missing_key(self, mock_get):
++        # No env var, no header
++        with self.assertLogs(
++            "you_search_under_test", level="WARNING"
++        ) as captured:
++            results = YouSearch("anything").search()
++
++        self.assertEqual(results, [])
++        mock_get.assert_not_called()
++        self.assertTrue(
++            any("YOU_API_KEY" in record for record in captured.output),
++            f"Expected warning to mention YOU_API_KEY; got {captured.output!r}",
++        )
++
++    @patch("you_search_under_test.requests.get")
++    def test_search_uses_header_key_over_env(self, mock_get):
++        os.environ["YOU_API_KEY"] = "env-key"
++        mock_get.return_value = _mock_response(SEARCH_FIXTURE)
++
++        retriever = YouSearch("q", headers={"you_api_key": "header-key"})
++        retriever.search(max_results=1)
++
++        self.assertEqual(
++            mock_get.call_args.kwargs["headers"],
++            {"X-API-Key": "header-key"},
++        )
++
++    @patch("you_search_under_test.requests.get")
++    def test_search_propagates_locale(self, mock_get):
++        os.environ["YOU_API_KEY"] = "test-key"
++        mock_get.return_value = _mock_response(SEARCH_FIXTURE)
++
++        retriever = YouSearch("q", country="SA", language="ar")
++        retriever.search(max_results=3)
++
++        params = mock_get.call_args.kwargs["params"]
++        self.assertEqual(params["country"], "SA")
++        self.assertEqual(params["search_lang"], "ar")
++
++    @patch("you_search_under_test.requests.get")
++    def test_search_returns_empty_on_timeout(self, mock_get):
++        os.environ["YOU_API_KEY"] = "test-key"
++        mock_get.side_effect = requests.exceptions.Timeout("slow")
++
++        results = YouSearch("q").search()
++
++        self.assertEqual(results, [])
++
++    @patch("you_search_under_test.requests.get")
++    def test_search_returns_empty_on_http_error(self, mock_get):
++        os.environ["YOU_API_KEY"] = "test-key"
++        mock_get.return_value = _mock_response({"error": "rate limited"}, status_code=429)
++
++        results = YouSearch("q").search()
++
++        self.assertEqual(results, [])
++
++
++if __name__ == "__main__":
++    unittest.main()
+-- 
+2.49.0.windows.1
+
+
+From a319d30af7739734800a026332ec3a4ed114baf4 Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:23:23 +0300
+Subject: [PATCH 8/9] Document You.com retriever in search-engines guide
+
+Adds the You.com entry to the supported retriever catalog and a
+configuration section covering YOU_API_KEY plus the YOU_COUNTRY and
+YOU_SAFE_SEARCH locale knobs, with concrete Arabic and Japanese
+examples to surface the multilingual story.
+---
+ .../search-engines/search-engines.md          | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/docs/docs/gpt-researcher/search-engines/search-engines.md b/docs/docs/gpt-researcher/search-engines/search-engines.md
+index 110a6224..9cc0f9c7 100644
+--- a/docs/docs/gpt-researcher/search-engines/search-engines.md
++++ b/docs/docs/gpt-researcher/search-engines/search-engines.md
+@@ -34,6 +34,7 @@ Thanks to our community, we have integrated the following web search engines:
+ - [Arxiv](https://info.arxiv.org/help/api/index.html) - Env: `RETRIEVER=arxiv`
+ - [Exa](https://docs.exa.ai/reference/getting-started) - Env: `RETRIEVER=exa`
+ - [PubMedCentral](https://www.ncbi.nlm.nih.gov/home/develop/api/) - Env: `RETRIEVER=pubmed_central`
++- [You.com](https://you.com/) - Env: `RETRIEVER=you` - [Setup Guide](#youcom)
+ 
+ ## Custom Retrievers
+ 
+@@ -95,4 +96,25 @@ SERPER_TIME_RANGE=qdr:w            # Time filter (qdr:h, qdr:d, qdr:w, qdr:m, qd
+ SERPER_EXCLUDE_SITES=youtube.com   # Exclude sites (comma-separated)
+ ```
+ 
++### You.com
++
++To use the [You.com Search API](https://documentation.you.com/quickstart) as your search engine:
++
++1. Get your API key from [api.you.com/plans](https://api.you.com/plans).
++2. Set the required environment variables:
++
++```bash
++RETRIEVER=you
++YOU_API_KEY=your_api_key_here
++```
++
++**Optional Configuration:**
++
++```bash
++YOU_COUNTRY=SA          # ISO-3166 alpha-2 country code (e.g. US, GB, SA, JP)
++YOU_SAFE_SEARCH=ar      # BCP-47 language tag (e.g. en, ar for Arabic, ja for Japanese)
++```
++
++The retriever is multilingual: pair `YOU_COUNTRY=SA` with `YOU_SAFE_SEARCH=ar` for Arabic-language results from Saudi Arabia, or `YOU_COUNTRY=JP` with `YOU_SAFE_SEARCH=ja` for Japanese results. If `YOU_API_KEY` is not set the retriever logs a warning and returns no results, so it can be combined safely with other retrievers (e.g. `RETRIEVER=tavily,you`).
++
+ Missing a retriever? Feel free to contribute to this project by submitting issues or pull requests on our [GitHub](https://github.com/assafelovic/gpt-researcher) page.
+-- 
+2.49.0.windows.1
+
+
+From 0158732e6766298bb55104caa97eb4cba5a52b0c Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:26:59 +0300
+Subject: [PATCH 9/9] Rename YOU_SAFE_SEARCH env var to YOU_LANGUAGE
+
+The language kwarg's env var fallback was misnamed: YOU_SAFE_SEARCH
+is the natural slot for an actual safesearch knob (the API supports
+off/moderate/strict). YOU_LANGUAGE matches the kwarg name and the
+SERPER_LANGUAGE precedent we set out to mirror.
+---
+ docs/docs/gpt-researcher/search-engines/search-engines.md | 4 ++--
+ gpt_researcher/retrievers/you/you_search.py               | 6 +++---
+ tests/test_you_retriever.py                               | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/docs/docs/gpt-researcher/search-engines/search-engines.md b/docs/docs/gpt-researcher/search-engines/search-engines.md
+index 9cc0f9c7..4897f7eb 100644
+--- a/docs/docs/gpt-researcher/search-engines/search-engines.md
++++ b/docs/docs/gpt-researcher/search-engines/search-engines.md
+@@ -112,9 +112,9 @@ YOU_API_KEY=your_api_key_here
+ 
+ ```bash
+ YOU_COUNTRY=SA          # ISO-3166 alpha-2 country code (e.g. US, GB, SA, JP)
+-YOU_SAFE_SEARCH=ar      # BCP-47 language tag (e.g. en, ar for Arabic, ja for Japanese)
++YOU_LANGUAGE=ar      # BCP-47 language tag (e.g. en, ar for Arabic, ja for Japanese)
+ ```
+ 
+-The retriever is multilingual: pair `YOU_COUNTRY=SA` with `YOU_SAFE_SEARCH=ar` for Arabic-language results from Saudi Arabia, or `YOU_COUNTRY=JP` with `YOU_SAFE_SEARCH=ja` for Japanese results. If `YOU_API_KEY` is not set the retriever logs a warning and returns no results, so it can be combined safely with other retrievers (e.g. `RETRIEVER=tavily,you`).
++The retriever is multilingual: pair `YOU_COUNTRY=SA` with `YOU_LANGUAGE=ar` for Arabic-language results from Saudi Arabia, or `YOU_COUNTRY=JP` with `YOU_LANGUAGE=ja` for Japanese results. If `YOU_API_KEY` is not set the retriever logs a warning and returns no results, so it can be combined safely with other retrievers (e.g. `RETRIEVER=tavily,you`).
+ 
+ Missing a retriever? Feel free to contribute to this project by submitting issues or pull requests on our [GitHub](https://github.com/assafelovic/gpt-researcher) page.
+diff --git a/gpt_researcher/retrievers/you/you_search.py b/gpt_researcher/retrievers/you/you_search.py
+index a0cb1144..b153cbb3 100644
+--- a/gpt_researcher/retrievers/you/you_search.py
++++ b/gpt_researcher/retrievers/you/you_search.py
+@@ -29,7 +29,7 @@ class YouSearch:
+       ``ja`` (Japanese). The user-facing kwarg is ``language`` for
+       readability but the wire parameter is ``search_lang``.
+ 
+-    Both kwargs fall back to the ``YOU_COUNTRY`` and ``YOU_SAFE_SEARCH``
++    Both kwargs fall back to the ``YOU_COUNTRY`` and ``YOU_LANGUAGE``
+     environment variables, mirroring Serper's ``SERPER_REGION`` /
+     ``SERPER_LANGUAGE`` precedent.
+     """
+@@ -57,14 +57,14 @@ class YouSearch:
+                 ``JP``). Falls back to the ``YOU_COUNTRY`` env var.
+             language (str, optional): BCP-47 language tag (e.g. ``ar``, ``ja``).
+                 Sent on the wire as ``search_lang``. Falls back to the
+-                ``YOU_SAFE_SEARCH`` env var.
++                ``YOU_LANGUAGE`` env var.
+         """
+         self.query = query
+         self.headers = headers or {}
+         self.topic = topic
+         self.query_domains = query_domains or None
+         self.country = country or os.getenv("YOU_COUNTRY")
+-        self.language = language or os.getenv("YOU_SAFE_SEARCH")
++        self.language = language or os.getenv("YOU_LANGUAGE")
+ 
+     def _get_api_key(self):
+         """
+diff --git a/tests/test_you_retriever.py b/tests/test_you_retriever.py
+index 50c3cd92..a430547e 100644
+--- a/tests/test_you_retriever.py
++++ b/tests/test_you_retriever.py
+@@ -81,7 +81,7 @@ class YouSearchTests(unittest.TestCase):
+         # Ensure no environment leakage between tests.
+         self._env_backup = {
+             key: os.environ.pop(key, None)
+-            for key in ("YOU_API_KEY", "YOU_COUNTRY", "YOU_SAFE_SEARCH")
++            for key in ("YOU_API_KEY", "YOU_COUNTRY", "YOU_LANGUAGE")
+         }
+ 
+     def tearDown(self):
+-- 
+2.49.0.windows.1
+

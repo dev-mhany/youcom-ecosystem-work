@@ -1,0 +1,690 @@
+From 6341d600b40a324a9abc4022476d907abe53f48b Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:17:49 +0300
+Subject: [PATCH 1/8] Add search_you() skeleton to SearchToolkit
+
+Introduce the public surface and Google-style docstring for the new
+You.com Search integration so subsequent commits can fill in the body,
+error handling, and tool registration without re-touching the signature.
+---
+ camel/toolkits/search_toolkit.py | 48 ++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+
+diff --git a/camel/toolkits/search_toolkit.py b/camel/toolkits/search_toolkit.py
+index 738ec239..fdd4eb0c 100644
+--- a/camel/toolkits/search_toolkit.py
++++ b/camel/toolkits/search_toolkit.py
+@@ -787,6 +787,54 @@ class SearchToolkit(BaseToolkit):
+         except Exception as e:
+             return [{"error": f"An unexpected error occurred: {e!s}"}]
+ 
++    @api_keys_required([(None, 'YOU_API_KEY')])
++    def search_you(
++        self,
++        query: str,
++        number_of_result_pages: int = 10,
++        country: Optional[str] = None,
++        search_lang: Optional[str] = None,
++    ) -> List[Dict[str, Any]]:
++        r"""Use the You.com Search API to search information for the
++        given query.
++
++        You.com (https://you.com) provides a web search API that returns
++        relevant results including titles, descriptions, snippets, and
++        URLs. The API exposes optional locale parameters that make it
++        well suited to multilingual and region-specific searches.
++
++        Args:
++            query (str): The search query string.
++            number_of_result_pages (int): The number of result pages to
++                retrieve. Adjust this based on your task - use fewer
++                results for focused searches and more for comprehensive
++                searches. (default: :obj:`10`)
++            country (Optional[str]): ISO-3166 alpha-2 country code used
++                to bias results toward a specific market (e.g.
++                ``"US"``, ``"JP"``, ``"SA"``). When ``None`` the API
++                default is used. (default: :obj:`None`)
++            search_lang (Optional[str]): BCP-47 language tag used to
++                bias results toward a specific language (e.g. ``"en"``,
++                ``"ja"``, ``"ar"``). When ``None`` the API default is
++                used. (default: :obj:`None`)
++
++        Returns:
++            List[Dict[str, Any]]: A list of dictionaries representing
++                search results. Each dictionary contains:
++
++                - 'result_id' (int): The result's index (1-based).
++                - 'title' (str): The title of the result.
++                - 'description' (str): A brief description of the
++                  result.
++                - 'long_description' (str): Concatenated snippets that
++                  provide longer-form context for the result.
++                - 'url' (str): The URL of the result.
++
++                On failure a single-element list ``[{"error": "..."}]``
++                is returned.
++        """
++        raise NotImplementedError
++
+     @api_keys_required([(None, 'BOCHA_API_KEY')])
+     def search_bocha(
+         self,
+-- 
+2.49.0.windows.1
+
+
+From c8d203257270df4ded6f062eb35b309690e07684 Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:18:08 +0300
+Subject: [PATCH 2/8] Implement You.com Search API wrapper
+
+Replace the placeholder body with a plain requests.get call against
+https://ydc-index.io/v1/search using the X-API-Key header. Parse
+results.web[] into the camel-standard {result_id, title, description,
+long_description, url} shape, joining snippets[] for long_description
+to give agents richer context. Optional country and search_lang query
+params are dropped when None so callers only opt in when needed.
+---
+ camel/toolkits/search_toolkit.py | 32 +++++++++++++++++++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
+
+diff --git a/camel/toolkits/search_toolkit.py b/camel/toolkits/search_toolkit.py
+index fdd4eb0c..06822f1c 100644
+--- a/camel/toolkits/search_toolkit.py
++++ b/camel/toolkits/search_toolkit.py
+@@ -833,7 +833,37 @@ class SearchToolkit(BaseToolkit):
+                 On failure a single-element list ``[{"error": "..."}]``
+                 is returned.
+         """
+-        raise NotImplementedError
++        YOU_API_KEY = os.environ.get("YOU_API_KEY")
++
++        url = "https://ydc-index.io/v1/search"
++        headers = {"X-API-Key": YOU_API_KEY}
++        params: Dict[str, Any] = {
++            "query": query,
++            "count": number_of_result_pages,
++        }
++        if country is not None:
++            params["country"] = country
++        if search_lang is not None:
++            params["search_lang"] = search_lang
++
++        response = requests.get(
++            url, headers=headers, params=params, timeout=self.timeout
++        )
++        web_results = response.json().get("results", {}).get("web", [])
++
++        results: List[Dict[str, Any]] = []
++        for idx, item in enumerate(web_results, 1):
++            snippets = item.get("snippets") or []
++            results.append(
++                {
++                    "result_id": idx,
++                    "title": item.get("title", ""),
++                    "description": item.get("description", ""),
++                    "long_description": "\n".join(snippets),
++                    "url": item.get("url", ""),
++                }
++            )
++        return results
+ 
+     @api_keys_required([(None, 'BOCHA_API_KEY')])
+     def search_bocha(
+-- 
+2.49.0.windows.1
+
+
+From 7fe5f036c1abc0a0a1724885561f632310b6d2a9 Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:18:28 +0300
+Subject: [PATCH 3/8] Add error handling for search_you
+
+Wrap the request in try/except, distinguishing Timeout, HTTPError,
+generic RequestException, and unexpected exceptions so callers always
+receive a structured [{"error": ...}] payload instead of a traceback.
+Non-2xx status codes are also surfaced as errors and logged via the
+module logger, matching the Bocha and Querit handling pattern.
+---
+ camel/toolkits/search_toolkit.py | 63 ++++++++++++++++++++++++++++++--
+ 1 file changed, 59 insertions(+), 4 deletions(-)
+
+diff --git a/camel/toolkits/search_toolkit.py b/camel/toolkits/search_toolkit.py
+index 06822f1c..4074adf7 100644
+--- a/camel/toolkits/search_toolkit.py
++++ b/camel/toolkits/search_toolkit.py
+@@ -846,10 +846,65 @@ class SearchToolkit(BaseToolkit):
+         if search_lang is not None:
+             params["search_lang"] = search_lang
+ 
+-        response = requests.get(
+-            url, headers=headers, params=params, timeout=self.timeout
+-        )
+-        web_results = response.json().get("results", {}).get("web", [])
++        try:
++            response = requests.get(
++                url,
++                headers=headers,
++                params=params,
++                timeout=self.timeout,
++            )
++
++            if response.status_code != 200:
++                logger.warning(
++                    "You.com search returned HTTP "
++                    f"{response.status_code}: {response.text}"
++                )
++                return [
++                    {
++                        "error": (
++                            f"You.com API failed with status "
++                            f"{response.status_code}: {response.text}"
++                        )
++                    }
++                ]
++
++            web_results = (
++                response.json().get("results", {}).get("web", [])
++            )
++        except requests.exceptions.Timeout as e:
++            logger.warning(f"You.com search timed out: {e!s}")
++            return [{"error": f"You.com search timed out: {e!s}"}]
++        except requests.exceptions.HTTPError as e:
++            status = (
++                e.response.status_code
++                if e.response is not None
++                else "unknown"
++            )
++            logger.warning(
++                f"You.com search HTTP error {status}: {e!s}"
++            )
++            return [
++                {
++                    "error": (
++                        f"You.com search HTTP error {status}: {e!s}"
++                    )
++                }
++            ]
++        except requests.exceptions.RequestException as e:
++            logger.warning(f"You.com search request failed: {e!s}")
++            return [{"error": f"You.com search request failed: {e!s}"}]
++        except Exception as e:
++            logger.warning(
++                f"Unexpected error during You.com search: {e!s}"
++            )
++            return [
++                {
++                    "error": (
++                        f"Unexpected error during You.com search: "
++                        f"{e!s}"
++                    )
++                }
++            ]
+ 
+         results: List[Dict[str, Any]] = []
+         for idx, item in enumerate(web_results, 1):
+-- 
+2.49.0.windows.1
+
+
+From 140d82dbac370bb7508d934f77e308feb442c696 Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:18:37 +0300
+Subject: [PATCH 4/8] Register search_you in get_tools()
+
+Expose search_you alongside the other engines so it is picked up by
+agents that consume SearchToolkit().get_tools() and by the @MCPServer
+auto-registration. Position matches the method-declaration order
+between search_tavily and search_brave for readability.
+---
+ camel/toolkits/search_toolkit.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/camel/toolkits/search_toolkit.py b/camel/toolkits/search_toolkit.py
+index 4074adf7..ef73afc8 100644
+--- a/camel/toolkits/search_toolkit.py
++++ b/camel/toolkits/search_toolkit.py
+@@ -1813,6 +1813,7 @@ class SearchToolkit(BaseToolkit):
+             FunctionTool(self.search_google),
+             FunctionTool(self.search_duckduckgo),
+             FunctionTool(self.search_tavily),
++            FunctionTool(self.search_you),
+             FunctionTool(self.search_brave),
+             FunctionTool(self.search_bocha),
+             FunctionTool(self.search_baidu),
+-- 
+2.49.0.windows.1
+
+
+From dcb75339777b1381f05fb83c1c755e7d1f8c6d1c Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:18:53 +0300
+Subject: [PATCH 5/8] Document Arabic and Japanese examples in search_you
+ docstring
+
+Add concrete usage snippets for ar-SA and ja-JP under the Args block to
+make the multi-region differentiator discoverable directly from the
+method help text. Docs-only change; no behavior is affected.
+---
+ camel/toolkits/search_toolkit.py | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/camel/toolkits/search_toolkit.py b/camel/toolkits/search_toolkit.py
+index ef73afc8..a4b4585c 100644
+--- a/camel/toolkits/search_toolkit.py
++++ b/camel/toolkits/search_toolkit.py
+@@ -818,6 +818,22 @@ class SearchToolkit(BaseToolkit):
+                 ``"ja"``, ``"ar"``). When ``None`` the API default is
+                 used. (default: :obj:`None`)
+ 
++                Examples for multilingual searches::
++
++                    # Arabic-language results biased to Saudi Arabia.
++                    toolkit.search_you(
++                        query="ما هي أحدث أخبار التقنية؟",
++                        country="SA",
++                        search_lang="ar",
++                    )
++
++                    # Japanese-language results biased to Japan.
++                    toolkit.search_you(
++                        query="生成AIの最新動向",
++                        country="JP",
++                        search_lang="ja",
++                    )
++
+         Returns:
+             List[Dict[str, Any]]: A list of dictionaries representing
+                 search results. Each dictionary contains:
+-- 
+2.49.0.windows.1
+
+
+From 828e8732d1b3b2f01a928e8b54c9f2a387296290 Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:19:53 +0300
+Subject: [PATCH 6/8] Add unit tests for search_you
+
+Cover the happy path against a reduced fixture mirroring the live
+You.com 200 response, plus the missing-API-key, HTTP error, timeout,
+and multilingual-parameter-propagation scenarios. Tests use
+unittest.mock.patch for both requests.get and os.environ to stay
+consistent with the existing Querit test section.
+---
+ test/toolkits/test_search_functions.py | 178 +++++++++++++++++++++++++
+ 1 file changed, 178 insertions(+)
+
+diff --git a/test/toolkits/test_search_functions.py b/test/toolkits/test_search_functions.py
+index 8caa019f..c7c1a392 100644
+--- a/test/toolkits/test_search_functions.py
++++ b/test/toolkits/test_search_functions.py
+@@ -1212,3 +1212,181 @@ def test_search_querit_empty_results(mock_post, search_toolkit):
+     assert "results" in result
+     assert len(result["results"]) == 0
+     assert result["search_id"] == 12348
++
++
++# ==================== You.com Search Tests ====================
++
++# Reduced fixture mirroring the shape captured at
++# research/fixtures/search-response.json (2026-05-15 live 200 response).
++# Long thumbnail URLs are trimmed; the field set is unchanged.
++YOU_FIXTURE_RESPONSE = {
++    "results": {
++        "web": [
++            {
++                "url": (
++                    "https://docs.langchain.com/oss/python/"
++                    "integrations/providers/overview"
++                ),
++                "title": (
++                    "LangChain Python integrations - Docs by LangChain"
++                ),
++                "description": (
++                    "Integrate with providers using LangChain Python."
++                ),
++                "thumbnail_url": "https://example.com/thumb1.png",
++                "original_thumbnail_url": (
++                    "https://example.com/thumb1-orig.png"
++                ),
++                "favicon_url": (
++                    "https://you.com/favicon?domain=docs.langchain.com"
++                ),
++                "snippets": [
++                    "LangChain offers an extensive ecosystem.",
++                    "1000+ integrations across chat & embedding models.",
++                    "Community integrations live in langchain-community.",
++                ],
++            },
++            {
++                "url": (
++                    "https://docs.langchain.com/oss/python/"
++                    "integrations/providers/all_providers"
++                ),
++                "title": (
++                    "All LangChain Python integration providers - Docs"
++                ),
++                "description": (
++                    "Browse the complete collection of integrations "
++                    "available for Python."
++                ),
++                "thumbnail_url": "https://example.com/thumb2.png",
++                "original_thumbnail_url": (
++                    "https://example.com/thumb2-orig.png"
++                ),
++                "favicon_url": (
++                    "https://you.com/favicon?domain=docs.langchain.com"
++                ),
++                "snippets": [
++                    "LangChain Python offers the most extensive ecosystem.",
++                    "1000+ integrations across LLMs and retrievers.",
++                ],
++            },
++        ]
++    },
++    "metadata": {
++        "query": "python langchain integration",
++        "search_uuid": "46e1a6fa-ad87-485e-9b99-e18db4c40c5b",
++        "latency": 0.53,
++    },
++}
++
++
++@patch('requests.get')
++def test_search_you_success(mock_get, search_toolkit):
++    """Test successful You.com search returns the expected shape."""
++    mock_response = MagicMock()
++    mock_response.status_code = 200
++    mock_response.json.return_value = YOU_FIXTURE_RESPONSE
++    mock_get.return_value = mock_response
++
++    with patch.dict(os.environ, {'YOU_API_KEY': 'fake_api_key'}):
++        result = search_toolkit.search_you(
++            query="python langchain integration"
++        )
++
++    assert isinstance(result, list)
++    assert len(result) == 2
++    assert result[0] == {
++        "result_id": 1,
++        "title": "LangChain Python integrations - Docs by LangChain",
++        "description": (
++            "Integrate with providers using LangChain Python."
++        ),
++        "long_description": (
++            "LangChain offers an extensive ecosystem.\n"
++            "1000+ integrations across chat & embedding models.\n"
++            "Community integrations live in langchain-community."
++        ),
++        "url": (
++            "https://docs.langchain.com/oss/python/integrations/"
++            "providers/overview"
++        ),
++    }
++    assert result[1]["result_id"] == 2
++
++    # Verify the request was made correctly.
++    mock_get.assert_called_once()
++    args, kwargs = mock_get.call_args
++    assert args[0] == "https://ydc-index.io/v1/search"
++    assert kwargs['headers']['X-API-Key'] == 'fake_api_key'
++    assert kwargs['params']['query'] == 'python langchain integration'
++    assert kwargs['params']['count'] == 10
++    assert 'timeout' in kwargs
++
++
++@patch('requests.get')
++def test_search_you_missing_api_key(mock_get, search_toolkit):
++    """Test the @api_keys_required decorator rejects missing key."""
++    # Ensure YOU_API_KEY is not present in the environment.
++    with patch.dict(os.environ, {}, clear=True):
++        with pytest.raises(ValueError, match="YOU_API_KEY"):
++            search_toolkit.search_you(query="test")
++
++    # No HTTP call should have been made.
++    mock_get.assert_not_called()
++
++
++@patch('requests.get')
++def test_search_you_http_error(mock_get, search_toolkit):
++    """Test HTTP error handling in You.com search."""
++    mock_response = MagicMock()
++    mock_response.status_code = 401
++    mock_response.text = '{"message": "Unauthorized"}'
++    mock_get.return_value = mock_response
++
++    with patch.dict(os.environ, {'YOU_API_KEY': 'invalid_key'}):
++        result = search_toolkit.search_you(query="test")
++
++    assert isinstance(result, list)
++    assert len(result) == 1
++    assert "error" in result[0]
++    assert "401" in result[0]["error"]
++
++
++@patch('requests.get')
++def test_search_you_timeout(mock_get, search_toolkit):
++    """Test timeout handling in You.com search."""
++    mock_get.side_effect = requests.exceptions.Timeout(
++        "Connection timed out"
++    )
++
++    with patch.dict(os.environ, {'YOU_API_KEY': 'fake_key'}):
++        result = search_toolkit.search_you(query="test")
++
++    assert isinstance(result, list)
++    assert len(result) == 1
++    assert "error" in result[0]
++    assert "timed out" in result[0]["error"]
++
++
++@patch('requests.get')
++def test_search_you_multilingual_params_propagated(
++    mock_get, search_toolkit
++):
++    """Test country and search_lang are forwarded to the API call."""
++    mock_response = MagicMock()
++    mock_response.status_code = 200
++    mock_response.json.return_value = {"results": {"web": []}}
++    mock_get.return_value = mock_response
++
++    with patch.dict(os.environ, {'YOU_API_KEY': 'fake_key'}):
++        search_toolkit.search_you(
++            query="ما هي أحدث أخبار التقنية؟",
++            country='SA',
++            search_lang='ar',
++        )
++
++    mock_get.assert_called_once()
++    _, kwargs = mock_get.call_args
++    assert kwargs['params']['country'] == 'SA'
++    assert kwargs['params']['search_lang'] == 'ar'
++    assert kwargs['params']['query'] == 'ما هي أحدث أخبار التقنية؟'
+-- 
+2.49.0.windows.1
+
+
+From f97b35d13ea00f13ab8282d3ec2d42b9ba39399e Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:20:32 +0300
+Subject: [PATCH 7/8] Apply ruff formatting to search_you additions
+
+Run ruff format and ruff check --fix on the toolkit and test changes
+so the new code matches the project style. Pure formatting; no
+behavior change.
+---
+ camel/toolkits/search_toolkit.py       | 31 +++++---------------------
+ test/toolkits/test_search_functions.py | 20 +++++------------
+ 2 files changed, 11 insertions(+), 40 deletions(-)
+
+diff --git a/camel/toolkits/search_toolkit.py b/camel/toolkits/search_toolkit.py
+index a4b4585c..5df6e566 100644
+--- a/camel/toolkits/search_toolkit.py
++++ b/camel/toolkits/search_toolkit.py
+@@ -884,42 +884,23 @@ class SearchToolkit(BaseToolkit):
+                     }
+                 ]
+ 
+-            web_results = (
+-                response.json().get("results", {}).get("web", [])
+-            )
++            web_results = response.json().get("results", {}).get("web", [])
+         except requests.exceptions.Timeout as e:
+             logger.warning(f"You.com search timed out: {e!s}")
+             return [{"error": f"You.com search timed out: {e!s}"}]
+         except requests.exceptions.HTTPError as e:
+             status = (
+-                e.response.status_code
+-                if e.response is not None
+-                else "unknown"
+-            )
+-            logger.warning(
+-                f"You.com search HTTP error {status}: {e!s}"
++                e.response.status_code if e.response is not None else "unknown"
+             )
+-            return [
+-                {
+-                    "error": (
+-                        f"You.com search HTTP error {status}: {e!s}"
+-                    )
+-                }
+-            ]
++            logger.warning(f"You.com search HTTP error {status}: {e!s}")
++            return [{"error": (f"You.com search HTTP error {status}: {e!s}")}]
+         except requests.exceptions.RequestException as e:
+             logger.warning(f"You.com search request failed: {e!s}")
+             return [{"error": f"You.com search request failed: {e!s}"}]
+         except Exception as e:
+-            logger.warning(
+-                f"Unexpected error during You.com search: {e!s}"
+-            )
++            logger.warning(f"Unexpected error during You.com search: {e!s}")
+             return [
+-                {
+-                    "error": (
+-                        f"Unexpected error during You.com search: "
+-                        f"{e!s}"
+-                    )
+-                }
++                {"error": (f"Unexpected error during You.com search: {e!s}")}
+             ]
+ 
+         results: List[Dict[str, Any]] = []
+diff --git a/test/toolkits/test_search_functions.py b/test/toolkits/test_search_functions.py
+index c7c1a392..074b85dc 100644
+--- a/test/toolkits/test_search_functions.py
++++ b/test/toolkits/test_search_functions.py
+@@ -1227,9 +1227,7 @@ YOU_FIXTURE_RESPONSE = {
+                     "https://docs.langchain.com/oss/python/"
+                     "integrations/providers/overview"
+                 ),
+-                "title": (
+-                    "LangChain Python integrations - Docs by LangChain"
+-                ),
++                "title": ("LangChain Python integrations - Docs by LangChain"),
+                 "description": (
+                     "Integrate with providers using LangChain Python."
+                 ),
+@@ -1251,9 +1249,7 @@ YOU_FIXTURE_RESPONSE = {
+                     "https://docs.langchain.com/oss/python/"
+                     "integrations/providers/all_providers"
+                 ),
+-                "title": (
+-                    "All LangChain Python integration providers - Docs"
+-                ),
++                "title": ("All LangChain Python integration providers - Docs"),
+                 "description": (
+                     "Browse the complete collection of integrations "
+                     "available for Python."
+@@ -1298,9 +1294,7 @@ def test_search_you_success(mock_get, search_toolkit):
+     assert result[0] == {
+         "result_id": 1,
+         "title": "LangChain Python integrations - Docs by LangChain",
+-        "description": (
+-            "Integrate with providers using LangChain Python."
+-        ),
++        "description": ("Integrate with providers using LangChain Python."),
+         "long_description": (
+             "LangChain offers an extensive ecosystem.\n"
+             "1000+ integrations across chat & embedding models.\n"
+@@ -1355,9 +1349,7 @@ def test_search_you_http_error(mock_get, search_toolkit):
+ @patch('requests.get')
+ def test_search_you_timeout(mock_get, search_toolkit):
+     """Test timeout handling in You.com search."""
+-    mock_get.side_effect = requests.exceptions.Timeout(
+-        "Connection timed out"
+-    )
++    mock_get.side_effect = requests.exceptions.Timeout("Connection timed out")
+ 
+     with patch.dict(os.environ, {'YOU_API_KEY': 'fake_key'}):
+         result = search_toolkit.search_you(query="test")
+@@ -1369,9 +1361,7 @@ def test_search_you_timeout(mock_get, search_toolkit):
+ 
+ 
+ @patch('requests.get')
+-def test_search_you_multilingual_params_propagated(
+-    mock_get, search_toolkit
+-):
++def test_search_you_multilingual_params_propagated(mock_get, search_toolkit):
+     """Test country and search_lang are forwarded to the API call."""
+     mock_response = MagicMock()
+     mock_response.status_code = 200
+-- 
+2.49.0.windows.1
+
+
+From 1a35bdc665a7d6ea4469566f4d45819fc0fc66c8 Mon Sep 17 00:00:00 2001
+From: Muhammad Hany <dev.mhany@gmail.com>
+Date: Fri, 15 May 2026 22:21:00 +0300
+Subject: [PATCH 8/8] Add You.com Search README usage example
+
+Document the new search_you method alongside the existing search
+example: env-var setup, a 5-line agent-free Python snippet, and a
+brief mention of the country / search_lang arguments for Arabic and
+Japanese coverage.
+---
+ README.md | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/README.md b/README.md
+index e41d88db..ae7cdafc 100644
+--- a/README.md
++++ b/README.md
+@@ -322,6 +322,34 @@ Explore different types of agents, their roles, and their applications.
+ - **[Embodied Agents](https://docs.camel-ai.org/cookbooks/advanced_features/embodied_agents)**
+ - **[Critic Agents](https://docs.camel-ai.org/cookbooks/advanced_features/critic_agents_and_tree_search)**
+ 
++### Search: You.com
++
++`SearchToolkit` exposes the You.com Search API via `search_you`. Set
++the API key in the environment, then call the method directly or pass
++it to a `ChatAgent` like any other tool.
++
++```bash
++export YOU_API_KEY='your_you_api_key'
++```
++
++```python
++from camel.toolkits import SearchToolkit
++
++toolkit = SearchToolkit()
++results = toolkit.search_you(
++    query="latest CAMEL-AI release notes",
++    number_of_result_pages=5,
++)
++for hit in results:
++    print(hit["title"], hit["url"])
++```
++
++The `country` and `search_lang` arguments accept ISO-3166 alpha-2 and
++BCP-47 codes respectively, so the same tool covers Arabic
++(`country='SA', search_lang='ar'`) and Japanese
++(`country='JP', search_lang='ja'`) searches without a separate
++locale-specific engine.
++
+ ### Seeking Help
+ 
+ Please reach out to us on [CAMEL discord](https://discord.camel-ai.org/) if you encounter any issue set up CAMEL.
+-- 
+2.49.0.windows.1
+
