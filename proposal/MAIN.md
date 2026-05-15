@@ -147,13 +147,14 @@ Commits (in order; `git log 0d917c0f..HEAD --reverse`):
 | 5 | `dcb75339` | Document Arabic and Japanese examples in search_you docstring |
 | 6 | `828e8732` | Add unit tests for search_you |
 | 7 | `f97b35d1` | Apply ruff formatting to search_you additions |
+| 8 | `1a35bdc6` | Add You.com Search README usage example |
 
 What it adds: a `search_you()` method on `SearchToolkit` (in
 `camel/toolkits/search_toolkit.py`) following the dominant per-engine
 pattern (plain `requests` + `@api_keys_required` + try/except returning
-an error dict). Locale params: `country` (ISO-2: `US`, `JP`, `AE`, `SA`),
-`search_lang` (BCP 47: `en`, `ja`, `ar`), plus `safesearch` and
-`freshness`. Registered via `FunctionTool(self.search_you)` in
+an error dict). Locale params: `country` (ISO-2: `US`, `JP`, `AE`, `SA`)
+and `search_lang` (BCP 47: `en`, `ja`, `ar`). Registered via
+`FunctionTool(self.search_you)` in
 `get_tools()`; the class-level `@MCPServer()` decorator makes it
 auto-available as an MCP tool too. Tests appended to
 `test/toolkits/test_search_functions.py` covering success, locale
@@ -185,6 +186,9 @@ Commits (in order; `git log 92bfc038..HEAD --reverse`):
 | 4 | `8b9e208a` | Wire YouSearch into retrievers registry |
 | 5 | `ca93f2aa` | Add country and language locale support |
 | 6 | `9bec63bc` | Add HTTP error handling |
+| 7 | `077b8c63` | Add unit tests for YouSearch |
+| 8 | `a319d30a` | Document You.com retriever in search-engines guide |
+| 9 | `0158732e` | Rename YOU_SAFE_SEARCH env var to YOU_LANGUAGE |
 
 What it adds: a `YouSearch` class in
 `gpt_researcher/retrievers/you/you_search.py` modeled on
@@ -193,7 +197,7 @@ What it adds: a `YouSearch` class in
 plus optional `country` and `language` kwargs that fall back to
 `YOU_COUNTRY` / `YOU_LANGUAGE` env vars — same shape as the Serper
 retriever's locale precedent (`SERPER_REGION`, `SERPER_LANGUAGE`). The
-`search(max_results=10)` method returns the framework-standard
+`search(max_results=7)` method returns the framework-standard
 `[{"href", "body", "title"}, ...]` shape; on exception it returns `[]`
 to match the Tavily pattern. Soft-fail on missing `YOU_API_KEY` (warn +
 return blank), with per-request override via
