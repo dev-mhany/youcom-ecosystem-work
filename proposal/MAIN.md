@@ -121,11 +121,152 @@ analysis with working code.
 
 ## 3. Two reference forks (already built)
 
-*To be filled.*
+Both forks were built off the parity contract in
+`research/benchmark-langchain.md` (the upstream LangChain integration is
+the quality benchmark). Both target the verified Search endpoint
+`GET https://ydc-index.io/v1/search` with the response shape captured at
+`research/fixtures/search-response.json`. Both expose `country` and
+`search_lang` / `language` for the Search endpoint — locale parameters the
+upstream LangChain wrapper does not expose for Search (LangChain restricts
+those to the News endpoint).
+
+### 3.1 `camel-fork` — `camel-ai/camel`
+
+Working tree: `E:\youdotcom\workspace\camel-fork\`. Branch off
+upstream `master` at `0d917c0f`.
+
+Commits (in order; `git log 0d917c0f..HEAD --reverse`):
+
+| # | Hash | Subject |
+|---|---|---|
+| 1 | `6341d600` | Add search_you() skeleton to SearchToolkit |
+| 2 | `c8d20325` | Implement You.com Search API wrapper |
+| 3 | `7fe5f036` | Add error handling for search_you |
+| 4 | `140d82db` | Register search_you in get_tools() |
+| 5 | `dcb75339` | Document Arabic and Japanese examples in search_you docstring |
+| 6 | `828e8732` | Add unit tests for search_you |
+| 7 | `f97b35d1` | Apply ruff formatting to search_you additions |
+
+What it adds: a `search_you()` method on `SearchToolkit` (in
+`camel/toolkits/search_toolkit.py`) following the dominant per-engine
+pattern (plain `requests` + `@api_keys_required` + try/except returning
+an error dict). Locale params: `country` (ISO-2: `US`, `JP`, `AE`, `SA`),
+`search_lang` (BCP 47: `en`, `ja`, `ar`), plus `safesearch` and
+`freshness`. Registered via `FunctionTool(self.search_you)` in
+`get_tools()`; the class-level `@MCPServer()` decorator makes it
+auto-available as an MCP tool too. Tests appended to
+`test/toolkits/test_search_functions.py` covering success, locale
+(`country='JP', search_lang='ja'` and `search_lang='ar'`), HTTP error,
+and request-exception cases.
+
+Multilingual gap closed: camel-ai's existing engines either lack locale
+entirely (Google hard-codes `search_language="en"`), use non-standard
+codes (Brave's `search_lang='jp'` instead of `'ja'`), or don't list
+Arabic at all (Querit's `language_include` enumerates English / Japanese /
+Korean / German / French / Spanish / Portuguese — no Arabic). You.com's
+`country` and `search_lang` fields, exposed via `search_you()`, give
+camel-ai its cleanest path to Arabic and to a correctly-coded Japanese
+locale.
+
+### 3.2 `gpt-researcher-fork` — `assafelovic/gpt-researcher`
+
+Working tree: `E:\youdotcom\workspace\gpt-researcher-fork\`. Branch off
+upstream `master` at `92bfc038`.
+
+Commits (in order; `git log 92bfc038..HEAD --reverse`):
+
+| # | Hash | Subject |
+|---|---|---|
+| 1 | `296826ff` | Scaffold You.com retriever package |
+| 2 | `d0044789` | Implement YouSearch core retrieval |
+| 3 | `b531be50` | Add soft-fail on missing API key (Tavily pattern) |
+| 4 | `8b9e208a` | Wire YouSearch into retrievers registry |
+| 5 | `ca93f2aa` | Add country and language locale support |
+| 6 | `9bec63bc` | Add HTTP error handling |
+
+What it adds: a `YouSearch` class in
+`gpt_researcher/retrievers/you/you_search.py` modeled on
+`tavily_search.py`. Constructor mirrors Tavily exactly
+(`__init__(self, query, headers=None, topic="general", query_domains=None)`)
+plus optional `country` and `language` kwargs that fall back to
+`YOU_COUNTRY` / `YOU_LANGUAGE` env vars — same shape as the Serper
+retriever's locale precedent (`SERPER_REGION`, `SERPER_LANGUAGE`). The
+`search(max_results=10)` method returns the framework-standard
+`[{"href", "body", "title"}, ...]` shape; on exception it returns `[]`
+to match the Tavily pattern. Soft-fail on missing `YOU_API_KEY` (warn +
+return blank), with per-request override via
+`headers.get("you_api_key")` — supports the multi-tenant
+header-injection path used by `backend/server/server_utils.py`.
+
+Wired into the retrievers registry: import added to
+`gpt_researcher/retrievers/__init__.py`, `case "you":` added to the
+factory `match` block in `gpt_researcher/actions/retriever.py`, and
+`"you"` added to the defensive `VALID_RETRIEVERS` list in
+`gpt_researcher/retrievers/utils.py` (the dynamic directory scan picks
+it up automatically; the list is belt-and-suspenders). Users select via
+`RETRIEVER=you` and can compose with others via `RETRIEVER=tavily,you,arxiv`.
 
 ## 4. Multi-region engagement plan
 
-*To be filled.*
+The two forks above are the first two artifacts. The structure that
+follows is the durable shape: per region, name a lead, name an outreach
+target, name the first repo. We start with what we can demonstrate
+(Arabic, live this engagement) and stage the rest behind it.
+
+### Arabic — LIVE on this engagement
+
+- **Lead:** Muhammad Hany.
+- **First repo:** `camel-ai/camel`. Done — see section 3.1. KAUST is the
+  origin of camel-ai, which makes the Arabic-community story land
+  naturally rather than as an afterthought.
+- **Outreach targets:** KAUST (camel-ai's institutional home) and the
+  American University in Cairo. Outreach templates are in
+  `extra/`.
+- **Locale verification status:** `country=SA`, `country=AE`,
+  `country=EG` and `search_lang=ar` are accepted by the Search API per
+  documentation; live verification was not budgeted for this pass (we
+  spent both budgeted live calls on endpoint correctness — see
+  `research/api-reference.md` section 5). The fork's unit tests cover
+  the Arabic locale path; an integration smoke test against a real
+  Arabic query is the first item we'd want a You.com API key to run.
+
+### Japanese — NEXT engagement
+
+- **Outreach lead:** npaka (布留川英一,
+  [@npaka123](https://twitter.com/npaka123)) on note.com / X. He has
+  already written explainers on Tavily Search API + LangChain; a
+  "You.com Search API を試す" post from him is the single
+  highest-leverage piece of JP coverage available.
+- **First repo:** [`SakanaAI/AI-Scientist-v2`](https://github.com/SakanaAI/AI-Scientist-v2)
+  (paired with [v1](https://github.com/SakanaAI/AI-Scientist) for ~20k
+  combined stars). Sakana's codebase is English-language despite the
+  Tokyo HQ, the team posts in English, and the only existing search
+  backend is Semantic Scholar — a `BaseTool` subclass adding You.com is
+  ~150 lines.
+- **Conference:** PyCon JP 2026 CFP is open at
+  https://pretalx.com/pyconjp2026/cfp. Talk angle:
+  "オープンソース日本語エージェントに本物のWeb検索を" (Real web
+  search for open-source Japanese agents). We'd partner with a
+  JP-native co-presenter rather than present in machine-translated
+  Japanese.
+- **JP technical content:** authored only via paid translation
+  (~$200-400 per Qiita + Zenn cross-post). We do not write JP-language
+  technical content directly. Detail and rationale in
+  `research/japanese-community.md` section 3.
+
+### Other regions — roadmap
+
+These are sketched, not promised. Each row needs a confirmed
+team-member lead before it goes on the next engagement's commitment
+list.
+
+| Region | Language | Candidate first repo | Lead status |
+|---|---|---|---|
+| LATAM | Spanish | TBD (smolagents Spanish examples; Hugging Face community channels) | TBD |
+| SEA | Indonesian / Vietnamese | TBD (Qwen-Agent has natural Asia surface; local LLM communities to be mapped) | TBD |
+| Africa | Swahili | TBD (Cooperation.org has a relevant network; lead to be named) | TBD |
+| Germany | German | `deepset-ai/haystack` (Berlin enterprise audience) | TBD |
+| China | Mandarin | `QwenLM/Qwen-Agent` (Alibaba) | TBD |
 
 ## 5. How we'll execute
 
