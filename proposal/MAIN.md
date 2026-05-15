@@ -36,11 +36,11 @@ release that proves it.
 |---|---|---|---|
 | LangChain (Python) | First-class | [sam-h-bean](https://github.com/sam-h-bean), [scottnath](https://github.com/scottnath), [christeefy](https://github.com/christeefy) | [`utilities/you.py`](https://github.com/langchain-ai/langchain-community/blob/main/libs/community/langchain_community/utilities/you.py), [`retrievers/you.py`](https://github.com/langchain-ai/langchain-community/blob/main/libs/community/langchain_community/retrievers/you.py), [`tools/you/tool.py`](https://github.com/langchain-ai/langchain-community/blob/main/libs/community/langchain_community/tools/you/tool.py) |
 | LlamaIndex | First-class | run-llama maintainers | [LlamaIndex `YouRetriever`](https://docs.llamaindex.ai/en/stable/api_reference/retrievers/you/) |
-| DSPy | First-class (`YouRM`) | [christeefy](https://github.com/christeefy) | [`dspy/retrieve/you_rm.py`](https://github.com/stanfordnlp/dspy/blob/main/dspy/retrieve/you_rm.py) |
+| DSPy | First-class (`YouRM`) | [christeefy](https://github.com/christeefy) | [`dspy/retrieve/you_rm.py`](https://github.com/stanfordnlp/dspy/blob/2.6.27/dspy/retrieve/you_rm.py) (last present on tag `2.6.27`; absent in DSPy 3.x — re-introduction is a candidate task) |
 | CrewAI 1.14.4 | Docs/MCP | crewAI maintainers | [1.14.4 release](https://github.com/crewAIInc/crewAI/releases/tag/1.14.4), [`youai-search.mdx`](https://raw.githubusercontent.com/crewAIInc/crewAI/1.14.4/docs/en/tools/search-research/youai-search.mdx), [`youai-contents.mdx`](https://raw.githubusercontent.com/crewAIInc/crewAI/1.14.4/docs/en/tools/web-scraping/youai-contents.mdx) |
 | Composio | First-class | Composio maintainers | [Composio YouSearch toolkit](https://docs.composio.dev/toolkits/yousearch) |
 | Vercel AI SDK | Official | You.com + Vercel | [You.com docs — Vercel AI SDK](https://documentation.you.com/sdks/typescript-sdk) |
-| n8n | Official | You.com + n8n | [n8n You.com node](https://docs.n8n.io/integrations/builtin/credentials/youcom/) |
+| n8n | Official | You.com + n8n | [You.com integrations index](https://you.com/docs/integrations) (specific n8n node URL needs re-verification — the previously documented credentials path 404s) |
 | Zapier | Official | You.com + Zapier | [You.com Zapier integration](https://zapier.com/apps/youcom) |
 | MCP server | Official (You.com) | You.com | [`@youdotcom-oss/mcp` on npm](https://www.npmjs.com/package/@youdotcom-oss/mcp); endpoint `https://api.you.com/mcp` |
 | Anthropic MCP Registry | Official | You.com | [Anthropic MCP Registry — You.com entry](https://github.com/modelcontextprotocol/servers) |
