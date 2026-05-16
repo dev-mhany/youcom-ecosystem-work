@@ -324,20 +324,26 @@
   }
   .commits li {
     counter-increment: cmt;
-    display: grid;
-    grid-template-columns: 2.4em 1fr;
-    gap: 10px;
-    padding: 9px 0;
+    position: relative;
+    padding: 9px 0 9px 2.6em;
     font-size: 13.5px;
+    line-height: 1.55;
     color: var(--ink);
     border-bottom: 1px dotted var(--rule);
+    overflow-wrap: anywhere;
   }
   .commits li::before {
     content: counter(cmt, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 11px;
     color: var(--ink-muted);
     font-variant-numeric: tabular-nums;
     font-size: 12px;
     letter-spacing: 0.04em;
+  }
+  .commits li code {
+    white-space: nowrap;
   }
   .commits li:last-child { border-bottom: 0; }
 
@@ -689,9 +695,8 @@
     <h1>Two reference forks. <span class="lit">Real multilingual search.</span> Ready to ship.</h1>
     <p class="sub">A single page recap of what we built against the You.com Search API for two uncovered open-source agent frameworks &mdash; with the captured Arabic and Japanese responses to prove the locale parameters land.</p>
     <div class="ctas">
-      <a class="cta" href="https://github.com/dev-mhany/youcom-ecosystem-work" target="_blank" rel="noopener">Working repo <span class="arrow">&rarr;</span></a>
-      <a class="cta secondary" href="https://github.com/Cooperation-org/camel/pull/1" target="_blank" rel="noopener">camel PR #1 <span class="arrow">&rarr;</span></a>
-      <a class="cta secondary" href="https://github.com/Cooperation-org/gpt-researcher/pull/1" target="_blank" rel="noopener">gpt-researcher PR #1 <span class="arrow">&rarr;</span></a>
+      <a class="cta" href="https://github.com/Cooperation-org/camel/pull/1" target="_blank" rel="noopener">camel PR #1 <span class="arrow">&rarr;</span></a>
+      <a class="cta" href="https://github.com/Cooperation-org/gpt-researcher/pull/1" target="_blank" rel="noopener">gpt-researcher PR #1 <span class="arrow">&rarr;</span></a>
     </div>
   </div>
 </section>
@@ -1073,10 +1078,6 @@
   <div class="wrap">
     <div class="links">
       <div>
-        <span class="lab">Working repo</span>
-        <a href="https://github.com/dev-mhany/youcom-ecosystem-work" target="_blank" rel="noopener">github.com/dev-mhany/youcom-ecosystem-work</a>
-      </div>
-      <div>
         <span class="lab">camel fork PR</span>
         <a href="https://github.com/Cooperation-org/camel/pull/1" target="_blank" rel="noopener">github.com/Cooperation-org/camel/pull/1</a>
       </div>
@@ -1085,7 +1086,7 @@
         <a href="https://github.com/Cooperation-org/gpt-researcher/pull/1" target="_blank" rel="noopener">github.com/Cooperation-org/gpt-researcher/pull/1</a>
       </div>
     </div>
-    <p class="credit">Cooperation.org &middot; Multi-region team &mdash; <em>Muhammad Hany</em> (Arabic lead, author of both fork branches), <em>Tuna</em> (Japanese lead), <em>Gitonga Miriam</em> (presenter). LangChain integration credited to sam-h-bean, scottnath, and christeefy. Eval-harness work credited to the You.com team.</p>
+    <p class="credit">Cooperation.org &middot; Multi-region team &mdash; <em>Muhammad Hany</em> (Arabic lead), <em>Amr Nabil</em> (Arabic), <em>Tuna</em> (Japanese lead), <em>Gitonga Miriam</em> (presenter). LangChain integration credited to sam-h-bean, scottnath, and christeefy. Eval-harness work credited to the You.com team.</p>
   </div>
 </footer>
 
