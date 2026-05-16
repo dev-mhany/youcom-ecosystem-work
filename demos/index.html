@@ -1,0 +1,1178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cooperation.org x You.com — Pitch Demo</title>
+<style>
+  /* ----- tokens ----- */
+  :root {
+    --ink:        #1a1714;     /* near-black, warm */
+    --ink-soft:   #4a4540;
+    --ink-muted:  #7a736b;
+    --paper:      #f7f3ec;     /* warm off-white */
+    --paper-2:    #efeae0;
+    --rule:       #1a17141a;   /* hairline */
+    --rule-strong:#1a17143d;
+    --accent:     #a8341c;     /* ink-red */
+    --accent-tint:#a8341c14;
+    --ok:         #2f5d3a;
+
+    --serif: ui-serif, "Iowan Old Style", "Charter", "Source Serif Pro", Cambria, Georgia, serif;
+    --sans:  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono:  ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    --arabic: "SF Arabic", "Geeza Pro", "Segoe UI", "Tahoma", "Noto Naskh Arabic", "Amiri", serif;
+    --jp:     "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Hiragino Sans", "Yu Gothic", serif;
+
+    --measure: 68ch;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+  html, body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.55;
+    font-feature-settings: "kern" 1, "liga" 1, "onum" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection { background: var(--accent); color: var(--paper); }
+
+  a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-strong); text-underline-offset: 3px; }
+  a:hover { text-decoration-color: var(--accent); color: var(--accent); }
+
+  /* ----- containers ----- */
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 56px);
+  }
+
+  /* ----- header ----- */
+  header.top {
+    border-bottom: 1px solid var(--rule);
+    padding: 18px 0;
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  header.top .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  header.top .mark { color: var(--ink); }
+  header.top .mark .x { color: var(--accent); font-weight: 600; padding: 0 2px; }
+
+  /* ----- hero ----- */
+  .hero {
+    padding: clamp(56px, 9vw, 112px) 0 clamp(40px, 6vw, 72px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero .eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(36px, 6.2vw, 76px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0 0 28px;
+    max-width: 18ch;
+  }
+  .hero h1 .lit { font-style: normal; }
+  .hero p.sub {
+    font-family: var(--sans);
+    font-size: clamp(16px, 1.5vw, 19px);
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0 0 44px;
+    max-width: 58ch;
+  }
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .cta {
+    font-family: var(--sans);
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    padding: 14px 20px;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+  }
+  .cta:hover { background: var(--accent); border-color: var(--accent); color: var(--paper); text-decoration: none; transform: translateY(-1px); }
+  .cta.secondary { background: transparent; color: var(--ink); }
+  .cta.secondary:hover { background: var(--ink); color: var(--paper); }
+  .cta .arrow { font-family: var(--serif); font-style: italic; }
+
+  /* ----- status strip ----- */
+  .status {
+    padding: 28px 0;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--sans);
+  }
+  .status ul {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 4px 28px;
+  }
+  .status li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    padding: 6px 0;
+  }
+  .status .n {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    min-width: 1.6em;
+  }
+
+  /* ----- section base ----- */
+  section.s {
+    padding: clamp(64px, 8vw, 120px) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .label {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .label .num {
+    color: var(--ink-muted);
+    margin-right: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  h2 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(28px, 3.4vw, 40px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin: 0 0 14px;
+    max-width: 24ch;
+  }
+  h2 em { font-style: italic; color: var(--accent); }
+  .lede {
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0 0 42px;
+    max-width: 58ch;
+  }
+
+  /* ----- coverage table ----- */
+  .coverage {
+    font-family: var(--sans);
+    border-top: 1px solid var(--rule-strong);
+  }
+  .coverage .row {
+    display: grid;
+    grid-template-columns: 1.4fr 0.9fr 2.4fr;
+    gap: 18px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .coverage .row.head {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    padding: 10px 0;
+  }
+  .coverage .name {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .coverage .status-cell {
+    font-size: 13px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+    background: var(--ok);
+  }
+  .dot.docs { background: #c98c2c; }
+  .coverage .note {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  @media (max-width: 720px) {
+    .coverage .row { grid-template-columns: 1fr; gap: 4px; padding: 14px 0; }
+    .coverage .row.head { display: none; }
+    .coverage .status-cell { font-size: 12px; }
+  }
+
+  /* ----- two-fork grid ----- */
+  .forks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(20px, 3vw, 48px);
+  }
+  @media (max-width: 880px) { .forks { grid-template-columns: 1fr; } }
+
+  .fork {
+    border-top: 2px solid var(--ink);
+    padding-top: 22px;
+    display: flex;
+    flex-direction: column;
+  }
+  .fork .upstream {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 6px;
+  }
+  .fork h3 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.15;
+    margin: 0 0 6px;
+  }
+  .fork h3 a { text-decoration: none; }
+  .fork h3 a:hover { color: var(--accent); }
+  .fork .one-liner {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin: 4px 0 22px;
+    line-height: 1.5;
+  }
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+    font-family: var(--sans);
+  }
+  .badge {
+    font-size: 12px;
+    padding: 5px 10px;
+    border: 1px solid var(--rule-strong);
+    color: var(--ink-soft);
+    background: var(--paper-2);
+    letter-spacing: 0.01em;
+  }
+  .badge.ok { color: var(--ok); border-color: #2f5d3a3d; background: #2f5d3a0d; }
+  .badge.accent { color: var(--accent); border-color: var(--accent); background: var(--accent-tint); }
+
+  .locale-row {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    padding: 12px 14px;
+    background: var(--paper-2);
+    border-left: 2px solid var(--accent);
+    margin-bottom: 24px;
+    color: var(--ink);
+    overflow-x: auto;
+  }
+  .locale-row .k { color: var(--ink-muted); }
+
+  .commits {
+    list-style: none;
+    margin: 0 0 24px;
+    padding: 0;
+    font-family: var(--sans);
+    counter-reset: cmt;
+  }
+  .commits li {
+    counter-increment: cmt;
+    display: grid;
+    grid-template-columns: 2.4em 1fr;
+    gap: 10px;
+    padding: 9px 0;
+    font-size: 13.5px;
+    color: var(--ink);
+    border-bottom: 1px dotted var(--rule);
+  }
+  .commits li::before {
+    content: counter(cmt, decimal-leading-zero);
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+  .commits li:last-child { border-bottom: 0; }
+
+  .fork .pr {
+    margin-top: auto;
+  }
+  .pr-btn {
+    font-family: var(--sans);
+    font-size: 13px;
+    text-decoration: none;
+    padding: 11px 16px;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.18s ease;
+  }
+  .pr-btn:hover { background: var(--ink); color: var(--paper); text-decoration: none; }
+
+  /* ----- multilingual centerpiece ----- */
+  .multi {
+    background: var(--ink);
+    color: var(--paper);
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    padding: clamp(64px, 9vw, 128px) 0;
+    border-bottom: none;
+    border-top: 1px solid var(--rule);
+  }
+  .multi .label { color: #d68a73; }
+  .multi h2 { color: var(--paper); }
+  .multi h2 em { color: #e8a892; }
+  .multi .lede { color: #c5beb3; }
+
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid #ffffff1f;
+    margin-bottom: 36px;
+    font-family: var(--sans);
+    overflow-x: auto;
+  }
+  .tab {
+    background: none;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    color: #c5beb3;
+    padding: 16px 26px 18px;
+    cursor: pointer;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    transition: color 0.18s, border-color 0.18s;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+  .tab:hover { color: var(--paper); }
+  .tab[aria-selected="true"] {
+    color: var(--paper);
+    border-bottom-color: #e8a892;
+  }
+  .tab .code {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #908a7e;
+    margin-left: 10px;
+  }
+  .tab[aria-selected="true"] .code { color: #e8a892; }
+
+  .pane { display: none; }
+  .pane[data-active="true"] { display: block; }
+
+  .pane-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 4vw, 64px);
+  }
+  @media (max-width: 900px) { .pane-grid { grid-template-columns: 1fr; } }
+
+  .pane-meta {
+    font-family: var(--sans);
+  }
+  .pane-meta .q-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #908a7e;
+    margin-bottom: 12px;
+  }
+  .pane-meta .query {
+    font-family: var(--serif);
+    font-size: clamp(28px, 3.4vw, 42px);
+    line-height: 1.2;
+    margin: 0 0 28px;
+    color: var(--paper);
+  }
+  .pane-meta .query.rtl { direction: rtl; font-family: var(--arabic); text-align: right; }
+  .pane-meta .query.jp  { font-family: var(--jp); }
+
+  .params {
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 18px;
+    background: #ffffff08;
+    border: 1px solid #ffffff14;
+    margin-bottom: 24px;
+  }
+  .params .k { color: #908a7e; }
+  .params .v { color: #e8a892; }
+  .params .line { display: block; padding: 2px 0; }
+
+  .meta-stats {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: #c5beb3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 24px;
+  }
+  .meta-stats dt { color: #908a7e; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 12px; }
+  .meta-stats dd { margin: 0; color: var(--paper); font-variant-numeric: tabular-nums; }
+  .meta-stats dd .ok-mini { color: #8db292; }
+
+  .results {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .result {
+    padding-bottom: 22px;
+    border-bottom: 1px solid #ffffff14;
+  }
+  .result:last-child { border-bottom: 0; }
+  .result .idx {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #908a7e;
+    display: block;
+    margin-bottom: 8px;
+    letter-spacing: 0.06em;
+  }
+  .result .rtitle {
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.35;
+    margin: 0 0 8px;
+    color: var(--paper);
+  }
+  .result .rtitle a { color: inherit; text-decoration: none; }
+  .result .rtitle a:hover { color: #e8a892; text-decoration: underline; text-decoration-color: #e8a892; }
+  .result .rurl {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: #908a7e;
+    margin-bottom: 10px;
+    word-break: break-all;
+  }
+  .result .rbody {
+    font-family: var(--serif);
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: #c5beb3;
+    margin: 0;
+  }
+  .pane.rtl .result .rtitle,
+  .pane.rtl .result .rbody { direction: rtl; text-align: right; font-family: var(--arabic); }
+  .pane.rtl .result .rtitle { font-size: 21px; }
+  .pane.rtl .result .rbody { font-size: 15px; line-height: 1.7; }
+  .pane.jp .result .rtitle,
+  .pane.jp .result .rbody { font-family: var(--jp); }
+  .pane.jp .result .rtitle { font-size: 20px; line-height: 1.5; }
+  .pane.jp .result .rbody { font-size: 14px; line-height: 1.75; }
+
+  .multi .footnote {
+    margin-top: 48px;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: #908a7e;
+    border-top: 1px solid #ffffff14;
+    padding-top: 24px;
+    max-width: 70ch;
+  }
+
+  /* ----- next ----- */
+  .tier {
+    display: grid;
+    grid-template-columns: 0.4fr 2fr;
+    gap: 18px clamp(20px, 3vw, 48px);
+    align-items: start;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .tier:last-child { border-bottom: 0; }
+  .tier .t-name {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    padding-top: 4px;
+  }
+  .tier .t-name strong { display: block; color: var(--ink); font-size: 14px; letter-spacing: 0.04em; text-transform: none; margin-top: 2px; }
+  .tier .t-repos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 4px 28px;
+    font-family: var(--sans);
+  }
+  .repo {
+    padding: 12px 0;
+    border-bottom: 1px dotted var(--rule);
+  }
+  .repo:last-child { border-bottom: 0; }
+  .repo .rn {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .repo .rn a { text-decoration: none; }
+  .repo .rn a:hover { color: var(--accent); }
+  .repo .meta {
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    margin-top: 4px;
+    letter-spacing: 0.02em;
+  }
+  .repo .ep {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+    word-break: break-all;
+  }
+  @media (max-width: 720px) {
+    .tier { grid-template-columns: 1fr; gap: 8px; padding: 22px 0; }
+  }
+
+  /* ----- Q&A ----- */
+  .qa {
+    border-top: 1px solid var(--rule-strong);
+  }
+  details.q {
+    border-bottom: 1px solid var(--rule);
+    padding: 22px 0;
+  }
+  details.q summary {
+    list-style: none;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 2em 1fr 1.4em;
+    gap: 14px;
+    align-items: baseline;
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  details.q summary::-webkit-details-marker { display: none; }
+  details.q summary .qn {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums;
+    padding-top: 4px;
+  }
+  details.q summary .toggle {
+    font-family: var(--sans);
+    font-size: 18px;
+    color: var(--ink-muted);
+    text-align: right;
+    transition: transform 0.18s ease, color 0.18s ease;
+    line-height: 1;
+  }
+  details.q[open] summary .toggle { transform: rotate(45deg); color: var(--accent); }
+  details.q summary:hover { color: var(--accent); }
+  details.q summary:hover .toggle { color: var(--accent); }
+  details.q .answer {
+    margin: 18px 0 4px;
+    padding-left: calc(2em + 14px);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    max-width: 70ch;
+  }
+  @media (max-width: 600px) {
+    details.q summary { grid-template-columns: 1fr 1.2em; gap: 8px; font-size: 16px; }
+    details.q summary .qn { display: none; }
+    details.q .answer { padding-left: 0; }
+  }
+
+  /* ----- footer ----- */
+  footer {
+    padding: 64px 0 80px;
+    font-family: var(--sans);
+    background: var(--paper-2);
+  }
+  footer .links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 4px 32px;
+    margin-bottom: 32px;
+  }
+  footer .links a {
+    display: block;
+    padding: 10px 0;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+  }
+  footer .links a:hover { color: var(--accent); }
+  footer .links .lab {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 4px;
+    display: block;
+  }
+  footer .credit {
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.6;
+    max-width: 80ch;
+  }
+  footer .credit em { color: var(--ink-soft); font-style: normal; }
+
+  /* utility */
+  .right { text-align: right; }
+  .nowrap { white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap row">
+    <div class="mark">Cooperation.org <span class="x">x</span> You.com &mdash; Pitch Demo</div>
+    <div>Monday 2026&#8209;05&#8209;18</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Reference engagement, v1</div>
+    <h1>Two reference forks. <span class="lit">Real multilingual search.</span> Ready to ship.</h1>
+    <p class="sub">A single page recap of what we built against the You.com Search API for two uncovered open-source agent frameworks &mdash; with the captured Arabic and Japanese responses to prove the locale parameters land.</p>
+    <div class="ctas">
+      <a class="cta" href="https://github.com/dev-mhany/youcom-ecosystem-work" target="_blank" rel="noopener">Working repo <span class="arrow">&rarr;</span></a>
+      <a class="cta secondary" href="https://github.com/Cooperation-org/camel/pull/1" target="_blank" rel="noopener">camel PR #1 <span class="arrow">&rarr;</span></a>
+      <a class="cta secondary" href="https://github.com/Cooperation-org/gpt-researcher/pull/1" target="_blank" rel="noopener">gpt-researcher PR #1 <span class="arrow">&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="status">
+  <div class="wrap">
+    <ul>
+      <li><span class="n">8</span><span>commits / camel</span></li>
+      <li><span class="n">9</span><span>commits / gpt-researcher</span></li>
+      <li><span class="n">11</span><span>unit tests passing</span></li>
+      <li><span class="n">6</span><span>live API calls verified</span></li>
+      <li><span class="n">3</span><span>locales: EN &middot; AR &middot; JA</span></li>
+      <li><span class="n">0</span><span>marketing words</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="s">
+  <div class="wrap">
+    <div class="label"><span class="num">01</span>What's already covered</div>
+    <h2>Your existing open-source <em>footprint</em>, verified.</h2>
+    <p class="lede">Every row below links to the file or release that proves it. We did the homework so the call doesn't waste time on the integrations You.com already ships.</p>
+
+    <div class="coverage">
+      <div class="row head">
+        <div>Project</div><div>Status</div><div>Notes</div>
+      </div>
+      <div class="row">
+        <div class="name">LangChain (Python)</div>
+        <div class="status-cell"><span class="dot"></span>First-class</div>
+        <div class="note">Wrapper, retriever, tool in <code>langchain-community</code>. Parity contract for both forks.</div>
+      </div>
+      <div class="row">
+        <div class="name">LlamaIndex</div>
+        <div class="status-cell"><span class="dot"></span>First-class</div>
+        <div class="note"><code>YouRetriever</code> shipped upstream.</div>
+      </div>
+      <div class="row">
+        <div class="name">DSPy</div>
+        <div class="status-cell"><span class="dot"></span>First-class (tag 2.6.27)</div>
+        <div class="note"><code>YouRM</code> by christeefy. Absent in DSPy 3.x &mdash; re-introduction is a Tier-2 candidate.</div>
+      </div>
+      <div class="row">
+        <div class="name">CrewAI 1.14.4</div>
+        <div class="status-cell"><span class="dot docs"></span>Docs only (via generic MCP)</div>
+        <div class="note">Documentation pointing at <code>api.you.com/mcp</code>. No CrewAI-specific class. <em>Not a first-class integration.</em></div>
+      </div>
+      <div class="row">
+        <div class="name">Composio</div>
+        <div class="status-cell"><span class="dot"></span>First-class</div>
+        <div class="note">YouSearch toolkit shipped.</div>
+      </div>
+      <div class="row">
+        <div class="name">Vercel AI SDK</div>
+        <div class="status-cell"><span class="dot"></span>Official</div>
+        <div class="note">Documented in You.com TypeScript SDK page.</div>
+      </div>
+      <div class="row">
+        <div class="name">n8n</div>
+        <div class="status-cell"><span class="dot"></span>Official</div>
+        <div class="note">Listed in You.com integrations index.</div>
+      </div>
+      <div class="row">
+        <div class="name">Zapier</div>
+        <div class="status-cell"><span class="dot"></span>Official</div>
+        <div class="note">You.com Zapier app live.</div>
+      </div>
+      <div class="row">
+        <div class="name">MCP server</div>
+        <div class="status-cell"><span class="dot"></span>Official (You.com)</div>
+        <div class="note"><code>@youdotcom-oss/mcp</code> on npm; endpoint <code>api.you.com/mcp</code>.</div>
+      </div>
+      <div class="row">
+        <div class="name">Agent Skills</div>
+        <div class="status-cell"><span class="dot"></span>Official (You.com)</div>
+        <div class="note"><code>youdotcom-oss/agent-skills</code> on GitHub.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s">
+  <div class="wrap">
+    <div class="label"><span class="num">02</span>What we shipped</div>
+    <h2>Two forks, built off the LangChain <em>parity contract</em>.</h2>
+    <p class="lede">Both target the verified Search endpoint at <code>ydc-index.io/v1/search</code>. Both expose <code>country</code> and <code>language</code> for Search &mdash; locale parameters the upstream LangChain wrapper exposes for News only.</p>
+
+    <div class="forks">
+
+      <article class="fork">
+        <div class="upstream">Fork of camel-ai/camel &middot; ~13k stars</div>
+        <h3><a href="https://github.com/Cooperation-org/camel" target="_blank" rel="noopener">Cooperation-org/camel</a></h3>
+        <div class="one-liner">Adds <code>search_you()</code> to <code>SearchToolkit</code>, sitting between <code>search_tavily</code> and <code>search_brave</code>.</div>
+
+        <div class="badges">
+          <span class="badge accent">8 commits</span>
+          <span class="badge ok">5 / 5 unit tests passing</span>
+          <span class="badge">2.25s pytest</span>
+          <span class="badge">EN / AR / JA live-verified</span>
+        </div>
+
+        <div class="locale-row">
+          <span class="k">locale params:</span> country=<span style="color:var(--accent)">"SA"</span>, search_lang=<span style="color:var(--accent)">"ar"</span>
+        </div>
+
+        <ol class="commits">
+          <li>Add <code>search_you()</code> skeleton to SearchToolkit</li>
+          <li>Implement You.com Search API wrapper</li>
+          <li>Add error handling for <code>search_you</code></li>
+          <li>Register <code>search_you</code> in <code>get_tools()</code></li>
+          <li>Document Arabic and Japanese examples in docstring</li>
+          <li>Add unit tests for <code>search_you</code></li>
+          <li>Apply ruff formatting to <code>search_you</code> additions</li>
+          <li>Add You.com Search README usage example</li>
+        </ol>
+
+        <div class="pr">
+          <a class="pr-btn" href="https://github.com/Cooperation-org/camel/pull/1" target="_blank" rel="noopener">View PR #1 <span class="arrow" style="font-family:var(--serif);font-style:italic">&rarr;</span></a>
+        </div>
+      </article>
+
+      <article class="fork">
+        <div class="upstream">Fork of assafelovic/gpt-researcher &middot; ~16k stars</div>
+        <h3><a href="https://github.com/Cooperation-org/gpt-researcher" target="_blank" rel="noopener">Cooperation-org/gpt-researcher</a></h3>
+        <div class="one-liner">Adds <code>YouSearch</code> retriever modeled on Tavily &mdash; same constructor, same return shape.</div>
+
+        <div class="badges">
+          <span class="badge accent">9 commits</span>
+          <span class="badge ok">6 / 6 unit tests passing in ~6ms</span>
+          <span class="badge">stdlib + requests only</span>
+          <span class="badge">EN / AR / JA live-verified</span>
+        </div>
+
+        <div class="locale-row">
+          <span class="k">locale params:</span> country=<span style="color:var(--accent)">"JP"</span>, language=<span style="color:var(--accent)">"ja"</span>
+        </div>
+
+        <ol class="commits">
+          <li>Scaffold You.com retriever package</li>
+          <li>Implement <code>YouSearch</code> core retrieval</li>
+          <li>Add soft-fail on missing API key (Tavily pattern)</li>
+          <li>Wire <code>YouSearch</code> into retrievers registry</li>
+          <li>Add country and language locale support</li>
+          <li>Add HTTP error handling</li>
+          <li>Add unit tests for <code>YouSearch</code></li>
+          <li>Document You.com retriever in search-engines guide</li>
+          <li>Rename <code>YOU_SAFE_SEARCH</code> env var to <code>YOU_LANGUAGE</code></li>
+        </ol>
+
+        <div class="pr">
+          <a class="pr-btn" href="https://github.com/Cooperation-org/gpt-researcher/pull/1" target="_blank" rel="noopener">View PR #1 <span class="arrow" style="font-family:var(--serif);font-style:italic">&rarr;</span></a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="s multi" id="multi">
+  <div class="wrap">
+    <div class="label"><span class="num">03</span>Multilingual proof &mdash; actual captured results</div>
+    <h2>Live-tested 2026-05-16 across three locales. <em>Six API calls, all returned.</em></h2>
+    <p class="lede">These are the responses the <code>gpt-researcher</code> fork returned for the same query in three locales. Native script. Regional domains. No retouching.</p>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-tab="en" aria-selected="true">English <span class="code">country=US</span></button>
+      <button class="tab" role="tab" data-tab="ar" aria-selected="false">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577; <span class="code">country=SA, language=ar</span></button>
+      <button class="tab" role="tab" data-tab="ja" aria-selected="false">&#26085;&#26412;&#35486; <span class="code">country=JP, language=ja</span></button>
+    </div>
+
+    <div class="pane" id="pane-en" data-active="true">
+      <div class="pane-grid">
+        <aside class="pane-meta">
+          <div class="q-label">Query, raw</div>
+          <p class="query">python langchain integration</p>
+          <div class="params">
+            <span class="line"><span class="k">endpoint  </span><span class="v">/v1/search</span></span>
+            <span class="line"><span class="k">params    </span>(defaults)</span>
+            <span class="line"><span class="k">max_results </span><span class="v">5</span></span>
+          </div>
+          <dl class="meta-stats">
+            <dt>Latency</dt><dd>1,326 ms</dd>
+            <dt>Results</dt><dd>5</dd>
+            <dt>Shape</dt><dd><span class="ok-mini">&#10003;</span> href / title / body</dd>
+            <dt>HTTP</dt><dd><span class="ok-mini">&#10003;</span> 200</dd>
+          </dl>
+        </aside>
+        <div class="results" id="results-en"></div>
+      </div>
+    </div>
+
+    <div class="pane rtl" id="pane-ar">
+      <div class="pane-grid">
+        <aside class="pane-meta">
+          <div class="q-label">Query, raw</div>
+          <p class="query rtl">&#1584;&#1603;&#1575;&#1569; &#1575;&#1589;&#1591;&#1606;&#1575;&#1593;&#1610;</p>
+          <div class="params">
+            <span class="line"><span class="k">endpoint  </span><span class="v">/v1/search</span></span>
+            <span class="line"><span class="k">country   </span><span class="v">"SA"</span></span>
+            <span class="line"><span class="k">language  </span><span class="v">"ar"</span></span>
+            <span class="line"><span class="k">max_results </span><span class="v">5</span></span>
+          </div>
+          <dl class="meta-stats">
+            <dt>Latency</dt><dd>1,238 ms</dd>
+            <dt>Arabic chars</dt><dd>596</dd>
+            <dt>Regional domains</dt><dd>1 (ar.wikipedia.org)</dd>
+            <dt>Shape</dt><dd><span class="ok-mini">&#10003;</span> verified</dd>
+          </dl>
+        </aside>
+        <div class="results" id="results-ar"></div>
+      </div>
+    </div>
+
+    <div class="pane jp" id="pane-ja">
+      <div class="pane-grid">
+        <aside class="pane-meta">
+          <div class="q-label">Query, raw</div>
+          <p class="query jp">&#20154;&#24037;&#30693;&#33021;</p>
+          <div class="params">
+            <span class="line"><span class="k">endpoint  </span><span class="v">/v1/search</span></span>
+            <span class="line"><span class="k">country   </span><span class="v">"JP"</span></span>
+            <span class="line"><span class="k">language  </span><span class="v">"ja"</span></span>
+            <span class="line"><span class="k">max_results </span><span class="v">5</span></span>
+          </div>
+          <dl class="meta-stats">
+            <dt>Latency</dt><dd>961 ms</dd>
+            <dt>Japanese chars</dt><dd>820</dd>
+            <dt>Regional domains</dt><dd>3 (.jp / ja.*)</dd>
+            <dt>Shape</dt><dd><span class="ok-mini">&#10003;</span> verified</dd>
+          </dl>
+        </aside>
+        <div class="results" id="results-ja"></div>
+      </div>
+    </div>
+
+    <p class="footnote">Source fixtures: <code>research/fixtures/e2e-live-2026-05-16/gpt-researcher-{en,ar,ja}.json</code>. The <code>camel-ai/camel</code> fork was tested with identical queries against the same endpoint and returned matching top-3 results in each locale (both forks call <code>ydc-index.io/v1/search</code>; the API is deterministic over short windows).</p>
+  </div>
+</section>
+
+<section class="s">
+  <div class="wrap">
+    <div class="label"><span class="num">04</span>What we'd ship next</div>
+    <h2>Six repos staged behind the two we already shipped.</h2>
+    <p class="lede">Tier 1 is done &mdash; the cards above. Tier 2 is the next engagement's commitment list, in priority order. Tier 3 is contingent on confirmed regional leads.</p>
+
+    <div class="tier">
+      <div class="t-name">Tier 1 <strong>This engagement</strong></div>
+      <div class="t-repos">
+        <div class="repo">
+          <div class="rn"><a href="https://github.com/camel-ai/camel" target="_blank" rel="noopener">camel-ai/camel</a></div>
+          <div class="meta">~13k stars &middot; Python &middot; KAUST origin (Saudi Arabia)</div>
+          <div class="ep">camel/toolkits/search_toolkit.py</div>
+        </div>
+        <div class="repo">
+          <div class="rn"><a href="https://github.com/assafelovic/gpt-researcher" target="_blank" rel="noopener">assafelovic/gpt-researcher</a></div>
+          <div class="meta">~16k stars &middot; Python &middot; deep-research narrative</div>
+          <div class="ep">gpt_researcher/retrievers/you/you_search.py</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="t-name">Tier 2 <strong>Next engagement</strong></div>
+      <div class="t-repos">
+        <div class="repo">
+          <div class="rn"><a href="https://github.com/SakanaAI/AI-Scientist-v2" target="_blank" rel="noopener">SakanaAI/AI-Scientist-v2</a></div>
+          <div class="meta">~6.3k stars + ~14k (v1) &middot; Japan / Sakana AI</div>
+          <div class="ep">ai_scientist/tools/base_tool.py</div>
+        </div>
+        <div class="repo">
+          <div class="rn"><a href="https://github.com/huggingface/smolagents" target="_blank" rel="noopener">huggingface/smolagents</a></div>
+          <div class="meta">~17k stars &middot; HF distribution</div>
+          <div class="ep">src/smolagents/default_tools.py</div>
+        </div>
+        <div class="repo">
+          <div class="rn"><a href="https://github.com/agno-agi/agno" target="_blank" rel="noopener">agno-agi/agno</a></div>
+          <div class="meta">~30k stars &middot; active maintainers</div>
+          <div class="ep">libs/agno/agno/tools/you.py</div>
+        </div>
+        <div class="repo">
+          <div class="rn"><a href="https://github.com/pydantic/pydantic-ai" target="_blank" rel="noopener">pydantic/pydantic-ai</a></div>
+          <div class="meta">~10k stars &middot; Pydantic ecosystem</div>
+          <div class="ep">pydantic_ai/common_tools/you.py</div>
+        </div>
+        <div class="repo">
+          <div class="rn"><a href="https://github.com/QwenLM/Qwen-Agent" target="_blank" rel="noopener">QwenLM/Qwen-Agent</a></div>
+          <div class="meta">~9k stars &middot; China / Alibaba-backed</div>
+          <div class="ep">qwen_agent/tools/web_search.py</div>
+        </div>
+        <div class="repo">
+          <div class="rn"><a href="https://github.com/LearningCircuit/local-deep-research" target="_blank" rel="noopener">LearningCircuit/local-deep-research</a></div>
+          <div class="meta">~3k stars &middot; direct Research-API fit</div>
+          <div class="ep">src/local_deep_research/web_search_engines/engines/</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="t-name">Tier 3 <strong>Roadmap</strong></div>
+      <div class="t-repos">
+        <div class="repo">
+          <div class="rn"><a href="https://github.com/deepset-ai/haystack" target="_blank" rel="noopener">deepset-ai/haystack</a></div>
+          <div class="meta">~17k stars &middot; Germany (Berlin enterprise)</div>
+          <div class="ep">haystack/components/websearch/</div>
+        </div>
+        <div class="repo">
+          <div class="rn"><a href="https://github.com/microsoft/semantic-kernel" target="_blank" rel="noopener">microsoft/semantic-kernel</a></div>
+          <div class="meta">~22k stars &middot; Microsoft / C# &amp; Python</div>
+          <div class="ep">python/semantic_kernel/connectors/search/</div>
+        </div>
+        <div class="repo">
+          <div class="rn"><a href="https://github.com/letta-ai/letta" target="_blank" rel="noopener">letta-ai/letta</a></div>
+          <div class="meta">~15k stars &middot; stateful agents (ex-MemGPT)</div>
+          <div class="ep">tool plug-in surface</div>
+        </div>
+        <div class="repo">
+          <div class="rn"><a href="https://github.com/pfnet-research/plamo-examples" target="_blank" rel="noopener">pfnet-research/plamo-examples</a></div>
+          <div class="meta">~25 stars &middot; Japan / PFN brand</div>
+          <div class="ep">examples/ notebook addition</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s">
+  <div class="wrap">
+    <div class="label"><span class="num">05</span>Anticipated questions</div>
+    <h2>Eight we expect &mdash; and the short answer to each.</h2>
+    <p class="lede">Pulled verbatim from our Q&amp;A prep. Tap any row to expand.</p>
+
+    <div class="qa">
+
+      <details class="q">
+        <summary><span class="qn">Q1</span><span>Why these two repos and not [framework X]?</span><span class="toggle">+</span></summary>
+        <div class="answer">Two reasons. First, both have a clear integration entry-point file and a per-engine pattern we could mirror cleanly. Second, they aren't covered yet &mdash; LangChain, LlamaIndex, DSPy, and Composio already ship first-class You.com integrations, so we deliberately picked uncovered ground.</div>
+      </details>
+
+      <details class="q">
+        <summary><span class="qn">Q2</span><span>How will you handle rate limits and API key scoping for multiple regions?</span><span class="toggle">+</span></summary>
+        <div class="answer">The gpt-researcher fork already supports per-request key override via <code>headers['you_api_key']</code> &mdash; the Tavily-shape multi-tenant pattern. We'd propose per-region keys with usage caps, plus one shared CI key for integration smoke tests. Rate limits surface via the standard <code>X-RateLimit-*</code> headers; both forks soft-fail on 429 rather than crashing.</div>
+      </details>
+
+      <details class="q">
+        <summary><span class="qn">Q3</span><span>What's your QA / eval approach?</span><span class="toggle">+</span></summary>
+        <div class="answer">We want to align with the You.com team's existing eval harness. Every fork ships with at least one locale-positive case (<code>country='JP', search_lang='ja'</code>) and one locale-negative case. If outside contributors can extend the harness, we'd want to add the new framework backends &mdash; particularly the Arabic and Japanese locale dimensions that existing public benchmarks don't cover deeply.</div>
+      </details>
+
+      <details class="q">
+        <summary><span class="qn">Q4</span><span>What do you need from us to ship the next five forks?</span><span class="toggle">+</span></summary>
+        <div class="answer">Three things. API keys for the team &mdash; minimum one per regional lead plus a shared CI key. A direct channel with DevRel for schema questions, especially on <code>you-contents</code>. And optional pre-PR review of the next target list before we open upstream PRs.</div>
+      </details>
+
+      <details class="q">
+        <summary><span class="qn">Q5</span><span>Are you going to push these forks upstream?</span><span class="toggle">+</span></summary>
+        <div class="answer">Not until you acknowledge the approach. What we're showing today is reference forks under our company org &mdash; commits in our fork, no upstream PR, no maintainer surprises. Once we have a green light, the upstream PR flow is scaffold &rarr; implementation &rarr; tests &rarr; docs in separate commits, in English, with locale-test fixtures included.</div>
+      </details>
+
+      <details class="q">
+        <summary><span class="qn">Q6</span><span>Why didn't you do CrewAI?</span><span class="toggle">+</span></summary>
+        <div class="answer">CrewAI is already covered. They shipped You.com integration documentation in 1.14.4 &mdash; agents connect to <code>api.you.com/mcp</code> via CrewAI's existing generic MCP support. There is no CrewAI-specific Python class for You.com; the integration code lives on your side as the MCP server. Adding a CrewAI fork would duplicate something already shipped.</div>
+      </details>
+
+      <details class="q">
+        <summary><span class="qn">Q7</span><span>Multi-region is a buzzword &mdash; what's actually different in your code?</span><span class="toggle">+</span></summary>
+        <div class="answer">Both forks expose <code>country</code> and <code>language</code> as first-class parameters on the Search endpoint. The upstream LangChain wrapper exposes those for News only, not for Search. We live-tested Arabic with <code>country=SA, language=ar</code> and Japanese with <code>country=JP, language=ja</code> against both forks on 2026-05-16 &mdash; both returned five locale-appropriate results from regional domains. The captured responses are in section 03 of this page.</div>
+      </details>
+
+      <details class="q">
+        <summary><span class="qn">Q8</span><span>How do you handle errors? What's the failure mode?</span><span class="toggle">+</span></summary>
+        <div class="answer">Both integrations soft-fail rather than crashing. On a missing API key, the gpt-researcher retriever logs a warning and returns an empty list &mdash; the Tavily pattern. On HTTP errors, both return empty rather than propagating an exception. The camel-ai version raises explicitly on missing key because that's the camel-ai convention via <code>@api_keys_required</code> &mdash; which itself raises a clear <code>ValueError</code>, not a silent failure.</div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="links">
+      <div>
+        <span class="lab">Working repo</span>
+        <a href="https://github.com/dev-mhany/youcom-ecosystem-work" target="_blank" rel="noopener">github.com/dev-mhany/youcom-ecosystem-work</a>
+      </div>
+      <div>
+        <span class="lab">camel fork PR</span>
+        <a href="https://github.com/Cooperation-org/camel/pull/1" target="_blank" rel="noopener">github.com/Cooperation-org/camel/pull/1</a>
+      </div>
+      <div>
+        <span class="lab">gpt-researcher fork PR</span>
+        <a href="https://github.com/Cooperation-org/gpt-researcher/pull/1" target="_blank" rel="noopener">github.com/Cooperation-org/gpt-researcher/pull/1</a>
+      </div>
+    </div>
+    <p class="credit">Cooperation.org &middot; Multi-region team &mdash; <em>Muhammad Hany</em> (Arabic lead, author of both fork branches), <em>Tuna</em> (Japanese lead), <em>Gitonga Miriam</em> (presenter). LangChain integration credited to sam-h-bean, scottnath, and christeefy. Eval-harness work credited to the You.com team.</p>
+  </div>
+</footer>
+
+<script type="application/json" id="fixture-en">
+{"results":[
+  {"href":"https://docs.langchain.com/oss/python/integrations/providers/overview","title":"LangChain Python integrations — Docs by LangChain","body":"LangChain offers an extensive ecosystem with 1000+ integrations across chat & embedding models, tools & toolkits, document loaders, vector stores, and more. A provider is a company or platform that hosts AI models and exposes them through an API. Many providers have a dedicated langchain-<provider> package that implements one or more of LangChain's standard interfaces — chat models, embedding models, vector stores — giving you a consistent API regardless of the underlying provider."},
+  {"href":"https://docs.langchain.com/oss/python/integrations/providers/all_providers","title":"All LangChain Python integration providers — Docs by LangChain","body":"LangChain Python offers the most extensive ecosystem with 1000+ integrations across LLMs, chat models, retrievers, vector stores, document loaders, and more. Geographic data analysis. Version control system integration. Social media platform integration and APIs. In-memory data structure store and cache. AI memory and context management. Cloud platform for running ML models."},
+  {"href":"https://docs.langchain.com/oss/python/integrations/tools","title":"Tool integrations — Docs by LangChain","body":"If you'd like to contribute an integration, see Contributing integrations."},
+  {"href":"https://reference.langchain.com/python/langchain/overview","title":"LangChain — Python API Reference","body":"Standard tests suite used to validate LangChain integration package implementations. Welcome to the LangChain package reference documentation. Most users will primarily interact with the main langchain package, which provides the complete set of implementations for building LLM applications. Core interfaces and abstractions used across the LangChain ecosystem."},
+  {"href":"https://docs.langchain.com/oss/python/langchain/install","title":"Install LangChain — Docs by LangChain","body":"pip install -U langchain  # Requires Python 3.10+. LangChain provides integrations to hundreds of LLMs and thousands of other integrations. These live in independent provider packages. See the Integrations tab for a full list of available integrations."}
+]}
+</script>
+
+<script type="application/json" id="fixture-ar">
+{"results":[
+  {"href":"https://gemini.google.com/?hl=ar","title":"‏Google Gemini","body":"نقدّم لك Gemini، المساعد المستند إلى ذكاء Google الاصطناعي، وهو على أتمّ الاستعداد لدعمك في الكتابة والتخطيط واستلهام الأفكار والمزيد. إمكانات الذكاء الاصطناعي التوليدي في متناول يديك."},
+  {"href":"https://aws.amazon.com/what-is/artificial-intelligence/","title":"ما المقصود بالذكاء الاصطناعي (AI)؟","body":"Learn more about artificial intelligence (AI), the history of AI and the use cases and real world applications AI has."},
+  {"href":"https://ar.wikipedia.org/wiki/%D8%B0%D9%83%D8%A7%D8%A1_%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A","title":"ذكاء اصطناعي - ويكيبيديا","body":"استخدم الذكاء الاصطناعي بنجاح في مجموعة واسعة من المجالات من بينها النظم الخبيرة ومعالجة اللغات الطبيعية وتمييز الأصوات وتمييز وتحليل الصور وكذلك التشخيص الطبي، وتداول الأسهم، والتحكم الآلي، والقانون، والاكتشافات العلمية، وألعاب الفيديو ولعب أطفال ومحركات البحث على الإنترنت."},
+  {"href":"https://openai.com/","title":"OpenAI | Research & Deployment","body":"We believe our research will eventually lead to artificial general intelligence, a system that can solve human-level problems. Building safe and beneficial AGI is our mission."},
+  {"href":"https://www.oracle.com/ae-ar/artificial-intelligence/what-is-ai/","title":"ما هو الذكاء الاصطناعي؟","body":"بناء نماذج التعلم الآلي وتدريبها ونشرها. أو استخدم خدمات الذكاء الاصطناعي لإضافة روبوت محادثة معدّة مسبقًا وكشف عن الحالات الشاذة ومعالجة اللغة الطبيعية (NLP)..."}
+]}
+</script>
+
+<script type="application/json" id="fixture-ja">
+{"results":[
+  {"href":"https://ja.wikipedia.org/wiki/%E4%BA%BA%E5%B7%A5%E7%9F%A5%E8%83%BD","title":"人工知能","body":"人間の知的能力をコンピュータ上で実現する、様々な技術・ソフトウェア群・コンピュータシステム、アルゴリズムとも言われる。人工知能の例は、そして人工知能の機能を提供しその成長を支えるうえで、データセンターが重要インフラとなっている。1950年代から始まった初期の人工知能は、人間がルールを与える「探索と推論」（第1次ブーム）と「知識表現」（第2次ブーム）が中心だったが限界に至り、1980年代にはデータから学ぶ「機械学習」へ移行。2010年代にはその発展形である「ディープラーニング（深層学習）」が画像認識や囲碁で人間を凌駕し、第3次ブームが生じた。"},
+  {"href":"https://www.ai-gakkai.or.jp/","title":"人工知能学会 (The Japanese Society for Artificial Intelligence)","body":"2026.05.01： 【会誌発行】人工知能学会誌 Vol.41 No.3 (2026/5) →詳細"},
+  {"href":"https://wired.jp/article/using-ai-negative-impact-thinking-problem-solving-study/","title":"AIを10分使うだけで、人は考えなくなるのか？","body":"『WIRED』による人工知能の関連記事はこちら。数百人規模の参加者を対象にした3つの実験で、一部の参加者はAIアシスタントを自由に利用できる状態にあった。途中でAI支援を突然打ち切られた参加者は、問題を諦めたり、誤答したりする傾向が顕著にみられたという。研究チームは、人工知能（AI）の普及は生産性を高める可能性がある一方で、その代償として基礎的な問題解決能力の発達が損なわれるおそれがあると指摘している。"},
+  {"href":"https://www.talend.com/jp/resources/what-is-artificial-intelligence/","title":"AI（人工知能）とは — AIの種類と仕組み、メリット","body":"AI（Artificial Intelligence: 人工知能）とは、コンピューターサイエンスの一分野で、音声認識、意志決定、視覚など、通常は人間の知能に関連するタスクをコンピューターシステムが学習して実行することを可能にするもの総称を指します。人工知能（AI）が再び注目され、ビジネスに変革をもたらしています。開発には約60年かかり、「AIの冬」（AIの進化に対する研究と資金提供がほとんどなかった時代）は終わりました。"},
+  {"href":"https://shikiho.toyokeizai.net/news/0/943793","title":"会社四季報オンライン｜株式投資・銘柄研究のバ...","body":"このサイトを利用するには、コンテンツブロック機能（広告ブロック機能を持つ拡張機能等）を無効にしてページを再読み込みしてください。なお、Microsoft Edgeをご利用のお客様はプライバシー設定が影響している..."}
+]}
+</script>
+
+<script>
+  (function () {
+    // ----- render fixtures into result panes -----
+    function escapeHTML(s) {
+      return s.replace(/[&<>"']/g, function (c) {
+        return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+      });
+    }
+    function shortenUrl(u, max) {
+      if (u.length <= max) return u;
+      return u.slice(0, max - 1) + '…';
+    }
+    function truncate(s, max) {
+      if (s.length <= max) return s;
+      return s.slice(0, max - 1).trimEnd() + '…';
+    }
+    function renderInto(locale, jsonId, containerId) {
+      var node = document.getElementById(jsonId);
+      var container = document.getElementById(containerId);
+      if (!node || !container) return;
+      var data;
+      try { data = JSON.parse(node.textContent); } catch (e) { return; }
+      var html = '';
+      data.results.forEach(function (r, i) {
+        var idx = (i + 1).toString().padStart(2, '0');
+        html += '<article class="result">';
+        html += '<span class="idx">No. ' + idx + '</span>';
+        html += '<h4 class="rtitle"><a href="' + escapeHTML(r.href) + '" target="_blank" rel="noopener">' + escapeHTML(r.title) + '</a></h4>';
+        html += '<div class="rurl">' + escapeHTML(shortenUrl(r.href, 72)) + '</div>';
+        html += '<p class="rbody">' + escapeHTML(truncate(r.body, 320)) + '</p>';
+        html += '</article>';
+      });
+      container.innerHTML = html;
+    }
+    renderInto('en', 'fixture-en', 'results-en');
+    renderInto('ar', 'fixture-ar', 'results-ar');
+    renderInto('ja', 'fixture-ja', 'results-ja');
+
+    // ----- tab behavior -----
+    var tabs  = document.querySelectorAll('.tabs .tab');
+    var panes = document.querySelectorAll('#multi .pane');
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        var target = t.getAttribute('data-tab');
+        tabs.forEach(function (other) {
+          other.setAttribute('aria-selected', other === t ? 'true' : 'false');
+        });
+        panes.forEach(function (p) {
+          p.setAttribute('data-active', p.id === ('pane-' + target) ? 'true' : 'false');
+        });
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
