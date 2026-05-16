@@ -14,8 +14,8 @@ proposal (`proposal/MAIN.md`), the three-file call kit
 (`call-kit/demo-script.md`, `call-kit/qa-prep.md`,
 `call-kit/talking-points.md`), the multi-region outreach kit (three
 files in `extra/`), the eight research backgrounders (in `research/`),
-and the two reference forks (`E:\youdotcom\workspace\camel-fork\`,
-`E:\youdotcom\workspace\gpt-researcher-fork\`) are all on disk and
+and the two reference forks ([Cooperation-org/camel](https://github.com/Cooperation-org/camel/pull/1),
+[Cooperation-org/gpt-researcher](https://github.com/Cooperation-org/gpt-researcher/pull/1)) are all on disk and
 internally consistent per the 2026-05-15 link-and-consistency audit.
 Apply-ready single-file patches for both forks are now in
 `patches/`. What remains open is bounded: a handful of items that need a
@@ -29,9 +29,9 @@ sign-off), and a few logistical items Muhammad owns himself.
 
 | Repo | Path | Commits ahead of base | Total commits | Base |
 |---|---|---|---|---|
-| Working repo | `E:\youdotcom\workspace\youcom-ecosystem-work\` | n/a (own history) | 25 | initial commit |
-| camel-fork | `E:\youdotcom\workspace\camel-fork\` | 8 | 58 | `0d917c0f` upstream master |
-| gpt-researcher-fork | `E:\youdotcom\workspace\gpt-researcher-fork\` | 9 | 601 | `92bfc038` upstream main |
+| Working repo | https://github.com/dev-mhany/youcom-ecosystem-work | n/a (own history) | 25 | initial commit |
+| camel-fork | https://github.com/Cooperation-org/camel (PR https://github.com/Cooperation-org/camel/pull/1) | 8 | 58 | `0d917c0f` upstream master |
+| gpt-researcher-fork | https://github.com/Cooperation-org/gpt-researcher (PR https://github.com/Cooperation-org/gpt-researcher/pull/1) | 9 | 601 | `92bfc038` upstream main |
 
 Working-repo total of 25 is as of this preflight commit (commit 24 adds
 the patches; commit 25 adds this file).
@@ -99,8 +99,8 @@ Read in this order:
    listed at the bottom
 
 Forks (local-only, NOT pushed yet — push decision is yours):
-- E:\youdotcom\workspace\camel-fork\           (8 commits ahead)
-- E:\youdotcom\workspace\gpt-researcher-fork\  (9 commits ahead)
+- https://github.com/Cooperation-org/camel              (8 commits ahead; PR https://github.com/Cooperation-org/camel/pull/1)
+- https://github.com/Cooperation-org/gpt-researcher     (9 commits ahead; PR https://github.com/Cooperation-org/gpt-researcher/pull/1)
 - patches/camel-fork.patch and patches/gpt-researcher-fork.patch
   re-apply both branches onto a fresh upstream clone if anything
   goes sideways during push.
@@ -212,8 +212,8 @@ The current `YOU_API_KEY` was pasted into the working chat during the
 build pass. After Monday's call (regardless of how it goes), rotate
 the key and update any `.env` files in:
 
-- `E:\youdotcom\workspace\camel-fork\` (no `.env` shipped, but check)
-- `E:\youdotcom\workspace\gpt-researcher-fork\` (no `.env` shipped, but check)
+- https://github.com/Cooperation-org/camel (no `.env` shipped, but check)
+- https://github.com/Cooperation-org/gpt-researcher (no `.env` shipped, but check)
 - Any local shell profiles that exported the key
 
 Treat the in-chat key as compromised by default. Cost of rotation is

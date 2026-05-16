@@ -132,7 +132,7 @@ those to the News endpoint).
 
 ### 3.1 `camel-fork` — `camel-ai/camel`
 
-Working tree: `E:\youdotcom\workspace\camel-fork\`. Branch off
+Repo: https://github.com/Cooperation-org/camel (branch `feat/youcom-search`, PR https://github.com/Cooperation-org/camel/pull/1). Branch off
 upstream `master` at `0d917c0f`. Build report:
 `research/camel-build-report.md`.
 
@@ -172,7 +172,7 @@ locale.
 
 ### 3.2 `gpt-researcher-fork` — `assafelovic/gpt-researcher`
 
-Working tree: `E:\youdotcom\workspace\gpt-researcher-fork\`. Branch off
+Repo: https://github.com/Cooperation-org/gpt-researcher (branch `feat/youcom-retriever`, PR https://github.com/Cooperation-org/gpt-researcher/pull/1). Branch off
 upstream `master` at `92bfc038`. Build report:
 `research/gpt-researcher-build-report.md`.
 
@@ -339,7 +339,7 @@ this proposal so You.com partnerships can read them in one place.
 ## Sources & verification methodology
 
 Every claim in this document is grounded in primary research saved to
-`E:\youdotcom\workspace\youcom-ecosystem-work\research\`. The relevant files:
+`research/` in this repo (https://github.com/dev-mhany/youcom-ecosystem-work). The relevant files:
 
 - `benchmark-langchain.md` — LangChain wrapper fetched 2026-05-15; parity contract
 - `api-reference.md` — endpoints, auth, response shape verified against a live 200
