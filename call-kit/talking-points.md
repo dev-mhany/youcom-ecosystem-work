@@ -135,18 +135,23 @@ the list before you dial in.
   and then say "Eddy Nassif's eval harness covers the LangChain
   integration." Source: `research/eddy-investigation.md`.
 
-- **Don't claim live Arabic or Japanese smoke tests.** We shipped
-  `country` and `language` parameters and unit tests for the locale
-  code path. We have not run a real Arabic or Japanese query against
-  the live API. The accurate phrasing is "the unit tests cover the
-  Arabic locale path; an integration smoke test against a real Arabic
-  query is the first thing we'd want a You.com API key to run."
-  Source: `proposal/MAIN.md` section 4.
+- **DO claim live Arabic and Japanese smoke tests passed.** We ran
+  them on 2026-05-16 — 6 live API calls across both forks, all
+  returned locale-appropriate results from regional domains. Captured
+  responses live in `research/fixtures/e2e-live-2026-05-16/`. The
+  accurate phrasing is "we live-tested Arabic with `country=SA,
+  language=ar` and Japanese with `country=JP, language=ja` against
+  both forks on 2026-05-16; both returned 5 locale-appropriate
+  results from regional domains." Source: `research/e2e-verification.md`.
 
-- **Don't oversell the multilingual story as a finished product.** It's
-  a documented capability with code in place, not a benchmarked
-  outcome. Use "we exposed the locale parameters" not "we solved
-  Arabic search."
+- **Don't oversell the multilingual story as a benchmarked outcome.**
+  Six successful smoke calls across three locales is verification
+  that the integration works end-to-end with native script and
+  regional domains — it is not a head-to-head eval against other
+  providers, and it is not coverage of every Arabic country code or
+  Japanese edge case. Use "we live-verified the locale path" and
+  "the captured responses are in the repo" — not "we solved Arabic
+  search" and not "our multilingual search outperforms X."
 
 - **Don't say the forks are pushed to upstream.** They are local
   commits under our company org. Pushing or opening upstream PRs
