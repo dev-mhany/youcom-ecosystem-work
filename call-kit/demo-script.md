@@ -40,8 +40,8 @@ section.
 ### 0.2 Editor and terminal layout
 
 - [ ] Editor open with two workspaces in tabs:
-      - `E:\youdotcom\workspace\camel-fork`
-      - `E:\youdotcom\workspace\gpt-researcher-fork`
+      - `E:\youdotcom\workspace\camel-fork`            (GitHub: https://github.com/Cooperation-org/camel — PR https://github.com/Cooperation-org/camel/pull/1)
+      - `E:\youdotcom\workspace\gpt-researcher-fork`   (GitHub: https://github.com/Cooperation-org/gpt-researcher — PR https://github.com/Cooperation-org/gpt-researcher/pull/1)
 - [ ] Editor font size bumped to ~16pt for screen-share readability.
 - [ ] Terminal open in two tabs, one per fork, both at the repo root.
       Font ~16pt, dark background, line wrapping on.
