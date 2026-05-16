@@ -103,18 +103,19 @@ the existing fork commit logs."
 
 ### Q6. What's the team composition?
 
-**Short:** "Multi-region. Muhammad Hany leads the Arabic side and
-authored both fork branches. Tuna leads the Japanese leg, supported by
-paid translation for JP-language content. The team is Python-strong,
-with prior open-source work in adjacent ecosystems."
+**Short:** "Multi-region. Amr Nabil leads the Arabic side, with
+Muhammad Hany on the Arabic team — Muhammad authored the camel-ai
+fork branch. Tuna leads the Japanese leg, supported by paid
+translation for JP-language content. The team is Python-strong, with
+prior open-source work in adjacent ecosystems."
 
 **Backup if asked for specifics:** "Headcount and engagement scope I'd
 want Golda to walk through — that's a contracting conversation, not
 my call."
 
-**Source:** `proposal/MAIN.md` section 4 (Arabic — Muhammad,
-Japanese — npaka outreach plus paid translator); `research/japanese-community.md`
-section 3.
+**Source:** `proposal/MAIN.md` section 4 (Arabic — Amr Nabil lead with
+Muhammad on team; Japanese — npaka outreach plus paid translator);
+`research/japanese-community.md` section 3.
 
 ---
 

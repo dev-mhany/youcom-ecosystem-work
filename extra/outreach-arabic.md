@@ -1,6 +1,6 @@
 # Arabic-Region Outreach Kit
 
-Owner on this engagement: **Muhammad Hany**. The integration target is camel-ai/camel (KAUST-founded, Saudi roots). This kit gives Muhammad concrete contacts and English-source templates to translate in his own voice.
+Owners on this engagement: **Amr Nabil** (lead) and **Muhammad Hany**. The integration target is camel-ai/camel (KAUST-founded, Saudi roots). This kit gives the Arabic team concrete contacts and English-source templates to translate in their own voice.
 
 ---
 

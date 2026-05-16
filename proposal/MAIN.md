@@ -9,7 +9,7 @@
 
 We propose a multi-region, multi-language open-source engagement that adds the You.com Search and Research APIs to agent and research frameworks where they are not yet present. The engagement is anchored by two reference forks already built against verified You.com endpoints: `camel-ai/camel` (KAUST origin, Arabic-community fit) and `assafelovic/gpt-researcher` (deep-research narrative fit). Each fork mirrors the upstream LangChain integration's parity contract and adds locale parameters (`country`, `search_lang`) that the existing LangChain wrapper does not expose for the Search endpoint.
 
-The team is global and multi-language. Muhammad Hany leads Arabic outreach (KAUST, AUC). The Japanese leg is structured as a translation-plus-influencer play around Sakana AI's `AI-Scientist-v2`, with npaka (note.com) as the outreach contact. The two completed forks are the demonstration; the engagement we want is a recurring cadence that keeps adding repos like these on a documented schedule.
+The team is global and multi-language. Amr Nabil leads Arabic outreach (KAUST, AUC), with Muhammad Hany on the Arabic team. The Japanese leg is structured as a translation-plus-influencer play around Sakana AI's `AI-Scientist-v2`, with npaka (note.com) as the outreach contact. The two completed forks are the demonstration; the engagement we want is a recurring cadence that keeps adding repos like these on a documented schedule.
 
 This document refines the earlier pre-Monday brief drafted by Peter B.A. and is built on verified primary sources: every claim about an existing You.com integration links to the file or release that proves it, and every recommended target lists the exact integration entry-point file.
 
@@ -221,7 +221,7 @@ target, name the first repo. We start with what we can demonstrate
 
 ### Arabic — LIVE on this engagement
 
-- **Lead:** Muhammad Hany.
+- **Lead:** Amr Nabil. **Team:** Muhammad Hany.
 - **First repo:** `camel-ai/camel`. Done — see section 3.1. KAUST is the
   origin of camel-ai, which makes the Arabic-community story land
   naturally rather than as an afterthought.
@@ -297,7 +297,7 @@ is deliberately concrete: cadence, asks, and reporting format.
 ### 5.2 What we need from You.com
 
 - **API keys** for the team — minimum: lead developer per region
-  (Muhammad for Arabic; one per future region as leads are confirmed)
+  (Amr Nabil for Arabic; one per future region as leads are confirmed)
   plus one shared key for CI / integration smoke tests. The forks'
   unit tests don't need keys; the live integration smoke tests do.
 - **A direct channel** with You.com DevRel for fast questions

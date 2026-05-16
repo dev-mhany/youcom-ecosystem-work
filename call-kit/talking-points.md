@@ -48,8 +48,8 @@ fork targets explicitly.
 > tests, both expose `country` and `language` parameters as first-class
 > arguments.
 >
-> The team is multi-region by design. Muhammad Hany leads the Arabic
-> side and authored both fork branches. The Japanese leg is staged for
+> The team is multi-region by design. Amr Nabil leads the Arabic side,
+> with Muhammad Hany on the Arabic team. The Japanese leg is staged for
 > the next engagement, with a translation-plus-influencer plan around
 > Sakana AI's project. [pause] The proposal in front of you has the
 > tier list of what we'd ship next, and the cadence we're proposing.
@@ -85,8 +85,9 @@ the first thirty seconds. Adds the You.com-side acknowledgement
 > `search_lang` for the Search endpoint — locale parameters the upstream
 > LangChain wrapper does not expose for Search.
 >
-> The team is multi-region. Muhammad Hany leads Arabic outreach into
-> KAUST and AUC. Japanese is staged for the next engagement, with
+> The team is multi-region. Amr Nabil leads Arabic outreach into KAUST
+> and AUC, with Muhammad Hany on the Arabic team. Japanese is staged
+> for the next engagement, with
 > translation plus an influencer play around Sakana AI. [pause] If your
 > team's eval harness is open to outside contributors, we'd want our
 > forks measured against it — that's the bar we built to.
