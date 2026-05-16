@@ -103,19 +103,34 @@ the existing fork commit logs."
 
 ### Q6. What's the team composition?
 
-**Short:** "Multi-region. Amr Nabil leads the Arabic side, with
-Muhammad Hany on the Arabic team — Muhammad authored the camel-ai
-fork branch. Tuna leads the Japanese leg, supported by paid
-translation for JP-language content. The team is Python-strong, with
-prior open-source work in adjacent ecosystems."
+**Short:** "Multi-region by language coverage. Arabic from Amr Nabil
+and Muhammad Hany — Muhammad authored the camel-ai fork branch.
+Partial Japanese from Tuna. Python-strong engineering across the
+rest, with prior open-source work in adjacent ecosystems."
 
 **Backup if asked for specifics:** "Headcount and engagement scope I'd
 want Golda to walk through — that's a contracting conversation, not
 my call."
 
-**Source:** `proposal/MAIN.md` section 4 (Arabic — Amr Nabil lead with
-Muhammad on team; Japanese — npaka outreach plus paid translator);
-`research/japanese-community.md` section 3.
+**Source:** `proposal/MAIN.md` section 4 (Regional fit — team
+capability);
+`research/japanese-community.md` section 5.
+
+---
+
+### Q6b. Have you done any community outreach yet?
+
+**Short:** "Not yet — this engagement was scoped to engineering work,
+two reference forks plus live multilingual verification. Outreach
+cadence is a separate scope conversation we'd be glad to have."
+
+**Backup if pressed:** "We have the regional context mapped — the
+ecosystems exist, the integration entry points are documented, the
+team has the language coverage. What we don't have is a brief from
+You.com on what outreach posture you'd want us operating under. That's
+the conversation we'd want to have before anything goes out."
+
+**Source:** `proposal/MAIN.md` section 4 (Regional fit).
 
 ---
 
@@ -212,13 +227,14 @@ run" (`test_search_soft_fails_on_missing_key`),
 ### Q12. Why camel-ai specifically? It's not the biggest framework.
 
 **Short:** "KAUST origin. camel-ai was founded out of the Saudi
-research scene, and Muhammad's outreach into KAUST and AUC is the
-warmest Arabic-region path we have. It's also a clean
-multi-engine `SearchToolkit` — fifteen existing search backends, all
-following the same pattern. You.com slots in cleanly."
+research scene, which makes the Arabic-region story a property of the
+repo's own institutional history rather than something we'd have to
+construct. It's also a clean multi-engine `SearchToolkit` — fifteen
+existing search backends, all following the same pattern. You.com
+slots in cleanly."
 
 **Source:** `proposal/MAIN.md` section 2 (Tier 1 table — KAUST origin
-note), section 4 (Arabic).
+note), section 4 (Arabic-region fit).
 
 ---
 
@@ -327,17 +343,15 @@ questions" item 3, `research/api-reference.md` section 1.3.
 
 ### Q21. How does the team handle the language gap on the Japanese side if no one is JP-native?
 
-**Short:** "We don't write JP-language technical content directly.
-Translation is paid — roughly two to four hundred dollars per Qiita
-plus Zenn cross-post. The outreach lead for JP is npaka, who reads
-English fine; the artifact we'd send him is in Japanese, the DM
-itself is English."
+**Short:** "Tuna gives us partial Japanese coverage — sufficient for
+proofreading and liaison work, not for native-quality JP technical
+authoring. The Sakana target is reachable in English: codebase is
+English-language despite the Tokyo HQ, and the team posts in English.
+Engineering work is unblocked. Anything that needs native JP-language
+production would be a scope question."
 
-**Backup:** "We're also not presenting in machine-translated Japanese
-at PyCon JP. If we get a CFP slot, we partner with a JP-native
-co-presenter."
-
-**Source:** `research/japanese-community.md` section 3.
+**Source:** `proposal/MAIN.md` section 4 (Regional fit — team
+capability); `research/japanese-community.md` section 5.
 
 ---
 

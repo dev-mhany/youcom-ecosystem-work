@@ -48,11 +48,11 @@ fork targets explicitly.
 > tests, both expose `country` and `language` parameters as first-class
 > arguments.
 >
-> The team is multi-region by design. Amr Nabil leads the Arabic side,
-> with Muhammad Hany on the Arabic team. The Japanese leg is staged for
-> the next engagement, with a translation-plus-influencer plan around
-> Sakana AI's project. [pause] The proposal in front of you has the
-> tier list of what we'd ship next, and the cadence we're proposing.
+> The team is multi-region by design — Arabic-language coverage from
+> Amr Nabil and Muhammad Hany, partial Japanese coverage from Tuna,
+> Python-strong engineering across the rest. [pause] The proposal in
+> front of you has the tier list of what we'd ship next, and the
+> cadence we're proposing.
 
 **Handoff:** "I'd like to walk you through the doc briefly, then put
 the forks on screen-share so you can see the actual code. Maybe four
@@ -85,12 +85,11 @@ the first thirty seconds. Adds the You.com-side acknowledgement
 > `search_lang` for the Search endpoint — locale parameters the upstream
 > LangChain wrapper does not expose for Search.
 >
-> The team is multi-region. Amr Nabil leads Arabic outreach into KAUST
-> and AUC, with Muhammad Hany on the Arabic team. Japanese is staged
-> for the next engagement, with
-> translation plus an influencer play around Sakana AI. [pause] If your
-> team's eval harness is open to outside contributors, we'd want our
-> forks measured against it — that's the bar we built to.
+> The team is multi-region — Arabic-language coverage from Amr Nabil
+> and Muhammad Hany, partial Japanese coverage from Tuna,
+> Python-strong engineering across the rest. [pause] If your team's
+> eval harness is open to outside contributors, we'd want our forks
+> measured against it — that's the bar we built to.
 
 **Handoff:** "I'd like to walk through the doc briefly — five minutes —
 then put the forks on screen-share for two minutes each, then questions.
@@ -157,6 +156,14 @@ the list before you dial in.
 - **Don't say the forks are pushed to upstream.** They are local
   commits under our company org. Pushing or opening upstream PRs
   happens after You.com acknowledges the approach.
+
+- **Don't claim outreach activity.** No "we reached out to X," no "our
+  outreach targets include Y," no "translation pipeline." The
+  engagement to date is engineering: two forks shipped + live
+  multilingual verification. If outreach comes up, the answer is:
+  "Outreach scope and cadence is a follow-on conversation — happy to
+  talk about what we'd want to set up if/when it's part of the
+  engagement."
 
 ### Banned words
 

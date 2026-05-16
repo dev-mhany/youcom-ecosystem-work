@@ -9,7 +9,7 @@
 
 We propose a multi-region, multi-language open-source engagement that adds the You.com Search and Research APIs to agent and research frameworks where they are not yet present. The engagement is anchored by two reference forks already built against verified You.com endpoints: `camel-ai/camel` (KAUST origin, Arabic-community fit) and `assafelovic/gpt-researcher` (deep-research narrative fit). Each fork mirrors the upstream LangChain integration's parity contract and adds locale parameters (`country`, `search_lang`) that the existing LangChain wrapper does not expose for the Search endpoint.
 
-The team is global and multi-language. Amr Nabil leads Arabic outreach (KAUST, AUC), with Muhammad Hany on the Arabic team. The Japanese leg is structured as a translation-plus-influencer play around Sakana AI's `AI-Scientist-v2`, with npaka (note.com) as the outreach contact. The two completed forks are the demonstration; the engagement we want is a recurring cadence that keeps adding repos like these on a documented schedule.
+The team is global and multi-language: Arabic-language coverage from Amr Nabil and Muhammad Hany, partial Japanese coverage from Tuna, with Python-strong engineering across the rest of the team. The two completed forks are the demonstration; the engagement we want is a recurring cadence that keeps adding repos like these on a documented schedule.
 
 This document refines the earlier pre-Monday brief drafted by Peter B.A. and is built on verified primary sources: every claim about an existing You.com integration links to the file or release that proves it, and every recommended target lists the exact integration entry-point file.
 
@@ -18,7 +18,7 @@ This document refines the earlier pre-Monday brief drafted by Peter B.A. and is 
 1. Existing You.com OSS footprint
 2. Proposed targets (uncovered)
 3. Two reference forks (already built)
-4. Multi-region engagement plan
+4. Regional fit
 5. How we'll execute
 
 ---
@@ -212,67 +212,78 @@ factory `match` block in `gpt_researcher/actions/retriever.py`, and
 it up automatically; the list is belt-and-suspenders). Users select via
 `RETRIEVER=you` and can compose with others via `RETRIEVER=tavily,you,arxiv`.
 
-## 4. Multi-region engagement plan
+## 4. Regional fit
 
-The two forks above are the first two artifacts. The structure that
-follows is the durable shape: per region, name a lead, name an outreach
-target, name the first repo. We start with what we can demonstrate
-(Arabic, live this engagement) and stage the rest behind it.
+The two forks above are the first two artifacts. This section explains
+why each target maps cleanly onto a specific regional developer
+audience — these are factual properties of the repos and of the team —
+and what regional coverage the team can support if You.com wants
+regional reach as part of the engagement scope.
 
-### Arabic — LIVE on this engagement
+### Arabic-region fit — `camel-ai/camel`
 
-- **Lead:** Amr Nabil. **Team:** Muhammad Hany.
-- **First repo:** `camel-ai/camel`. Done — see section 3.1. KAUST is the
-  origin of camel-ai, which makes the Arabic-community story land
-  naturally rather than as an afterthought.
-- **Outreach targets:** KAUST (camel-ai's institutional home) and the
-  American University in Cairo. Outreach templates are in
-  `extra/`.
-- **Locale verification status:** `country=SA`, `country=AE`,
-  `country=EG` and `search_lang=ar` are accepted by the Search API per
-  documentation; live verification was not budgeted for this pass (we
-  spent both budgeted live calls on endpoint correctness — see
-  `research/api-reference.md` section 5). The fork's unit tests cover
-  the Arabic locale path; an integration smoke test against a real
-  Arabic query is the first item we'd want a You.com API key to run.
+- **Repo origin:** camel-ai was founded out of KAUST (King Abdullah
+  University of Science and Technology, Saudi Arabia), making it the
+  most natural Arabic-region anchor in the open-source agent
+  ecosystem. The Arabic-community story lands on the repo's own
+  institutional history, not on adjacent positioning.
+- **Locale verification:** Live tested 2026-05-16 with `country=SA,
+  search_lang=ar` against both forks; both returned 5
+  locale-appropriate results from regional domains. Captured responses
+  in `research/fixtures/e2e-live-2026-05-16/`. The integration covers
+  the documented `country=SA`, `country=AE`, `country=EG` and
+  `search_lang=ar` parameter values, with unit tests asserting
+  parameter propagation and live results confirming the end-to-end
+  path.
+- **Regional developer ecosystem:** Active Arabic-language NLP and
+  agent communities exist around KAUST (CEMSE / AI), MBZUAI's Arabic
+  NLP group, AUC's CS department, and the ArabicNLP / WANLP workshop
+  series collocated with EMNLP. Arabic queries are a known weak spot
+  for English-default search APIs — the locale path is a demonstrable
+  technical win with a real audience.
 
-### Japanese — NEXT engagement
+### Japanese-region fit — `SakanaAI/AI-Scientist-v2`
 
-- **Outreach lead:** npaka (布留川英一,
-  [@npaka123](https://twitter.com/npaka123)) on note.com / X. He has
-  already written explainers on Tavily Search API + LangChain; a
-  "You.com Search API を試す" post from him is the single
-  highest-yield piece of JP coverage available.
-- **First repo:** [`SakanaAI/AI-Scientist-v2`](https://github.com/SakanaAI/AI-Scientist-v2)
-  (paired with [v1](https://github.com/SakanaAI/AI-Scientist) for ~20k
-  combined stars). Sakana's codebase is English-language despite the
-  Tokyo HQ, the team posts in English, and the only existing search
-  backend is Semantic Scholar — a `BaseTool` subclass adding You.com is
-  ~150 lines.
-- **Conference:** PyCon JP 2026 CFP is open at
-  https://pretalx.com/pyconjp2026/cfp. Talk angle:
-  "オープンソース日本語エージェントに本物のWeb検索を" (Real web
-  search for open-source Japanese agents). We'd partner with a
-  JP-native co-presenter rather than present in machine-translated
-  Japanese.
-- **JP technical content:** authored only via paid translation
-  (~$200-400 per Qiita + Zenn cross-post). We do not write JP-language
-  technical content directly. Detail and rationale in
-  `research/japanese-community.md` section 3.
+The natural Japanese-region anchor for a future engagement is Sakana
+AI's `AI-Scientist-v2`. Sakana is the most internationally visible
+Japanese AI lab in 2025-2026, the codebase is English-language despite
+the Tokyo HQ, and the team posts in English — making it an unusually
+reachable target for an English-speaking engineering team. The
+integration entry point is clean (`ai_scientist/tools/base_tool.py`
+abstract class; only existing search backend is Semantic Scholar; a
+`BaseTool` subclass adding You.com is ~150 lines). Live testing on
+2026-05-16 confirmed `country=JP, search_lang=ja` returns
+locale-appropriate results from regional domains across both shipped
+forks.
 
-### Other regions — roadmap
+The broader Japanese developer ecosystem for LLM/agent work centers on
+Qiita, Zenn, note.com, the LLM-jp consortium at NII, and conferences
+like PyCon JP — distinct from the US Reddit/Hacker News surface.
+Background research on the JP community is in
+`research/japanese-community.md`.
 
-These are sketched, not promised. Each row needs a confirmed
-team-member lead before it goes on the next engagement's commitment
-list.
+### Team capability for regional coverage
 
-| Region | Language | Candidate first repo | Lead status |
-|---|---|---|---|
-| LATAM | Spanish | TBD (smolagents Spanish examples; Hugging Face community channels) | TBD |
-| SEA | Indonesian / Vietnamese | TBD (Qwen-Agent has natural Asia surface; local LLM communities to be mapped) | TBD |
-| Africa | Swahili | TBD (Cooperation.org has a relevant network; lead to be named) | TBD |
-| Germany | German | `deepset-ai/haystack` (Berlin enterprise audience) | TBD |
-| China | Mandarin | `QwenLM/Qwen-Agent` (Alibaba) | TBD |
+The team has Arabic-language coverage (Amr Nabil, Muhammad Hany) and
+partial Japanese coverage (Tuna — sufficient for proofreading and
+liaison work, not for native-quality JP technical authoring). Python
+engineering coverage is strong across the team. If You.com wants
+regional coverage as part of the engagement scope — sustained presence
+in Arabic-region developer communities, or a structured approach to
+the Japanese ecosystem — the team is positioned to support it
+long-term. The two shipped forks demonstrate the engineering shape;
+regional cadence and depth are scope items to be defined per
+engagement.
+
+### Other regions — future scope
+
+If the engagement expands beyond the Arabic and Japanese anchors, the
+team's pattern is to add regions as scope expands rather than
+front-loading commitments. Candidate first repos per region are
+listed in the Tier 2 / Tier 3 tables in section 2 (e.g.
+`huggingface/smolagents` for Spanish-language reach via HF
+distribution, `deepset-ai/haystack` for German enterprise audiences,
+`QwenLM/Qwen-Agent` for Mandarin / Asia coverage).
 
 ## 5. How we'll execute
 
@@ -296,10 +307,10 @@ is deliberately concrete: cadence, asks, and reporting format.
 
 ### 5.2 What we need from You.com
 
-- **API keys** for the team — minimum: lead developer per region
-  (Amr Nabil for Arabic; one per future region as leads are confirmed)
-  plus one shared key for CI / integration smoke tests. The forks'
-  unit tests don't need keys; the live integration smoke tests do.
+- **API keys** for the team — minimum: one developer key per active
+  engineer plus one shared key for CI / integration smoke tests, with
+  additional keys provisioned as scope expands. The forks' unit tests
+  don't need keys; the live integration smoke tests do.
 - **A direct channel** with You.com DevRel for fast questions
   (Slack channel, Discord, or shared email thread — whichever
   matches their existing partnerships flow). Specifically: schema
@@ -327,9 +338,8 @@ Monthly markdown report mirroring this document's style and structure.
 Required sections per report:
 
 - PRs opened (link, status, maintainer signal).
-- Outreach evidence (template links, replies, scheduled meetings).
 - Eval delta vs. previous month if a harness comparison is run.
-- Next month's commitment list (repo, lead, target PR-open date).
+- Next month's commitment list (repo, target PR-open date).
 
 Reports live in the same `Cooperation-org/projects` repo that hosts
 this proposal so You.com partnerships can read them in one place.
@@ -347,5 +357,5 @@ Every claim in this document is grounded in primary research saved to
 - `camel-build-report.md`, `gpt-researcher-build-report.md` — what each fork actually shipped
 - `eddy-investigation.md` — identification of Eddy Nassif as the eval-harness lead
 - `crewai-verification.md` — CrewAI integration is Type B (generic MCP), not first-class
-- `japanese-community.md` — JP fork target ranking and outreach plan
+- `japanese-community.md` — JP fork target ranking and regional context
 - `fixtures/search-response.json` — captured live 200 from `https://ydc-index.io/v1/search`

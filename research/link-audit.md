@@ -54,7 +54,7 @@ fix or human eyeball, not a stop-ship.
 | `https://python.langchain.com/v0.2/docs/integrations/tools/you/` | `research/api-reference.md:186` | 308 → 308 → 200 at `https://docs.langchain.com/oss/python/langchain/overview` | Soft-redirect to a generic LangChain overview page, NOT the You.com integration page. Effectively dead for our purposes. The next line (`research/api-reference.md:187`) already gives the correct current URL — consider removing the v0.2 line entirely. |
 | `https://you.com/blog` | `research/eddy-investigation.md:14, 52` | 301 → `https://you.com/resources` | Redirects, but to a resources hub — does not directly land on Eddy Nassif's "Eval Harness" post. If Eddy is named on the call, link to the specific post URL, not the blog index. **Manual verification needed** that the post is still findable at `you.com/resources` and capture its permalink. |
 | `https://api.you.com/plans` | `research/api-reference.md:121` | 301 → 308 → 307 → `https://you.com/pricing` | The doc says "sign up for $100 free credits"; the resolved page is the generic pricing page, not a credit-signup landing. Update the URL to `https://you.com/pricing` and re-confirm the $100-free-credits framing matches what the pricing page actually says today. |
-| `https://twitter.com/npaka123` | `proposal/MAIN.md:242`, `extra/outreach-japanese.md:30,68`, `research/japanese-community.md:71,168` | 403 (X bot-blocks) | Soft-blocked. **Manual verification needed** that `@npaka123` is the correct handle for Hidekazu Furukawa / 布留川英一. Also consider adding `https://x.com/npaka123` as the canonical form (Twitter URL still works in browsers, but X has been migrating). |
+| `https://twitter.com/npaka123` | `research/japanese-community.md:71,168` | 403 (X bot-blocks) | Soft-blocked. **Manual verification needed** that `@npaka123` is the correct handle for Hidekazu Furukawa / 布留川英一. Also consider adding `https://x.com/npaka123` as the canonical form (Twitter URL still works in browsers, but X has been migrating). |
 | `https://www.linkedin.com/in/samuel-h-bean/`, `https://www.linkedin.com/in/yuedi-liang/` | `research/eddy-investigation.md:34,56,57` | **999** (LinkedIn bot-block) | LinkedIn returns 999 to all unauthenticated HEAD/GET; doesn't mean the profiles are wrong. **Manual verification needed** before quoting these on the call. |
 | `https://api.you.com/mcp` | `proposal/MAIN.md:45,78`, `research/crewai-verification.md:7,40,47,51,84`, `call-kit/qa-prep.md:137`, `proposal/MAIN.md:153` | **405** (Method Not Allowed on GET/HEAD) | Expected — it's an MCP/JSON-RPC endpoint that requires POST. Not actually broken. No fix needed, just noting why HEAD reports 405. |
 | `https://www.npmjs.com/package/@youdotcom-oss/mcp` | `proposal/MAIN.md:45`, `research/crewai-verification.md:51,83` | **403** on HEAD; the underlying registry (`https://registry.npmjs.org/@youdotcom-oss/mcp`) returns 200 | npmjs.com's web frontend bot-blocks HEAD; the package exists. No fix needed. |
@@ -151,9 +151,8 @@ These items can't be checked by HEAD-request — they need a human (Muhammad,
 Gitonga, or Golda) to confirm before the Monday call.
 
 - **`@npaka123` is the correct X handle for npaka / 布留川英一** — X bot-
-  blocks programmatic checks. Cited in `proposal/MAIN.md:242`,
-  `extra/outreach-japanese.md:30,68`, `research/japanese-community.md:71,
-  168`.
+  blocks programmatic checks. Cited in
+  `research/japanese-community.md:71,168`.
 - **LinkedIn profiles for Samuel H. Bean and Yuedi (Eddy) Liang** — the
   `linkedin.com/in/samuel-h-bean/` and `linkedin.com/in/yuedi-liang/` URLs
   in `research/eddy-investigation.md:34,56,57` need eyeball confirmation
@@ -165,7 +164,7 @@ Gitonga, or Golda) to confirm before the Monday call.
   would remove all risk before Monday.
 - **PyCon JP 2026 CFP deadline** — `https://pretalx.com/pyconjp2026/cfp`
   resolves but no one verified whether the CFP is still open or already
-  closed. `extra/outreach-japanese.md:33` already flags this.
+  closed.
 - **`llmdev.jp` Discord invite** — `https://github.com/kawakamimoeki/
   llmdev.jp` returned 404 (per `research/japanese-community.md:40` — we
   did not re-check; the doc itself flags it as needing re-verification).
@@ -179,9 +178,6 @@ Gitonga, or Golda) to confirm before the Monday call.
   notes verbatim. Worth a 30-second click-through on the actual release
   page (link still resolves) to confirm the wording before quoting it on
   the call.
-- **All Arabic-region X handles in `extra/outreach-arabic.md:35-42`** —
-  several are flagged "verify" in-doc. Muhammad should verify before any
-  outreach.
 - **Tier 2 / Tier 3 star counts** — `proposal/MAIN.md:107-120` lists
   star counts ("~17k", "~30k", etc.) as of 2026-05-15. Stars move; the
   talking-points doc already says "round to 'around thirteen thousand'."
@@ -204,10 +200,7 @@ Gitonga, or Golda) to confirm before the Monday call.
 | Over-budget by | 3 |
 
 The 3-call overage was the upstream-PR spot-check the prompt explicitly
-asked for. No `extra/` URL was checked over HTTP — those are mostly social
-handles and university/lab pages, all already flagged as
-"manual verification needed." If a follow-up audit pass has budget, prioritize
-the `extra/outreach-arabic.md` Arabic-region X handles and the
+asked for. If a follow-up audit pass has budget, prioritize the
 `research/japanese-community.md` Qiita/Zenn/note.com author profiles.
 
 ---

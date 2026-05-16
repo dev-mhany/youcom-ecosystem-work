@@ -12,9 +12,9 @@
 The Cooperation.org pre-Monday packet is materially complete. The
 proposal (`proposal/MAIN.md`), the three-file call kit
 (`call-kit/demo-script.md`, `call-kit/qa-prep.md`,
-`call-kit/talking-points.md`), the multi-region outreach kit (three
-files in `extra/`), the eight research backgrounders (in `research/`),
-and the two reference forks ([Cooperation-org/camel](https://github.com/Cooperation-org/camel/pull/1),
+`call-kit/talking-points.md`), the eight research backgrounders (in
+`research/`), and the two reference forks
+([Cooperation-org/camel](https://github.com/Cooperation-org/camel/pull/1),
 [Cooperation-org/gpt-researcher](https://github.com/Cooperation-org/gpt-researcher/pull/1)) are all on disk and
 internally consistent per the 2026-05-15 link-and-consistency audit.
 Apply-ready single-file patches for both forks are in `patches/`. Live
@@ -52,10 +52,6 @@ youcom-ecosystem-work/
     demo-script.md
     qa-prep.md
     talking-points.md
-  extra/
-    outreach-arabic.md
-    outreach-japanese.md
-    outreach-playbook.md
   patches/
     camel-fork.patch                            (8 commits, ~26 KB)
     gpt-researcher-fork.patch                   (9 commits, ~28 KB)
@@ -141,8 +137,8 @@ the agent harness; all need a human.
 ### Manual verifications (from `research/link-audit.md` section 6)
 
 - **`@npaka123` X handle.** Confirm it is the correct handle for npaka
-  / Hidekazu Furukawa / 布留川英一. Cited in `proposal/MAIN.md:242`,
-  `extra/outreach-japanese.md:30,68`, `research/japanese-community.md:71,168`.
+  / Hidekazu Furukawa / 布留川英一. Cited in
+  `research/japanese-community.md`.
   X bot-blocks programmatic checks (HTTP 403). Eyeball
   `https://x.com/npaka123` in a browser; confirm display name and bio
   match.
@@ -296,7 +292,6 @@ Monday.
 | 12 | The CrewAI `you-contents` schema-patch claim ("~50 lines of user-side schema patching") — re-verify against any 1.14.5+ that may have shipped a fix? | `research/link-audit.md` §6; `research/crewai-verification.md` §2c | P2 | Eyeball the latest tag once before Monday. If CrewAI fixed the schema mismatch, update Q8 in `call-kit/qa-prep.md` to reflect that. |
 | 13 | Tier 2 / Tier 3 star counts in `proposal/MAIN.md:107-120` — refresh the morning of the call, or accept the 2026-05-15 numbers? | `research/link-audit.md` §6 | P2 | Spot-check camel-ai and gpt-researcher Monday morning. The talking-points doc already says "round to 'around thirteen thousand'" so the rounded numbers are durable. |
 | 14 | n8n integration URL in `proposal/MAIN.md:43` — was rewritten after the original 404'd; confirm `https://you.com/docs/integrations` lists n8n cleanly | `research/link-audit.md` §2; this preflight, "Manual verifications" | P2 | One eyeball pass. If the index doesn't list n8n by name, downgrade the row's "Source of record" further. |
-| 15 | Arabic-region X handles in `extra/outreach-arabic.md:35-42` — several flagged "verify" in-doc; confirm before any outreach goes out | `research/link-audit.md` §6 | P2 | Outreach hasn't started yet. Verify when outreach begins, not before Monday. |
 
 ---
 
@@ -318,11 +313,6 @@ shows up as a surprise on Monday or in the post-call retro.
   EN/AR/JA. Captured responses in
   `research/fixtures/e2e-live-2026-05-16/`; report in
   `research/e2e-verification.md`.
-- **Did NOT translate any content into Arabic or Japanese.** The
-  Japanese plan in `research/japanese-community.md` §3 explicitly
-  routes JP-language technical content through paid translation
-  (~$200-400 per Qiita + Zenn cross-post). No JP or AR strings ship
-  in either fork's user-facing docs.
 - ~~**Did NOT run camel-fork's full test suite end-to-end.**~~
   **Done 2026-05-16:** installed minimal deps (`openai mcp pydantic
   docstring_parser colorama pyyaml pillow`), camel `SearchToolkit`
@@ -342,9 +332,6 @@ shows up as a surprise on Monday or in the post-call retro.
   profiles, the Eddy Nassif identification chain, the CrewAI 1.14.4
   release wording, or the n8n integration URL via human eyeball. See
   "Manual verifications" above.
-- **Did NOT contact** anyone in the Arabic, Japanese, or other
-  outreach lists. The templates in `extra/` are drafted; outreach is
-  post-engagement.
 - **Did NOT rotate the `YOU_API_KEY`** that was pasted in chat during
   the build pass. Muhammad's post-call task; see "API key rotation"
   above.

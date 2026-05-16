@@ -1,6 +1,6 @@
-# Japanese Open-Source AI/Agent Community — Fork-Target Recon
+# Japanese Open-Source AI/Agent Community — Regional Research Context
 
-Goal: identify Python-or-Python-friendly repos rooted in the Japanese AI community where a clean You.com Search API integration would land, plus the channels we'd use for outreach. Counterpart to the Arabic angle (camel-ai/camel via KAUST).
+Goal: identify Python-or-Python-friendly repos rooted in the Japanese AI community where a clean You.com Search API integration would land, plus a map of the regional developer ecosystem (publication channels, conferences, key labs) for context. Counterpart to the Arabic angle (camel-ai/camel via KAUST).
 
 ---
 
@@ -19,7 +19,7 @@ Goal: identify Python-or-Python-friendly repos rooted in the Japanese AI communi
 - URL: https://github.com/SakanaAI/AI-Scientist
 - Stars: ~14k  |  License: same RAIL derivative
 - Last commit: Dec 19, 2025
-- **Integration entry point:** Same architecture as v2 but older — Semantic Scholar + OpenAlex (no API key). The literature-search module is optional/swappable. We can either ship one PR to v1 and v2 simultaneously, or use v1 as the pitch piece (more stars, more outreach value) and v2 as the engineering reference.
+- **Integration entry point:** Same architecture as v2 but older — Semantic Scholar + OpenAlex (no API key). The literature-search module is optional/swappable. v1 carries more stars (visibility value); v2 is the cleaner engineering target. A paired drop covering both is feasible.
 - Treat v1 + v2 as a **paired drop** in the pitch.
 
 ### #3 — pfnet-research/plamo-examples
@@ -38,19 +38,19 @@ Goal: identify Python-or-Python-friendly repos rooted in the Japanese AI communi
 
 ### #5 — kawakamimoeki/llmdev.jp
 - URL: https://github.com/kawakamimoeki/llmdev.jp
-- Note: Returned 404 on direct fetch — repo may have been moved to a private/community URL. Treat as a **community channel** (see §2) rather than a fork target until we re-verify. The GitHub URL was indexed as recently as the last few weeks, so it likely just renamed.
+- Note: Returned 404 on direct fetch — repo may have been moved to a private/community URL. Treat as a **community presence** (see §2) rather than a fork target until we re-verify. The GitHub URL was indexed as recently as the last few weeks, so it likely just renamed.
 
 ### Considered but deprioritized
 - **SakanaAI/treequest** (535 stars, Python, Feb 2026): tree-search library, no retrieval surface. Could host a "RAG-augmented MCTS" demo but it's a stretch.
 - **CyberAgentAILab/*** (TANGO, cmaes, layout-dm): all CV/optimization, no LLM-agent surface.
 - **stockmarkteam/***: mostly book-companion notebooks; LLM repos are stale (last meaningful update 2024).
-- **rinna/rinnakk** GitHub org: shows "no public repositories" — they ship via Hugging Face only. Outreach yes, fork no.
+- **rinna/rinnakk** GitHub org: shows "no public repositories" — they ship via Hugging Face only. Brand presence noted; no fork target available.
 - **cl-tohoku, ku-nlp**: classical NLP labs (BERT-japanese, jumanpp, kwja). Strong brand, but no agent/retrieval surface that maps to You.com.
 - **stockmark**, **ELYZA**: model weights only, no agent framework to fork.
 
 ---
 
-## 2. Community channel map
+## 2. Community and publication landscape
 
 ### Qiita (qiita.com)
 - Top tags to monitor: `#AIエージェント`, `#LLM`, `#RAG`, `#LangChain`, `#OpenAI`, `#生成AI`
@@ -59,7 +59,7 @@ Goal: identify Python-or-Python-friendly repos rooted in the Japanese AI communi
   - `Yasushi-Mo` — "LLM と AI Agent の役割と関係性を整理する" type explainers (high views).
   - `kenken38` — multi-agent architectures (recent self-evolving agent pieces).
   - `tikaranimaru` — model-comparison roundups.
-- Outreach pattern: write/translate a short JP article ("You.com Search API を AI Scientist に組み込んでみた"), tag aggressively, link the PR.
+- Publishing pattern in this community: short technical write-ups ("You.com Search API を AI Scientist に組み込んでみた"-shape) with aggressive tagging, linking the source PR.
 
 ### Zenn (zenn.dev)
 - Same author overlap as Qiita; Zenn skews more engineer/long-form.
@@ -77,7 +77,7 @@ Goal: identify Python-or-Python-friendly repos rooted in the Japanese AI communi
 - **Stable Diffusion JP** servers — image/video heavy, not our audience.
 
 ### X / Twitter
-- Must-follow / outreach handles: `@npaka123`, `@karaage0703`, `@SakanaAILabs`, `@PreferredNet`, `@llm_jp` (LLM-jp consortium), `@CyberAgent_AI`, `@elyza_ai`, `@stockmark_inc`.
+- Notable handles in the JP LLM/agent space: `@npaka123`, `@karaage0703`, `@SakanaAILabs`, `@PreferredNet`, `@llm_jp` (LLM-jp consortium), `@CyberAgent_AI`, `@elyza_ai`, `@stockmark_inc`.
 - The JP LLM dev conversation lives on X far more than on Mastodon/Bluesky.
 
 ### Conferences / events
@@ -93,21 +93,26 @@ Goal: identify Python-or-Python-friendly repos rooted in the Japanese AI communi
 
 ---
 
-## 3. Outreach approach (realistic, given weak Japanese)
+## 3. Why Sakana AI is the most reachable JP-rooted target
 
-Lead with **Sakana AI** because (a) the codebase is fully English-language despite the Tokyo HQ, (b) AI-Scientist v1+v2 is internationally famous, and (c) the team posts on X in English. The PR can be opened in English and will get reviewed in English. That's the single demonstrable artifact.
+Sakana AI is the most internationally-visible Japanese AI lab in
+2025-2026 and an unusually accessible engineering target for an
+English-speaking contributor team:
 
-Once that PR is open, the Japanese-language leg is a **translation + influencer** play, not a from-scratch authoring play. Concrete sequence:
+- The codebase is fully English-language despite the Tokyo HQ.
+- AI-Scientist v1+v2 is internationally recognized (Hacker News,
+  ByteByteGo's "Top AI repos 2026," aiagentindex.mit.edu).
+- The team posts on X in English.
+- A PR opened in English will get reviewed in English.
 
-1. Land the AI-Scientist-v2 PR (+ optional v1 mirror). English-only.
-2. Get a PFN engineer to merge a `plamo-examples` notebook (English README, JP-friendly comments — PFN engineers all read English).
-3. Pay a JP technical translator (~$200-400) to render a 1500-word Qiita + Zenn cross-post under one team-member's account. Topic: "Sakana AI AI-Scientist + You.com Search API で本物の Web 検索を." Cross-link from EN blog.
-4. Send a courtesy DM to `@npaka123` on X with the JP article + PR link. He posts about new search/RAG APIs habitually; no language barrier needed for the DM itself (he reads English fine), and the linked artifact is in JP.
-5. Drop the same article into the llmdev.jp Discord and the LLM-jp Slack/Discord (verify channels).
-6. Open a `awesome-japanese-llm` PR adding You.com under Tools/Search.
-7. Submit a PyCon JP 2026 CFP — if we don't have a JP-native speaker, partner with whoever wrote the translation in step 3 as co-presenter.
+PFN's `plamo-examples` is a secondary candidate with the same property
+— English-readable code, JP-brand audience.
 
-What we should **not** try: writing JP technical content ourselves, replying to JP X threads in machine-translated Japanese, cold-emailing JP universities. Those will read as low-effort to JP devs and damage credibility.
+The broader JP developer audience for LLM/agent content lives on Qiita,
+Zenn, note.com, and X — not on Reddit or Hacker News. Native-quality
+JP technical writing is a distinct competence from English-language
+engineering work; the team is positioned for the engineering side
+(see §5 on team capability for the JP region).
 
 ---
 
@@ -121,11 +126,27 @@ Verified absence of You.com / `ydc-index` integration in:
 
 No fork-target candidate above is "already covered." Safe to claim.
 
-LangChain itself ships a `YouSearchAPIWrapper` upstream, so the You.com/LangChain edge is well-known to JP devs who use LangChain — but that's a generic upstream integration, not a Japanese-rooted-project integration. Our angle (Japanese-flagship-project endorsement) is still uncovered.
+LangChain itself ships a `YouSearchAPIWrapper` upstream, so the You.com/LangChain edge is well-known to JP devs who use LangChain — but that's a generic upstream integration, not a Japanese-rooted-project integration. The Japanese-flagship-project angle is still uncovered.
 
 ---
 
-## 5. Sources
+## 5. Team capability for the JP region
+
+Tuna gives the team partial Japanese coverage — sufficient for
+proofreading, basic communication, and liaison work, not for
+native-quality JP technical authoring. Tuna pairs cleanly with
+Muhammad on the engineering side: the Sakana PR and any PFN
+`plamo-examples` notebook contribution are English-language code
+changes that don't require JP-language production.
+
+No current team member can carry sustained native-quality JP-language
+technical content alone. That capability is a scope question, not an
+engineering blocker — the engineering targets above are reachable in
+English.
+
+---
+
+## 6. Sources
 
 - https://github.com/SakanaAI
 - https://github.com/orgs/SakanaAI/repositories
