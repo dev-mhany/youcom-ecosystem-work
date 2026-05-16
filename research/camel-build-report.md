@@ -2,7 +2,7 @@
 
 **Repo:** https://github.com/Cooperation-org/camel (branch `feat/youcom-search`, PR https://github.com/Cooperation-org/camel/pull/1; ahead of upstream `master` by 8 commits)
 **Date:** 2026-05-15
-**Author config:** `Muhammad Hany <dev.mhany@gmail.com>` (verified before commit 1)
+**Authors:** `Muhammad Hany <dev.mhany@gmail.com>` (5 commits) and `Amr Nabel <amr.nabel3993@gmail.com>` (3 commits — docstring, tests, README)
 **Pushed:** No. Local commits only.
 
 ---
@@ -15,10 +15,10 @@
 | 2 | `c8d20325` | Implement You.com Search API wrapper |
 | 3 | `7fe5f036` | Add error handling for search_you |
 | 4 | `140d82db` | Register search_you in get_tools() |
-| 5 | `dcb75339` | Document Arabic and Japanese examples in search_you docstring |
-| 6 | `828e8732` | Add unit tests for search_you |
-| 7 | `f97b35d1` | Apply ruff formatting to search_you additions |
-| 8 | `1a35bdc6` | Add You.com Search README usage example |
+| 5 | `a5385861` | Document Arabic and Japanese examples in search_you docstring (Amr) |
+| 6 | `9f6577d7` | Add unit tests for search_you (Amr) |
+| 7 | `1d00a1a6` | Apply ruff formatting to search_you additions |
+| 8 | `4a45898f` | Add You.com Search README usage example (Amr) |
 
 `git log --oneline -8` output is reproduced verbatim above.
 

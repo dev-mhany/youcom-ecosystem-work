@@ -144,10 +144,10 @@ Commits (in order; `git log 0d917c0f..HEAD --reverse`):
 | 2 | `c8d20325` | Implement You.com Search API wrapper |
 | 3 | `7fe5f036` | Add error handling for search_you |
 | 4 | `140d82db` | Register search_you in get_tools() |
-| 5 | `dcb75339` | Document Arabic and Japanese examples in search_you docstring |
-| 6 | `828e8732` | Add unit tests for search_you |
-| 7 | `f97b35d1` | Apply ruff formatting to search_you additions |
-| 8 | `1a35bdc6` | Add You.com Search README usage example |
+| 5 | `a5385861` | Document Arabic and Japanese examples in search_you docstring |
+| 6 | `9f6577d7` | Add unit tests for search_you |
+| 7 | `1d00a1a6` | Apply ruff formatting to search_you additions |
+| 8 | `4a45898f` | Add You.com Search README usage example |
 
 What it adds: a `search_you()` method on `SearchToolkit` (in
 `camel/toolkits/search_toolkit.py`) following the dominant per-engine

@@ -256,8 +256,8 @@ index 4074adf7..ef73afc8 100644
 2.49.0.windows.1
 
 
-From dcb75339777b1381f05fb83c1c755e7d1f8c6d1c Mon Sep 17 00:00:00 2001
-From: Muhammad Hany <dev.mhany@gmail.com>
+From a5385861bacbe9f69af30625b5acb2bd3bbe1f44 Mon Sep 17 00:00:00 2001
+From: Amr Nabel <amr.nabel3993@gmail.com>
 Date: Fri, 15 May 2026 22:18:53 +0300
 Subject: [PATCH 5/8] Document Arabic and Japanese examples in search_you
  docstring
@@ -300,8 +300,8 @@ index ef73afc8..a4b4585c 100644
 2.49.0.windows.1
 
 
-From 828e8732d1b3b2f01a928e8b54c9f2a387296290 Mon Sep 17 00:00:00 2001
-From: Muhammad Hany <dev.mhany@gmail.com>
+From 9f6577d735006e0425768cb9837583301a224764 Mon Sep 17 00:00:00 2001
+From: Amr Nabel <amr.nabel3993@gmail.com>
 Date: Fri, 15 May 2026 22:19:53 +0300
 Subject: [PATCH 6/8] Add unit tests for search_you
 
@@ -504,7 +504,7 @@ index 8caa019f..c7c1a392 100644
 2.49.0.windows.1
 
 
-From f97b35d13ea00f13ab8282d3ec2d42b9ba39399e Mon Sep 17 00:00:00 2001
+From 1d00a1a6ce86f22cc11f21bacd72afcde90a756b Mon Sep 17 00:00:00 2001
 From: Muhammad Hany <dev.mhany@gmail.com>
 Date: Fri, 15 May 2026 22:20:32 +0300
 Subject: [PATCH 7/8] Apply ruff formatting to search_you additions
@@ -633,8 +633,8 @@ index c7c1a392..074b85dc 100644
 2.49.0.windows.1
 
 
-From 1a35bdc665a7d6ea4469566f4d45819fc0fc66c8 Mon Sep 17 00:00:00 2001
-From: Muhammad Hany <dev.mhany@gmail.com>
+From 4a45898f990875c584cf0ca88d7b764c6f91a5b9 Mon Sep 17 00:00:00 2001
+From: Amr Nabel <amr.nabel3993@gmail.com>
 Date: Fri, 15 May 2026 22:21:00 +0300
 Subject: [PATCH 8/8] Add You.com Search README usage example
 

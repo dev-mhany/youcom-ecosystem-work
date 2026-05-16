@@ -90,7 +90,7 @@ hashes match exactly:
 
 - camel-fork hashes in `proposal/MAIN.md:143-150` and
   `research/camel-build-report.md:14-21`: `6341d600`, `c8d20325`, `7fe5f036`,
-  `140d82db`, `dcb75339`, `828e8732`, `f97b35d1`, `1a35bdc6`. All present.
+  `140d82db`, `a5385861`, `9f6577d7`, `1d00a1a6`, `4a45898f`. All present.
 - gpt-researcher-fork hashes in `proposal/MAIN.md:183-191`: `296826ff`,
   `d0044789`, `b531be50`, `8b9e208a`, `ca93f2aa`, `9bec63bc`, `077b8c63`,
   `a319d30a`, `0158732e`. All present.
