@@ -1,0 +1,37 @@
+{
+  "fork": "gpt-researcher",
+  "locale": "en",
+  "query": "python langchain integration",
+  "params": {},
+  "max_results": 5,
+  "elapsed_ms": 1326,
+  "result_count": 5,
+  "shape_ok": true,
+  "results": [
+    {
+      "href": "https://docs.langchain.com/oss/python/integrations/providers/overview",
+      "body": "Use this file to discover all available pages before exploring further.LangChain offers an extensive ecosystem with 1000+ integrations across chat & embedding models, tools & toolkits, document loaders, vector stores, and more. A provider is a company or platform that hosts AI models and exposes them through an API (e.g., OpenAI, Anthropic, Google). Many providers have a dedicated langchain-<provider> package that implements one or more of LangChain’s standard interfaces—chat models, embedding models, vector stores, and more—giving you a consistent API regardless of the underlying provider. To see a full list of integrations by component type, refer to the categories in the sidebar. For a conceptual overview of how providers and models work in LangChain, including how to find model names, use new models immediately, and work with routers—see Providers and models. See all providers or search for a provider using the search field. Community integrations can be found in langchain-community.",
+      "title": "LangChain Python integrations - Docs by LangChain"
+    },
+    {
+      "href": "https://docs.langchain.com/oss/python/integrations/providers/all_providers",
+      "body": "LangChain Python offers the most extensive ecosystem with 1000+ integrations across LLMs, chat models, retrievers, vector stores, document loaders, and more. Geographic data analysis with Python. Version control system integration. Social media platform integration and APIs. In-memory data structure store and cache. AI memory and context management. Cloud platform for running ML models. Research and note-taking platform. Python automation and RPA platform. Machine learning library for Python. Business communication and collaboration. Cloud data platform and analytics. High-accuracy multilingual speech-to-text API. Industrial-strength NLP library. Unified analytics engine for big data. ... Authorization system for fine-grained permissions filtering in RAG applications. Payment orchestration platform. Embedded relational database engine. Q&A platform network integration.",
+      "title": "All LangChain Python integration providers - Docs by LangChain"
+    },
+    {
+      "href": "https://docs.langchain.com/oss/python/integrations/tools",
+      "body": "If you’d like to contribute an integration, see Contributing integrations.",
+      "title": "Tool integrations - Docs by LangChain"
+    },
+    {
+      "href": "https://reference.langchain.com/python/langchain/overview",
+      "body": "Standard tests suite used to validate LangChain integration package implementations. Welcome to the LangChain package reference documentation! Most users will primarily interact with the main langchain package, which provides the complete set of implementations for building LLM applications. Core interfaces and abstractions used across the LangChain ecosystem.",
+      "title": "LangChain - Python API Reference | LangChain Reference"
+    },
+    {
+      "href": "https://docs.langchain.com/oss/python/langchain/install",
+      "body": "LangChain · LangGraph · Integrations · Learn · Reference · Contribute · Python · Overview · Install · Quickstart · Changelog · Philosophy · Agents · Models · Messages · Tools · Short-term memory · Event streaming · Streaming · Structured output · pip install -U langchain # Requires Python 3.10+ LangChain provides integrations to hundreds of LLMs and thousands of other integrations. These live in independent provider packages. pip · uv · # Installing the OpenAI integration pip install -U langchain-openai # Installing the Anthropic integration pip install -U langchain-anthropic · See the Integrations tab for a full list of available integrations. Now that you have LangChain installed, you can get started by following the Quickstart guide. Join us May 13th & May 14th at Interrupt, the Agent Conference by LangChain.",
+      "title": "Install LangChain - Docs by LangChain"
+    }
+  ]
+}
