@@ -17,13 +17,19 @@ files in `extra/`), the eight research backgrounders (in `research/`),
 and the two reference forks ([Cooperation-org/camel](https://github.com/Cooperation-org/camel/pull/1),
 [Cooperation-org/gpt-researcher](https://github.com/Cooperation-org/gpt-researcher/pull/1)) are all on disk and
 internally consistent per the 2026-05-15 link-and-consistency audit.
-Apply-ready single-file patches for both forks are now in
-`patches/`. What remains open is bounded: a handful of items that need a
-human eyeball (X handle, two LinkedIn profiles, the Eddy Nassif chain,
-one CrewAI release wording, one n8n integration URL), live-API smoke
-tests in Arabic and Japanese (deliberately deferred — budget reserved
-for Muhammad), the push-to-Cooperation-org decision (pending Golda's
-sign-off), and a few logistical items Muhammad owns himself.
+Apply-ready single-file patches for both forks are in `patches/`. Live
+end-to-end verification across English, Arabic, and Japanese was run
+on 2026-05-16 — all 11 unit tests pass, all 6 live-API calls return
+real locale-appropriate results, captured responses are in
+`research/fixtures/e2e-live-2026-05-16/`, full report in
+`research/e2e-verification.md`. Both forks have been pushed to
+Cooperation-org with fork-internal review PRs open
+(https://github.com/Cooperation-org/camel/pull/1 and
+https://github.com/Cooperation-org/gpt-researcher/pull/1). What remains
+open is bounded: a handful of items that need a human eyeball (X
+handle, two LinkedIn profiles, the Eddy Nassif chain, one CrewAI
+release wording, one n8n integration URL), and a few logistical items
+Muhammad owns himself.
 
 ### Commit counts
 
@@ -116,10 +122,11 @@ Five things I need a yes/no on before Sunday push:
 4. The npaka123 X handle and the two LinkedIn URLs in
    eddy-investigation.md — anyone on the team able to eyeball
    them before Sunday?
-5. The Arabic / Japanese live smoke tests — Muhammad has the API
-   key budget and will run those Sunday morning. Do you want to
-   see the captured responses before Monday, or trust the unit
-   tests?
+5. (Resolved 2026-05-16) Live Arabic + Japanese smoke tests
+   completed against both forks. Captured responses are in
+   `research/fixtures/e2e-live-2026-05-16/`; report in
+   `research/e2e-verification.md`. All passed — locale-correct
+   results from regional domains.
 
 Full preflight detail: preflight.md (top of the working repo).
 ```
@@ -163,30 +170,49 @@ the agent harness; all need a human.
   Eyeball the index page once and confirm n8n is listed; if the n8n-
   specific page is back up, swap the link.
 
-### Live API smoke tests (deferred for Muhammad)
+### Live API smoke tests (COMPLETED 2026-05-16)
 
-Both deferred deliberately — no live API calls were budgeted in the
-build pass. The captured 200 in `research/fixtures/search-response.json`
-is from an English query against `https://ydc-index.io/v1/search`.
-Muhammad has the remaining API-key budget; run these before the
-Saturday handoff if possible, otherwise Sunday morning.
+Both forks were exercised end-to-end against the live You.com Search
+API across English, Arabic, and Japanese. **Six live calls, all 200,
+all returned locale-appropriate results from regional domains.** Full
+report and methodology in `research/e2e-verification.md`; raw captured
+responses (parsed-output shape) in
+`research/fixtures/e2e-live-2026-05-16/`.
 
-- **Arabic:** `country=SA, search_lang=ar` against a representative
-  Arabic query. Capture and redact the response. The unit tests in
-  both forks cover the locale code path; this confirms the API path.
-- **Japanese:** `country=JP, search_lang=ja` against a representative
-  Japanese query. Same capture-and-redact pattern.
+Headline numbers:
 
-If either query returns a non-200 or an empty `results.web[]`, surface
-that to Golda before Monday — the multi-region story in
-`proposal/MAIN.md` section 4 leans on these working.
+- gpt-researcher: 6/6 unit tests pass + 3/3 live locales pass (5
+  results each, EN/AR/JA, latencies 961–1326 ms)
+- camel: 5/5 unit tests pass + 3/3 live locales pass (5 results each,
+  EN/AR/JA, latencies 562–631 ms)
+- Arabic native-script chars in returned content: 442 (camel), 596
+  (gpt-researcher), across 5 results each
+- Japanese native-script chars in returned content: 339 (camel), 820
+  (gpt-researcher), across 5 results each
+- Regional-domain hits: 1/5 (Arabic, both forks), 3/5 (Japanese,
+  both forks)
 
-### Push-to-org decision (Cooperation-org GitHub)
+Total live API spend across the project (Wave 1.4 + 2 E2E rounds):
+13 calls, ~$0.065 of the $100 free signup credit.
 
-Both forks are local-only as of this preflight. Neither has been
-pushed to Cooperation-org/<fork-name>. The patches in `patches/` give
-you a re-application path if a push goes badly. Recommendation: push
-Sunday after Golda signs off, before Gitonga's 30-minute walkthrough,
+The multi-region story in `proposal/MAIN.md` §4 is now backed by
+captured live responses, not theoretical claims.
+
+### Push-to-org status (DONE 2026-05-16)
+
+Both forks pushed to Cooperation-org as **real GitHub forks** (verified
+`fork: true`, parents `camel-ai/camel` and `assafelovic/gpt-researcher`).
+Fork-internal review PRs are open:
+
+- https://github.com/Cooperation-org/camel/pull/1 (`feat/youcom-search` → `master`, 8 commits)
+- https://github.com/Cooperation-org/gpt-researcher/pull/1 (`feat/youcom-retriever` → `main`, 9 commits)
+
+Both PRs follow Golda's spec exactly: PR from a feature branch in our
+fork into the default branch in our fork — NOT against upstream. The
+patches in `patches/` remain as a backup re-application path. The
+forks themselves stay in sync with upstream by leaving each fork's
+default branch untouched. Recommendation: have Gitonga pull from
+the org URL during her dry-run rather than from a local working tree,
 so Gitonga can pull from the org URL during her dry-run rather than
 from a local working tree. Do NOT push to upstream `camel-ai/camel`
 or `assafelovic/gpt-researcher` — opening upstream PRs is explicitly
@@ -279,29 +305,30 @@ Monday.
 Honest non-goals and deferred items. Surface these to Golda so nothing
 shows up as a surprise on Monday or in the post-call retro.
 
-- **Did NOT push to Cooperation-org GitHub.** Both forks are local-only.
-  Push is gated on Golda's Sunday sign-off.
+- ~~**Did NOT push to Cooperation-org GitHub.** Both forks are local-only.~~
+  **Done 2026-05-16:** both forks pushed, fork-internal PRs opened
+  (https://github.com/Cooperation-org/camel/pull/1,
+  https://github.com/Cooperation-org/gpt-researcher/pull/1).
 - **Did NOT open upstream PRs** on `camel-ai/camel` or
   `assafelovic/gpt-researcher`. Explicitly gated on You.com
   acknowledgement of the approach (`proposal/MAIN.md` §3, §5.1;
   `call-kit/talking-points.md` "Hard rules").
-- **Did NOT run live API smoke tests for Arabic
-  (`country=SA, search_lang=ar`) or Japanese
-  (`country=JP, search_lang=ja`).** Unit tests in both forks cover the
-  locale code path; the live confirmation is reserved for Muhammad's
-  own pass.
+- ~~**Did NOT run live API smoke tests for Arabic or Japanese.**~~
+  **Done 2026-05-16:** all 6 live calls passed across both forks for
+  EN/AR/JA. Captured responses in
+  `research/fixtures/e2e-live-2026-05-16/`; report in
+  `research/e2e-verification.md`.
 - **Did NOT translate any content into Arabic or Japanese.** The
   Japanese plan in `research/japanese-community.md` §3 explicitly
   routes JP-language technical content through paid translation
   (~$200-400 per Qiita + Zenn cross-post). No JP or AR strings ship
   in either fork's user-facing docs.
-- **Did NOT run camel-fork's full test suite end-to-end.** No `uv` and
-  no `[dev]` install on the build machine; the import chain pulls in
-  openai, docstring_parser, wikipedia, etc. Verified instead via
-  `ast.parse`, `ruff format`, `ruff check`. Detail in
-  `research/camel-build-report.md` §4. The gpt-researcher fork's 6
-  unit tests DO run live (~10ms) — that's the demo's live-test
-  highlight per `call-kit/demo-script.md` §3.3.
+- ~~**Did NOT run camel-fork's full test suite end-to-end.**~~
+  **Done 2026-05-16:** installed minimal deps (`openai mcp pydantic
+  docstring_parser colorama pyyaml pillow`), camel `SearchToolkit`
+  imports, and our 5 `search_you` tests pass via `pytest test/toolkits/test_search_functions.py -k you`
+  (5 passed, 37 deselected, 2.45s). Plus 3 live locale calls — see
+  `research/e2e-verification.md`.
 - **Did NOT add `YDC_API_KEY` env-var alias** to camel-fork's
   `search_you()` (LangChain-compatible name). See open question #2.
 - **Did NOT add `safesearch` / `freshness` / `include_domains`** to
