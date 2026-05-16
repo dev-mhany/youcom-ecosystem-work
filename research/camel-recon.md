@@ -1,9 +1,10 @@
 # CAMEL Search Toolkit — Recon Report (for You.com Search integration)
 
-Repo: `E:\youdotcom\workspace\camel-fork\` (camel-ai/camel)
-Target file: `E:\youdotcom\workspace\camel-fork\camel\toolkits\search_toolkit.py` (1703 lines)
+Repo: https://github.com/Cooperation-org/camel (fork of camel-ai/camel; branch `feat/youcom-search`, PR https://github.com/Cooperation-org/camel/pull/1)
+Source: https://github.com/Cooperation-org/camel
+Target file: `camel/toolkits/search_toolkit.py` (1703 lines)
 
-All references below are `<absolute path>:<line>`.
+All references below are `<repo-relative path>:<line>`.
 
 ---
 
@@ -141,7 +142,7 @@ Three layers:
 
 ## 4. Test pattern
 
-Test file: `E:\youdotcom\workspace\camel-fork\test\toolkits\test_search_functions.py` (1214 lines). One file holds tests for every search engine; tests grouped by section banners like `# ==================== Querit Search Tests ====================` (`:1010`). Mocking style: `unittest.mock` (`patch`, `MagicMock`, `call`) — no `pytest-mock`, no `responses`, no `respx`. Imports at `:14-22`.
+Test file: `test/toolkits/test_search_functions.py` (1214 lines). One file holds tests for every search engine; tests grouped by section banners like `# ==================== Querit Search Tests ====================` (`:1010`). Mocking style: `unittest.mock` (`patch`, `MagicMock`, `call`) — no `pytest-mock`, no `responses`, no `respx`. Imports at `:14-22`.
 
 Shared fixture at `:25-27`:
 
@@ -231,17 +232,17 @@ Most engines do NOT expose locale params. The ones that do:
 
 Execute in this order:
 
-1. **Modify** `E:\youdotcom\workspace\camel-fork\camel\toolkits\search_toolkit.py`:
+1. **Modify** `camel/toolkits/search_toolkit.py`:
    - Insert `search_you()` method between `search_tavily()` (ends `:788`) and `search_bocha()` (starts `:790`). Use the skeleton in section 2.
    - Append `FunctionTool(self.search_you),` to the list returned by `get_tools()` — insert between `FunctionTool(self.search_tavily),` (`:1682`) and `FunctionTool(self.search_brave),` (`:1683`) to keep the order consistent with the method order.
 
-2. **No change** to `E:\youdotcom\workspace\camel-fork\camel\toolkits\__init__.py` — `SearchToolkit` is already exported at `:25`/`:123`. We are not creating a new toolkit class.
+2. **No change** to `camel/toolkits/__init__.py` — `SearchToolkit` is already exported at `:25`/`:123`. We are not creating a new toolkit class.
 
-3. **Modify** `E:\youdotcom\workspace\camel-fork\test\toolkits\test_search_functions.py`:
+3. **Modify** `test/toolkits/test_search_functions.py`:
    - Append a new section (banner-comment `# ==================== You.com Search Tests ====================`) at the end of the file (current EOF `:1214`). Add at least: `test_search_you_success`, `test_search_you_with_locale` (covers `country='JP'`, `search_lang='ja'`, plus an `ar` case), `test_search_you_http_error`, `test_search_you_request_exception`. Mock `requests.get` (or `.post` depending on which You.com endpoint is used) following the Querit pattern at `:1013-1183`.
    - **Do NOT** create a separate `test_search_toolkit_you.py` — the project keeps all search tests in this one file.
 
-4. **No change** to `E:\youdotcom\workspace\camel-fork\pyproject.toml`:
+4. **No change** to `pyproject.toml`:
    - `requests` is already present transitively (it's in `uv.lock` at line 9575 and used directly throughout `search_toolkit.py`). No new dep needed.
    - The toolkit's `[tool.ruff.lint.per-file-ignores]` entry for `search_toolkit.py = ["E501"]` (`pyproject.toml:552`) already covers long lines.
    - If You.com requires an SDK (`youcom` / `you-search`), add it to the `web_tools` optional group at `pyproject.toml:96-120` and decorate the new method with `@dependencies_required("<pkg>")`. Plain `requests` is preferred per the dominant pattern; do not add an SDK unless necessary.
@@ -261,10 +262,10 @@ Execute in this order:
 
 | Path | Purpose |
 |---|---|
-| `E:\youdotcom\workspace\camel-fork\camel\toolkits\search_toolkit.py` | Add `search_you()` method + register in `get_tools()` |
-| `E:\youdotcom\workspace\camel-fork\camel\toolkits\__init__.py` | No change |
-| `E:\youdotcom\workspace\camel-fork\camel\toolkits\base.py` | Reference only — `BaseToolkit.__init__(timeout=...)` at `:73` |
-| `E:\youdotcom\workspace\camel-fork\camel\utils\commons.py` | Reference only — `api_keys_required` decorator at `:248` |
-| `E:\youdotcom\workspace\camel-fork\test\toolkits\test_search_functions.py` | Append You.com test section |
-| `E:\youdotcom\workspace\camel-fork\pyproject.toml` | No change unless we add an SDK |
-| `E:\youdotcom\workspace\camel-fork\CONTRIBUTING.md` | Style reference (raw docstrings, prefix naming, logger, 79-char) |
+| `camel/toolkits/search_toolkit.py` | Add `search_you()` method + register in `get_tools()` |
+| `camel/toolkits/__init__.py` | No change |
+| `camel/toolkits/base.py` | Reference only — `BaseToolkit.__init__(timeout=...)` at `:73` |
+| `camel/utils/commons.py` | Reference only — `api_keys_required` decorator at `:248` |
+| `test/toolkits/test_search_functions.py` | Append You.com test section |
+| `pyproject.toml` | No change unless we add an SDK |
+| `CONTRIBUTING.md` | Style reference (raw docstrings, prefix naming, logger, 79-char) |

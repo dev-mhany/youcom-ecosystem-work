@@ -176,4 +176,4 @@ This is the contract. Each fork must honor every row.
 - Sync raises `HTTPError`, async raises bare `Exception` — inconsistent. Forks should unify.
 - `n_hits` is a documented-but-unimplemented deprecated alias; the field is declared but never read by `_generate_params`. Forks may omit entirely.
 
-Report file: `E:\youdotcom\workspace\youcom-ecosystem-work\research\benchmark-langchain.md`
+Report file: `research/benchmark-langchain.md` (in https://github.com/dev-mhany/youcom-ecosystem-work)

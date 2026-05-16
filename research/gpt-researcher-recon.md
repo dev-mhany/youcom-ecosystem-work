@@ -1,8 +1,9 @@
 # gpt-researcher Recon: Adding a You.com Retriever
 
-Repo root: `E:\youdotcom\workspace\gpt-researcher-fork\`
+Repo: https://github.com/Cooperation-org/gpt-researcher (fork of assafelovic/gpt-researcher; branch `feat/youcom-retriever`, PR https://github.com/Cooperation-org/gpt-researcher/pull/1)
+Source: https://github.com/Cooperation-org/gpt-researcher
 
-This report documents the exact patterns to match when adding a `you` retriever to `assafelovic/gpt-researcher`. All file/line refs are absolute.
+This report documents the exact patterns to match when adding a `you` retriever to `assafelovic/gpt-researcher`. All file/line refs are repo-relative.
 
 ---
 
@@ -13,7 +14,7 @@ Every retriever lives in its own subdirectory under `gpt_researcher/retrievers/`
 Tavily layout (our template):
 
 ```
-E:\youdotcom\workspace\gpt-researcher-fork\gpt_researcher\retrievers\tavily\
+gpt_researcher/retrievers/tavily/
 ├── __init__.py          # 0 lines (empty)
 └── tavily_search.py     # 125 lines  -> class TavilySearch
 ```
@@ -125,7 +126,7 @@ except KeyError:
 
 Recommendation for You: use the **Tavily soft-fail pattern** including the `headers.get("you_api_key")` per-request override — Tavily is our explicit template and this also supports the multi-tenant header-injection path used by the backend (see `backend/server/server_utils.py:275`). The standard env-var name will be `YOU_API_KEY` (the canonical You.com naming; YDC_API_KEY is also seen in some YDC SDKs but `YOU_API_KEY` matches the user-facing pattern other retrievers use).
 
-`.env.example` (`E:\youdotcom\workspace\gpt-researcher-fork\.env.example:1-4`) currently lists `OPENAI_API_KEY`, `TAVILY_API_KEY`, `XQUIK_API_KEY` — add `YOU_API_KEY=` here too.
+`.env.example` (`.env.example:1-4`) currently lists `OPENAI_API_KEY`, `TAVILY_API_KEY`, `XQUIK_API_KEY` — add `YOU_API_KEY=` here too.
 
 ---
 
@@ -320,26 +321,26 @@ Pattern documented in `docs\docs\gpt-researcher\search-engines\search-engines.md
 
 In order:
 
-1. **Create** `E:\youdotcom\workspace\gpt-researcher-fork\gpt_researcher\retrievers\you\__init__.py` — empty file (0 bytes), matching all peers.
-2. **Create** `E:\youdotcom\workspace\gpt-researcher-fork\gpt_researcher\retrievers\you\you_search.py` containing `class YouSearch`. Mirror `tavily_search.py` line-for-line:
+1. **Create** `gpt_researcher/retrievers/you/__init__.py` — empty file (0 bytes), matching all peers.
+2. **Create** `gpt_researcher/retrievers/you/you_search.py` containing `class YouSearch`. Mirror `tavily_search.py` line-for-line:
    - `__init__(self, query, headers=None, topic="general", query_domains=None)` plus optional `country`, `safe_search` (Serper-style locale support).
    - `get_api_key()` reads `headers.get("you_api_key")` then falls back to `os.environ["YOU_API_KEY"]`; soft-fail with print + return `""`.
    - Internal `_search()` POST/GET to You.com endpoint (Search API: `https://api.ydc-index.io/search`; Research API: `https://chat-api.you.com/research` — pick based on which surface this retriever wraps; recommend Search API for parity with Tavily, with `topic` switching to Research API when set to `"research"`).
    - Public `search(self, max_results=10)` returns `[{"href": ..., "body": ..., "title": ...}, ...]`; `try/except` returns `[]` on failure.
-3. **Modify** `E:\youdotcom\workspace\gpt-researcher-fork\gpt_researcher\retrievers\__init__.py`:
+3. **Modify** `gpt_researcher/retrievers/__init__.py`:
    - Add `from .you.you_search import YouSearch` after line 16 (after the `XquikSearch` import).
    - Add `"YouSearch"` to `__all__` after `"XquikSearch"` (line 34) — also append the missing trailing comma to line 34.
-4. **Modify** `E:\youdotcom\workspace\gpt-researcher-fork\gpt_researcher\actions\retriever.py`:
+4. **Modify** `gpt_researcher/actions/retriever.py`:
    - Add `case "you":` block returning `YouSearch` after the `case "xquik":` block (lines 95-98).
    - Add `- you: You.com Search/Research API` to the docstring at lines 17-33.
-5. **Modify** `E:\youdotcom\workspace\gpt-researcher-fork\gpt_researcher\retrievers\utils.py`:
+5. **Modify** `gpt_researcher/retrievers/utils.py`:
    - Add `"you"` to `VALID_RETRIEVERS` at lines 62-79 (defensive — the dir scan at `get_all_retriever_names()` already picks it up dynamically). Insert before `"mock"`.
-6. **Modify** `E:\youdotcom\workspace\gpt-researcher-fork\.env.example`:
+6. **Modify** `.env.example`:
    - Add `YOU_API_KEY=` after the existing `XQUIK_API_KEY=` line (line 3).
    - Optional: `YOU_COUNTRY=`, `YOU_SAFE_SEARCH=` if implementing locale knobs.
-7. **Modify** `E:\youdotcom\workspace\gpt-researcher-fork\docs\docs\gpt-researcher\search-engines\search-engines.md`:
+7. **Modify** `docs/docs/gpt-researcher/search-engines/search-engines.md`:
    - Add `- [You.com](https://you.com/) - Env: \`RETRIEVER=you\`` to the supported list at lines 26-36.
-8. **Create** unit test `E:\youdotcom\workspace\gpt-researcher-fork\tests\test_you_retriever.py`:
+8. **Create** unit test `tests/test_you_retriever.py`:
    - `unittest.TestCase` subclass, `unittest.mock.patch` on `requests.post` (or `requests.get`).
    - Cases: (a) success returns shape, (b) missing `YOU_API_KEY` -> empty list + warning print, (c) HTTP 4xx -> empty list, (d) `query_domains` filter is forwarded to API payload.
    - Run with `python -m unittest tests.test_you_retriever`.
@@ -347,18 +348,18 @@ In order:
 
 ---
 
-## Key reference files (absolute paths)
+## Key reference files (repo-relative paths)
 
-- `E:\youdotcom\workspace\gpt-researcher-fork\gpt_researcher\retrievers\__init__.py` (35 lines) — registration table
-- `E:\youdotcom\workspace\gpt-researcher-fork\gpt_researcher\retrievers\tavily\tavily_search.py` (125 lines) — primary template
-- `E:\youdotcom\workspace\gpt-researcher-fork\gpt_researcher\retrievers\exa\exa.py` (101 lines) — cross-validation
-- `E:\youdotcom\workspace\gpt-researcher-fork\gpt_researcher\retrievers\xquik\xquik.py` (94 lines) — newest peer, idiomatic style
-- `E:\youdotcom\workspace\gpt-researcher-fork\gpt_researcher\retrievers\serper\serper.py` (131 lines) — locale/region precedent
-- `E:\youdotcom\workspace\gpt-researcher-fork\gpt_researcher\retrievers\utils.py` (103 lines) — `VALID_RETRIEVERS` + dynamic discovery
-- `E:\youdotcom\workspace\gpt-researcher-fork\gpt_researcher\actions\retriever.py` (152 lines) — factory `match` block + `get_retrievers`
-- `E:\youdotcom\workspace\gpt-researcher-fork\gpt_researcher\config\config.py` (313 lines) — `RETRIEVER` env parsing at lines 77-83, 188-201
-- `E:\youdotcom\workspace\gpt-researcher-fork\gpt_researcher\config\variables\default.py` (54 lines) — defaults incl. `"RETRIEVER": "tavily"` and `"LANGUAGE": "english"`
-- `E:\youdotcom\workspace\gpt-researcher-fork\tests\test-your-retriever.py` (49 lines) — live smoke test entry point
-- `E:\youdotcom\workspace\gpt-researcher-fork\tests\test_quick_search.py` (46 lines) — unittest+mock template
-- `E:\youdotcom\workspace\gpt-researcher-fork\.env.example` — env var registration
-- `E:\youdotcom\workspace\gpt-researcher-fork\docs\docs\gpt-researcher\search-engines\search-engines.md` — user-facing retriever catalog
+- `gpt_researcher/retrievers/__init__.py` (35 lines) — registration table
+- `gpt_researcher/retrievers/tavily/tavily_search.py` (125 lines) — primary template
+- `gpt_researcher/retrievers/exa/exa.py` (101 lines) — cross-validation
+- `gpt_researcher/retrievers/xquik/xquik.py` (94 lines) — newest peer, idiomatic style
+- `gpt_researcher/retrievers/serper/serper.py` (131 lines) — locale/region precedent
+- `gpt_researcher/retrievers/utils.py` (103 lines) — `VALID_RETRIEVERS` + dynamic discovery
+- `gpt_researcher/actions/retriever.py` (152 lines) — factory `match` block + `get_retrievers`
+- `gpt_researcher/config/config.py` (313 lines) — `RETRIEVER` env parsing at lines 77-83, 188-201
+- `gpt_researcher/config/variables/default.py` (54 lines) — defaults incl. `"RETRIEVER": "tavily"` and `"LANGUAGE": "english"`
+- `tests/test-your-retriever.py` (49 lines) — live smoke test entry point
+- `tests/test_quick_search.py` (46 lines) — unittest+mock template
+- `.env.example` — env var registration
+- `docs/docs/gpt-researcher/search-engines/search-engines.md` — user-facing retriever catalog

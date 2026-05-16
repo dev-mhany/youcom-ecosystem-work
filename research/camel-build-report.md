@@ -1,6 +1,6 @@
 # CAMEL — You.com Search Integration Build Report
 
-**Repo:** `E:\youdotcom\workspace\camel-fork\` (branch `master`, ahead of `origin/master` by 8 commits)
+**Repo:** https://github.com/Cooperation-org/camel (branch `feat/youcom-search`, PR https://github.com/Cooperation-org/camel/pull/1; ahead of upstream `master` by 8 commits)
 **Date:** 2026-05-15
 **Author config:** `Muhammad Hany <dev.mhany@gmail.com>` (verified before commit 1)
 **Pushed:** No. Local commits only.
@@ -28,9 +28,9 @@
 
 | Path | Change |
 |---|---|
-| `E:\youdotcom\workspace\camel-fork\camel\toolkits\search_toolkit.py` | Added `search_you()` method between `search_tavily` and `search_bocha`; registered `FunctionTool(self.search_you)` in `get_tools()` between `search_tavily` and `search_brave`. |
-| `E:\youdotcom\workspace\camel-fork\test\toolkits\test_search_functions.py` | Appended `# ==================== You.com Search Tests ====================` section at end of file with 5 tests + an inline `YOU_FIXTURE_RESPONSE` dict mirroring the captured `research/fixtures/search-response.json`. |
-| `E:\youdotcom\workspace\camel-fork\README.md` | Inserted `### Search: You.com` subsection before `### Seeking Help`. |
+| `camel/toolkits/search_toolkit.py` | Added `search_you()` method between `search_tavily` and `search_bocha`; registered `FunctionTool(self.search_you)` in `get_tools()` between `search_tavily` and `search_brave`. |
+| `test/toolkits/test_search_functions.py` | Appended `# ==================== You.com Search Tests ====================` section at end of file with 5 tests + an inline `YOU_FIXTURE_RESPONSE` dict mirroring the captured `research/fixtures/search-response.json`. |
+| `README.md` | Inserted `### Search: You.com` subsection before `### Seeking Help`. |
 
 No other files modified. `camel/toolkits/__init__.py` and `pyproject.toml` were not touched (no new toolkit class, no new dependency required).
 
@@ -90,7 +90,8 @@ What was verified instead:
 ## 7. Sanity-check commands the reviewer can run
 
 ```bash
-cd E:\youdotcom\workspace\camel-fork
+# Repo: https://github.com/Cooperation-org/camel (branch feat/youcom-search)
+git clone -b feat/youcom-search https://github.com/Cooperation-org/camel.git && cd camel
 git log --oneline -8                         # confirm 8 commits
 git status                                   # confirm clean tree
 python -m ruff check camel/toolkits/search_toolkit.py   # confirm no new lint issues

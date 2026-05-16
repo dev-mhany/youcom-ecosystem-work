@@ -4,8 +4,8 @@
 **Run by:** verification-pass agent
 **Scope:** all docs in `proposal/`, `call-kit/`, `extra/`, `research/`, plus
 fork-path and commit-hash cross-checks against
-`E:\youdotcom\workspace\camel-fork\` and
-`E:\youdotcom\workspace\gpt-researcher-fork\`.
+https://github.com/Cooperation-org/camel (PR https://github.com/Cooperation-org/camel/pull/1) and
+https://github.com/Cooperation-org/gpt-researcher (PR https://github.com/Cooperation-org/gpt-researcher/pull/1).
 
 ## 1. Summary
 

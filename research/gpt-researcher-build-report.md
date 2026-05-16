@@ -1,7 +1,7 @@
 # gpt-researcher: You.com Retriever Build Report
 
 Build date: 2026-05-15
-Repo: `E:\youdotcom\workspace\gpt-researcher-fork\` (branch `main`, 9 commits ahead of `origin/main`, working tree clean, **not pushed**)
+Repo: https://github.com/Cooperation-org/gpt-researcher (branch `feat/youcom-retriever`, PR https://github.com/Cooperation-org/gpt-researcher/pull/1; 9 commits ahead of upstream `main`, working tree clean)
 
 ## Commits
 
