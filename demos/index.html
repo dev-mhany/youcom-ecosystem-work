@@ -364,6 +364,183 @@
   }
   .pr-btn:hover { background: var(--ink); color: var(--paper); text-decoration: none; }
 
+  /* ----- tests + live verification ----- */
+  .verify .blocks {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(40px, 5vw, 64px);
+  }
+  .test-panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(20px, 3vw, 48px);
+  }
+  @media (max-width: 880px) { .test-panels { grid-template-columns: 1fr; } }
+
+  .test-panel {
+    border-top: 2px solid var(--ink);
+    padding-top: 22px;
+  }
+  .test-panel .panel-name {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 1.2;
+    margin: 0 0 4px;
+  }
+  .test-panel .panel-stat {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: 0 0 20px;
+  }
+  .test-panel .panel-stat .pass {
+    color: var(--ok);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .test-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .test-list li {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
+    column-gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .test-list .check {
+    color: var(--ok);
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.4;
+    font-variant-numeric: tabular-nums;
+  }
+  .test-list .test-body { min-width: 0; }
+  .test-list .tname {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--ink);
+    word-break: break-word;
+    display: block;
+    line-height: 1.4;
+  }
+  .test-list .tdesc {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin-top: 4px;
+    display: block;
+  }
+  @media (max-width: 600px) {
+    .test-list .tname { font-size: 12px; }
+    .test-list .tdesc { font-size: 12.5px; }
+  }
+
+  .verify .sub-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 0 0 18px;
+  }
+
+  .verify-grid {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--sans);
+    border-top: 1px solid var(--rule-strong);
+  }
+  .verify-grid th, .verify-grid td {
+    text-align: left;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+  .verify-grid thead th {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    font-weight: 500;
+    padding: 12px 18px;
+  }
+  .verify-grid thead th:first-child {
+    color: transparent;
+  }
+  .verify-grid tbody th {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 17px;
+    color: var(--ink);
+    width: 14em;
+    white-space: nowrap;
+  }
+  .verify-grid td {
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .verify-grid td .num-strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .verify-grid td .regional {
+    display: block;
+    color: var(--ink-muted);
+    font-size: 12px;
+    margin-top: 4px;
+    letter-spacing: 0.01em;
+    font-variant-numeric: normal;
+  }
+  .verify-caption {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-muted);
+    line-height: 1.6;
+    margin: 20px 0 0;
+    max-width: 80ch;
+  }
+  .verify-caption em { font-style: italic; color: var(--ink-soft); }
+  @media (max-width: 720px) {
+    .verify-grid, .verify-grid thead, .verify-grid tbody, .verify-grid tr, .verify-grid th, .verify-grid td {
+      display: block;
+    }
+    .verify-grid thead { display: none; }
+    .verify-grid tbody tr {
+      border-bottom: 1px solid var(--rule-strong);
+      padding: 14px 0;
+    }
+    .verify-grid tbody th {
+      width: auto;
+      padding: 0 0 8px;
+      border-bottom: 0;
+      font-size: 18px;
+      white-space: normal;
+    }
+    .verify-grid td {
+      padding: 6px 0;
+      border-bottom: 1px dotted var(--rule);
+    }
+    .verify-grid td::before {
+      content: attr(data-locale);
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 4px;
+    }
+    .verify-grid td:last-child { border-bottom: 0; }
+  }
+
   /* ----- multilingual centerpiece ----- */
   .multi {
     background: var(--ink);
@@ -828,9 +1005,148 @@
   </div>
 </section>
 
+<section class="s verify" id="verify">
+  <div class="wrap">
+    <div class="label"><span class="num">03</span>Tests + live verification</div>
+    <h2>Eleven unit tests, <em>six live API calls.</em> All green on 2026&#8209;05&#8209;16.</h2>
+    <p class="lede">Unit tests cover the contract: shape, locale propagation, missing-key, timeout, HTTP error. The live calls prove the contract holds against the real <code>ydc-index.io/v1/search</code> endpoint in three locales.</p>
+
+    <div class="blocks">
+
+      <div>
+        <div class="sub-label">A &middot; Unit tests</div>
+        <div class="test-panels">
+
+          <div class="test-panel">
+            <h3 class="panel-name">camel-ai/camel</h3>
+            <p class="panel-stat"><span class="pass">5 / 5 passing</span> &mdash; 2.45s via pytest</p>
+            <ul class="test-list">
+              <li>
+                <span class="check" aria-hidden="true">&#10003;</span>
+                <span class="test-body">
+                  <code class="tname">test_search_you_success</code>
+                  <span class="tdesc">Happy path against a fixture &mdash; returns the expected list shape.</span>
+                </span>
+              </li>
+              <li>
+                <span class="check" aria-hidden="true">&#10003;</span>
+                <span class="test-body">
+                  <code class="tname">test_search_you_missing_api_key</code>
+                  <span class="tdesc">The <code>@api_keys_required</code> decorator raises when <code>YOU_API_KEY</code> is unset.</span>
+                </span>
+              </li>
+              <li>
+                <span class="check" aria-hidden="true">&#10003;</span>
+                <span class="test-body">
+                  <code class="tname">test_search_you_http_error</code>
+                  <span class="tdesc">Non-200 from the API &rarr; returns <code>[{"error": "..."}]</code>.</span>
+                </span>
+              </li>
+              <li>
+                <span class="check" aria-hidden="true">&#10003;</span>
+                <span class="test-body">
+                  <code class="tname">test_search_you_timeout</code>
+                  <span class="tdesc"><code>requests.exceptions.Timeout</code> &rarr; returns <code>[{"error": "..."}]</code>.</span>
+                </span>
+              </li>
+              <li>
+                <span class="check" aria-hidden="true">&#10003;</span>
+                <span class="test-body">
+                  <code class="tname">test_search_you_multilingual_params_propagated</code>
+                  <span class="tdesc"><code>country='SA', search_lang='ar'</code> reach the wire params correctly.</span>
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="test-panel">
+            <h3 class="panel-name">assafelovic/gpt-researcher</h3>
+            <p class="panel-stat"><span class="pass">6 / 6 passing</span> &mdash; ~6ms via unittest</p>
+            <ul class="test-list">
+              <li>
+                <span class="check" aria-hidden="true">&#10003;</span>
+                <span class="test-body">
+                  <code class="tname">test_search_returns_results_in_tavily_shape</code>
+                  <span class="tdesc">Returns <code>[{"href", "body", "title"}, ...]</code> matching the Tavily contract.</span>
+                </span>
+              </li>
+              <li>
+                <span class="check" aria-hidden="true">&#10003;</span>
+                <span class="test-body">
+                  <code class="tname">test_search_soft_fails_on_missing_key</code>
+                  <span class="tdesc">No <code>YOU_API_KEY</code> &rarr; warns and returns <code>[]</code> (Tavily pattern).</span>
+                </span>
+              </li>
+              <li>
+                <span class="check" aria-hidden="true">&#10003;</span>
+                <span class="test-body">
+                  <code class="tname">test_search_uses_header_key_over_env</code>
+                  <span class="tdesc">Per-request <code>headers["you_api_key"]</code> wins over the env var.</span>
+                </span>
+              </li>
+              <li>
+                <span class="check" aria-hidden="true">&#10003;</span>
+                <span class="test-body">
+                  <code class="tname">test_search_propagates_locale</code>
+                  <span class="tdesc"><code>country='SA', language='ar'</code> &rarr; reaches <code>search_lang=ar</code>, <code>country=SA</code> in the request.</span>
+                </span>
+              </li>
+              <li>
+                <span class="check" aria-hidden="true">&#10003;</span>
+                <span class="test-body">
+                  <code class="tname">test_search_returns_empty_on_timeout</code>
+                  <span class="tdesc"><code>Timeout</code> exception &rarr; warns and returns <code>[]</code>.</span>
+                </span>
+              </li>
+              <li>
+                <span class="check" aria-hidden="true">&#10003;</span>
+                <span class="test-body">
+                  <code class="tname">test_search_returns_empty_on_http_error</code>
+                  <span class="tdesc">Non-200 &rarr; warns and returns <code>[]</code>.</span>
+                </span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <div>
+        <div class="sub-label">B &middot; Live verification &mdash; six API calls, 2026&#8209;05&#8209;16</div>
+        <table class="verify-grid">
+          <thead>
+            <tr>
+              <th scope="col">Fork</th>
+              <th scope="col">English <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink-muted)">(default)</span></th>
+              <th scope="col">Arabic <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink-muted)">(country=SA, language=ar)</span></th>
+              <th scope="col">Japanese <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink-muted)">(country=JP, language=ja)</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">camel</th>
+              <td data-locale="English"><span class="num-strong">5 results</span> &middot; 631 ms</td>
+              <td data-locale="Arabic"><span class="num-strong">5 results</span> &middot; 442 Arabic chars<span class="regional">1 / 5 from regional domains</span></td>
+              <td data-locale="Japanese"><span class="num-strong">5 results</span> &middot; 339 JP chars<span class="regional">3 / 5 from regional domains (.jp, ai-gakkai)</span></td>
+            </tr>
+            <tr>
+              <th scope="row">gpt-researcher</th>
+              <td data-locale="English"><span class="num-strong">5 results</span> &middot; 1,326 ms</td>
+              <td data-locale="Arabic"><span class="num-strong">5 results</span> &middot; 596 Arabic chars<span class="regional">ar.wikipedia, AWS Arabic, Google Gemini AR</span></td>
+              <td data-locale="Japanese"><span class="num-strong">5 results</span> &middot; 820 JP chars<span class="regional">ja.wikipedia, ai-gakkai.or.jp, wired.jp</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="verify-caption">Six live API calls, total ~$0.03 of the $100 free signup credit. Raw responses captured as JSON fixtures in <code>research/fixtures/e2e-live-2026-05-16/</code>.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <section class="s multi" id="multi">
   <div class="wrap">
-    <div class="label"><span class="num">03</span>Multilingual proof &mdash; actual captured results</div>
+    <div class="label"><span class="num">04</span>Multilingual proof &mdash; actual captured results</div>
     <h2>Live-tested 2026-05-16 across three locales. <em>Six API calls, all returned.</em></h2>
     <p class="lede">These are the responses the <code>gpt-researcher</code> fork returned for the same query in three locales. Native script. Regional domains. No retouching.</p>
 
@@ -911,7 +1227,7 @@
 
 <section class="s">
   <div class="wrap">
-    <div class="label"><span class="num">04</span>What we'd ship next</div>
+    <div class="label"><span class="num">05</span>What we'd ship next</div>
     <h2>Six repos staged behind the two we already shipped.</h2>
     <p class="lede">Tier 1 is done &mdash; the cards above. Tier 2 is the next engagement's commitment list, in priority order. Tier 3 is contingent on confirmed regional leads.</p>
 
@@ -997,7 +1313,7 @@
 
 <section class="s">
   <div class="wrap">
-    <div class="label"><span class="num">05</span>Anticipated questions</div>
+    <div class="label"><span class="num">06</span>Anticipated questions</div>
     <h2>Eight we expect &mdash; and the short answer to each.</h2>
     <p class="lede">Pulled verbatim from our Q&amp;A prep. Tap any row to expand.</p>
 
