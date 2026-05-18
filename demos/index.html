@@ -869,11 +869,12 @@
 <section class="hero">
   <div class="wrap">
     <div class="eyebrow">Reference engagement, v1</div>
-    <h1>Two reference forks. <span class="lit">Real multilingual search.</span> Ready to ship.</h1>
-    <p class="sub">A single page recap of what we built against the You.com Search API for two uncovered open-source agent frameworks &mdash; with the captured Arabic and Japanese responses to prove the locale parameters land.</p>
+    <h1>Three reference forks. <span class="lit">Real multilingual search.</span> Ready to ship.</h1>
+    <p class="sub">A single page recap of what we built against the You.com Search, Research, and Finance Research APIs for three uncovered open-source frameworks &mdash; with the captured Arabic and Japanese responses to prove the locale parameters land.</p>
     <div class="ctas">
       <a class="cta" href="https://github.com/Cooperation-org/camel/pull/1" target="_blank" rel="noopener">camel PR #1 <span class="arrow">&rarr;</span></a>
       <a class="cta" href="https://github.com/Cooperation-org/gpt-researcher/pull/1" target="_blank" rel="noopener">gpt-researcher PR #1 <span class="arrow">&rarr;</span></a>
+      <a class="cta" href="https://github.com/Cooperation-org/TotalAgility-connector-for-you.com-/pull/1" target="_blank" rel="noopener">TotalAgility PR #1 <span class="arrow">&rarr;</span></a>
     </div>
   </div>
 </section>
@@ -956,8 +957,8 @@
 <section class="s">
   <div class="wrap">
     <div class="label"><span class="num">02</span>What we shipped</div>
-    <h2>Two forks, built off the LangChain <em>parity contract</em>.</h2>
-    <p class="lede">Both target the verified Search endpoint at <code>ydc-index.io/v1/search</code>. Both expose <code>country</code> and <code>language</code> for Search &mdash; locale parameters the upstream LangChain wrapper exposes for News only.</p>
+    <h2>Three forks, built off the LangChain <em>parity contract</em>.</h2>
+    <p class="lede">The two Search-API forks target the verified Search endpoint at <code>ydc-index.io/v1/search</code> and expose <code>country</code> and <code>language</code> for Search &mdash; locale parameters the upstream LangChain wrapper exposes for News only. The TotalAgility connector adds the Finance Research API (<code>api.you.com/v1/finance_research</code>) alongside the three You.com services it already wrapped.</p>
 
     <div class="forks">
 
@@ -998,6 +999,26 @@
 
         <div class="pr">
           <a class="pr-btn" href="https://github.com/Cooperation-org/gpt-researcher/pull/1" target="_blank" rel="noopener">View PR #1 <span class="arrow" style="font-family:var(--serif);font-style:italic">&rarr;</span></a>
+        </div>
+      </article>
+
+      <article class="fork">
+        <div class="upstream">Fork of TungstenAutomationLabs/TotalAgility-connector-for-you.com- &middot; enterprise connector</div>
+        <h3><a href="https://github.com/Cooperation-org/TotalAgility-connector-for-you.com-" target="_blank" rel="noopener">Cooperation-org/TotalAgility-connector</a></h3>
+        <div class="one-liner">Adds the <code>Finance Research</code> API alongside the three You.com services the connector already wrapped (Search, Research, Content).</div>
+
+        <div class="badges">
+          <span class="badge ok">4 You.com services wired</span>
+          <span class="badge">TotalAgility process + REST proxy</span>
+          <span class="badge">Finance verticals (earnings, due diligence, macro)</span>
+        </div>
+
+        <div class="locale-row">
+          <span class="k">endpoint:</span> POST <span style="color:var(--accent)">api.you.com/v1/finance_research</span>
+        </div>
+
+        <div class="pr">
+          <a class="pr-btn" href="https://github.com/Cooperation-org/TotalAgility-connector-for-you.com-/pull/1" target="_blank" rel="noopener">View PR #1 <span class="arrow" style="font-family:var(--serif);font-style:italic">&rarr;</span></a>
         </div>
       </article>
 
@@ -1244,6 +1265,11 @@
           <div class="meta">~16k stars &middot; Python &middot; deep-research narrative</div>
           <div class="ep">gpt_researcher/retrievers/you/you_search.py</div>
         </div>
+        <div class="repo">
+          <div class="rn"><a href="https://github.com/TungstenAutomationLabs/TotalAgility-connector-for-you.com-" target="_blank" rel="noopener">TungstenAutomationLabs/TotalAgility-connector</a></div>
+          <div class="meta">Enterprise connector &middot; XML / TotalAgility &middot; Finance Research API</div>
+          <div class="ep">packages/Webservice/WebServices_Finance.xml</div>
+        </div>
       </div>
     </div>
 
@@ -1373,6 +1399,10 @@
       <div>
         <span class="lab">gpt-researcher fork PR</span>
         <a href="https://github.com/Cooperation-org/gpt-researcher/pull/1" target="_blank" rel="noopener">github.com/Cooperation-org/gpt-researcher/pull/1</a>
+      </div>
+      <div>
+        <span class="lab">TotalAgility connector fork PR</span>
+        <a href="https://github.com/Cooperation-org/TotalAgility-connector-for-you.com-/pull/1" target="_blank" rel="noopener">github.com/Cooperation-org/TotalAgility-connector-for-you.com-/pull/1</a>
       </div>
     </div>
     <p class="credit">Cooperation.org &middot; Multi-region team &mdash; <em>Amr Nabil</em> (Arabic lead), <em>Muhammad Hany</em> (Arabic), <em>Tuna</em> (Japanese lead), <em>Gitonga Miriam</em> (presenter). LangChain integration credited to sam-h-bean, scottnath, and christeefy. Eval-harness work credited to the You.com team.</p>

@@ -7,7 +7,7 @@
 
 ## Executive summary
 
-We propose a multi-region, multi-language open-source engagement that adds the You.com Search and Research APIs to agent and research frameworks where they are not yet present. The engagement is anchored by two reference forks already built against verified You.com endpoints: `camel-ai/camel` (KAUST origin, Arabic-community fit) and `assafelovic/gpt-researcher` (deep-research narrative fit). Each fork mirrors the upstream LangChain integration's parity contract and adds locale parameters (`country`, `search_lang`) that the existing LangChain wrapper does not expose for the Search endpoint.
+We propose a multi-region, multi-language open-source engagement that adds the You.com Search and Research APIs to agent and research frameworks where they are not yet present. The engagement is anchored by three reference forks already built against verified You.com endpoints: `camel-ai/camel` (KAUST origin, Arabic-community fit), `assafelovic/gpt-researcher` (deep-research narrative fit), and `TungstenAutomationLabs/TotalAgility-connector-for-you.com-` (enterprise Finance Research fit). The Search-API forks mirror the upstream LangChain integration's parity contract and add locale parameters (`country`, `search_lang`) that the existing LangChain wrapper does not expose for the Search endpoint; the TotalAgility connector extends an existing You.com connector with the Finance Research API alongside the already-shipped Search / Research / Content services.
 
 The team is global and multi-language: Arabic-language coverage from Amr Nabil and Muhammad Hany, partial Japanese coverage from Tuna, with Python-strong engineering across the rest of the team. The two completed forks are the demonstration; the engagement we want is a recurring cadence that keeps adding repos like these on a documented schedule.
 
@@ -17,7 +17,7 @@ This document refines the earlier pre-Monday brief drafted by Peter B.A. and is 
 
 1. Existing You.com OSS footprint
 2. Proposed targets (uncovered)
-3. Two reference forks (already built)
+3. Three reference forks (already built)
 4. Regional fit
 5. How we'll execute
 
@@ -92,12 +92,13 @@ next one. Star counts and last-active dates are point-in-time
 `YouSearch` / equivalent should land — the forks in section 3 prove this
 analysis with working code.
 
-### Tier 1 — this engagement (two reference forks, already built)
+### Tier 1 — this engagement (three reference forks, already built)
 
 | Repo | Stars | Lang | Region/community signal | Integration entry point | Why this fits |
 |---|---|---|---|---|---|
 | [`camel-ai/camel`](https://github.com/camel-ai/camel) | ~13k | Python | KAUST origin (Saudi Arabia); Arabic-community story | [`camel/toolkits/search_toolkit.py`](https://github.com/camel-ai/camel/blob/master/camel/toolkits/search_toolkit.py) — add `search_you()` method + register in `get_tools()` | Multi-engine `SearchToolkit` already supports 15 search backends including Brave / Serper / Tavily; You.com is a clean drop-in. Brave's `search_lang` accepts `'jp'` (not `'ja'`) and offers no Arabic country mapping — You.com is the cleanest win for `ar-SA` / `ar-AE` / `ja-JP` use cases. Detail in `research/camel-recon.md`. |
 | [`assafelovic/gpt-researcher`](https://github.com/assafelovic/gpt-researcher) | ~16k | Python | Deep-research narrative; closest framework analog to You.com Research API | [`gpt_researcher/retrievers/`](https://github.com/assafelovic/gpt-researcher/tree/master/gpt_researcher/retrievers) — new `you/` package + `you_search.py` | Tavily-shape contract (`{href, body}` per result) is the de-facto standard; Serper-style locale precedent (`country`, `language`) is already in the codebase. You.com Research API is the natural counterpart to gpt-researcher's "deep" mode. Detail in `research/gpt-researcher-recon.md`. |
+| [`TungstenAutomationLabs/TotalAgility-connector-for-you.com-`](https://github.com/TungstenAutomationLabs/TotalAgility-connector-for-you.com-) | n/a | XML / TotalAgility | Tungsten Automation enterprise install base (formerly Kofax); finance / RPA vertical | `packages/Webservice/WebServices_Finance.xml` + `packages/Process/Process_Finance_V1.xml` + `packages/CustomService/CustomService_Finance.xml` — add Finance Research alongside existing Search / Research / Content services | Upstream connector already wraps three You.com services; the Finance Research API (`api.you.com/v1/finance_research`) was the missing fourth. Use cases: earnings analysis, competitive benchmarking, due diligence, macroeconomic research — all of which TotalAgility customers (banks, insurers, audit firms) already automate. |
 
 ### Tier 2 — recommended next (priority order)
 
@@ -119,16 +120,18 @@ analysis with working code.
 | [`letta-ai/letta`](https://github.com/letta-ai/letta) | ~15k | Python | Stateful agents (formerly MemGPT) | Tool plug-in surface |
 | [`pfnet-research/plamo-examples`](https://github.com/pfnet-research/plamo-examples) | ~25 | Jupyter | Japan (PFN brand) — examples repo, not framework code | `examples/` notebook addition |
 
-## 3. Two reference forks (already built)
+## 3. Three reference forks (already built)
 
-Both forks were built off the parity contract in
+The two Search-API forks (3.1, 3.2) were built off the parity contract in
 `research/benchmark-langchain.md` (the upstream LangChain integration is
 the quality benchmark). Both target the verified Search endpoint
 `GET https://ydc-index.io/v1/search` with the response shape captured at
 `research/fixtures/search-response.json`. Both expose `country` and
 `search_lang` / `language` for the Search endpoint — locale parameters the
 upstream LangChain wrapper does not expose for Search (LangChain restricts
-those to the News endpoint).
+those to the News endpoint). The third fork (3.3) extends the existing
+TotalAgility connector with the Finance Research endpoint
+`POST https://api.you.com/v1/finance_research`.
 
 ### 3.1 `camel-fork` — `camel-ai/camel`
 
@@ -211,6 +214,31 @@ factory `match` block in `gpt_researcher/actions/retriever.py`, and
 `gpt_researcher/retrievers/utils.py` (the dynamic directory scan picks
 it up automatically; the list is belt-and-suspenders). Users select via
 `RETRIEVER=you` and can compose with others via `RETRIEVER=tavily,you,arxiv`.
+
+### 3.3 `TotalAgility-connector-fork` — `TungstenAutomationLabs/TotalAgility-connector-for-you.com-`
+
+Repo: https://github.com/Cooperation-org/TotalAgility-connector-for-you.com- (PR https://github.com/Cooperation-org/TotalAgility-connector-for-you.com-/pull/1). Branch off
+upstream `main`. Owned on the team by Tuna.
+
+What it adds: a fourth You.com service to the existing TotalAgility
+connector. Upstream already wrapped Search, Research, and Content; this
+fork adds Finance Research, which targets
+`POST https://api.you.com/v1/finance_research` and returns
+markdown-formatted content plus a structured `sources` array. Files added:
+
+- `packages/CustomService/CustomService_Finance.xml` — service definition with `INPUT` and `RESEARCH_EFFORT` parameters (`deep` / `exhaustive`).
+- `packages/Process/Process_Finance_V1.xml` — TotalAgility process workflow that drives the Finance Research call.
+- `packages/Webservice/WebServices_Finance.xml` — REST proxy mapping to `api.you.com/v1/finance_research`.
+- `postman/you.com.postman_collection_finance.json` — four example requests for verification outside TotalAgility.
+- `prompts/Finance_Research_Prompt_Example.md` — prompt examples covering earnings analysis, competitive benchmarking, due diligence, and macroeconomic research.
+- `response_data_models/finance_response.json` — response schema (markdown content + sources array).
+
+Why this fits: TotalAgility's customer base (banks, insurers, audit firms,
+back-office RPA installs at Tungsten Automation customers — the rebranded
+Kofax footprint) already automates the workflows Finance Research targets.
+Adding it to the connector lets those customers reach the endpoint without
+custom HTTP code; the other three You.com services were already wrapped
+the same way upstream.
 
 ## 4. Regional fit
 
